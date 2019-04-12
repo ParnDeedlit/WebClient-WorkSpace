@@ -1,0 +1,111 @@
+.head {
+    &-pane {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 50px;
+        overflow: hidden;
+    }
+
+    &-top {
+        position: absolute;
+        padding-top: 0;
+        padding-bottom: 0;
+        text-align: center;
+        width: 100%;
+        height: 50px;
+        white-space: nowrap;
+        color: #fff;
+        background-color: rgb(0, 120, 212);;
+        font-size: 14px;
+    }
+    
+    .row-left {
+        position: absolute;
+        left: 0;
+        margin: 0 0;
+        padding-top: 0;
+        padding-bottom: 0;
+        padding-left: 0;
+        padding-right: 10px;  
+
+        &-contain{
+            height: 400px;
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        &-brand {
+            width: auto !important;
+            height: 24px !important;
+            line-height: normal !important;
+            padding-bottom: 13px;
+            padding-top: 13px;
+            display: inline-block;
+            font-size: 17px;
+            font-family: inherit;
+            margin-left: 15px;
+            margin-right: 15px;
+            font-family: 'Segoe UI','Segoe UI Web',Arial,Verdana,sans-serif;
+        }
+
+        &-switcher{
+            display: inline-block;
+            height: 50px;
+            vertical-align: top;
+            padding: 0;
+            margin: 0;
+            cursor: pointer;
+        }
+
+        &-bread {
+            display: inline-block;
+            padding: 1px;
+            vertical-align: top;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-align: left;
+        }
+    }
+
+    .row-center {
+        margin: 0 0;
+        padding-top: 0;
+        padding-left: 10px;
+        padding-right: 10px;
+        overflow: hidden;
+    }
+
+    .row-right {
+        position: absolute;
+        right: 0;
+        height: 50px;
+        margin: 0 0;
+        padding-top: 0;
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
+
+.top-head-brand {
+    width: auto !important;
+    height: 24px !important;
+    line-height: normal !important;
+    padding-bottom: 13px;
+    padding-top: 13px;
+    display: inline-block;
+    font-size: 17px;
+    font-family: inherit;
+    margin-left: 15px;
+    margin-right: 15px;
+    font-family: 'Segoe UI','Segoe UI Web',Arial,Verdana,sans-serif;
+}
+
+.top-head-bread {
+    padding-top: 16px;
+    padding-bottom: 16px;    
+}
+

@@ -22,15 +22,15 @@ class App extends React.Component<{}, {}> {
   public render(): JSX.Element {
     return (
       <Layout className="layout">
-        <Header>
-          <div className="logo" />
+        <Header className="header">
+          <div className="logo">Map<span>GIS</span></div>
           <Menu
-            theme="dark"
+            theme="light"
             mode="horizontal"
             defaultSelectedKeys={['2']}
-            style={{ lineHeight: '64px' }}
+            style={{ lineHeight: '62px' }}
           >
-            <Menu.Item key="1">工作空间</Menu.Item>
+            <Menu.Item key="1">我的地图</Menu.Item>
             <Menu.Item key="2">文档</Menu.Item>
             <Menu.Item key="3">Github</Menu.Item>
           </Menu>
@@ -42,7 +42,7 @@ class App extends React.Component<{}, {}> {
             <Breadcrumb.Item>App</Breadcrumb.Item>
           </Breadcrumb>
           <Workspace />
-          <div style={{ background: '#fff', padding: 24, minHeight: 280 }}>Content</div>
+          <div style={{ background: '#fff', padding: 24, minHeight: 480 }}>Content</div>
         </Content>
         <Footer style={{ textAlign: 'center' }}>
           Ant Design ©2018 Created by Ant UED

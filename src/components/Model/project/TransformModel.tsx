@@ -68,7 +68,7 @@ export class TransformModel extends React.Component<
 
           <Divider orientation="left">原始坐标</Divider>
           <Input 
-            addonBefore="原始数据 横坐标X:" ref="sourcex"
+            addonBefore="原始数据 横坐标X:" ref="sourcex" onChange={this.onChange.bind(this)}
           />
           <Input 
             addonBefore="原始数据 纵坐标Y:" ref="sourcey"
@@ -87,6 +87,9 @@ export class TransformModel extends React.Component<
     );
   }
 
+  private onChange(event) {
+    console.log(event.target);
+  }
 
   private onSourceChange(field) {
     this.setState({ source: field });

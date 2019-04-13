@@ -1,7 +1,6 @@
 import * as React from "react";
 import { connect } from 'dva';
 
-
 import { Menu, Icon } from 'antd';
 
 const SubMenu = Menu.SubMenu;
@@ -57,7 +56,6 @@ class ToolbarManager extends React.Component<IProps, IState> {
     }
 
     public render(): JSX.Element {
-        //console.log("ToolbarManager Render", this.state)
         const toggleProject = this.props.commandproject.toggleProject;
         const toggleTransform = this.props.commandproject.toggleTransform;
         return (

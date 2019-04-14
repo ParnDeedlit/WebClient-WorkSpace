@@ -1,17 +1,21 @@
 import * as React from 'react';
 import { Menu } from 'antd';
+import IconFont from '../IconFont/mapgis';
 const Item =Menu. Item;
 
 export function bindAddMenus(click) {
     return (
         <Menu onClick={click}>
-            <Item key="projection">
+            <Item key="search-layer">
+            <IconFont type="icon-search" /> 
             <span >搜索图层</span>
             </Item>
-            <Item key="transform">
+            <Item key="add-web-layer">
+            <IconFont type="icon-WEBqianduan" /> 
             <span >从Web添加图层</span>
             </Item>
-            <Item key="transform">
+            <Item key="add-local-layer">
+            <IconFont type="icon-analysischart" /> 
             <span >从本地添加图层</span>
             </Item>
         </Menu>);

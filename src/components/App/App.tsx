@@ -4,7 +4,8 @@ import { connect } from 'dva';
 import { Layout, Menu, Breadcrumb } from 'antd';
 
 import appDefinition from '../App/appDefiniton'
-import Workspace from '../Workspace/Workspace'
+//import Workspace from '../Workspace/WorkSpace'
+import WorkspaceAntd from '../Workspace/WorkSpaceAntd'
 
 const { Header, Content, Footer } = Layout;
 
@@ -36,17 +37,11 @@ class App extends React.Component<{}, {}> {
           </Menu>
         </Header>
         <Content style={{ padding: '0 0px' }}>
-          <Breadcrumb style={{ margin: '16px 0' }}>
-            <Breadcrumb.Item>Home</Breadcrumb.Item>
-            <Breadcrumb.Item>List</Breadcrumb.Item>
-            <Breadcrumb.Item>App</Breadcrumb.Item>
-          </Breadcrumb>
-          <Workspace />
-          <div style={{ background: '#fff', padding: 24, minHeight: 480 }}>Content</div>
+          <WorkspaceAntd />
         </Content>
         <Footer style={{ textAlign: 'center' }}>
-          Ant Design ©2018 Created by Ant UED
-   </Footer>
+          MapGIS Design ©2019 Created by 潘卓然Parn Deedlit
+        </Footer>
       </Layout>
     );
   };

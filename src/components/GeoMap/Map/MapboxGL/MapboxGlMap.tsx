@@ -73,6 +73,7 @@ interface IMapboxGlMapProps {
   inspectModeEnabled: boolean; //isRequired,
   highlightedLayer: Object;
   options: any;
+  layout: any;
 }
 
 interface IMapboxGlMapStates {
@@ -127,6 +128,9 @@ export default class MapboxGlMap extends React.Component<
     if (!IS_SUPPORTED) return;
 
     if (!this.state.map) return;
+
+    this.state.map.resize();    
+
     const metadata = props.mapStyle.metadata || {};
     MapboxGl.accessToken =
       metadata["maputnik:mapbox_access_token"] || tokens.mapbox;
@@ -274,7 +278,7 @@ export default class MapboxGlMap extends React.Component<
   render() {
     if (IS_SUPPORTED) {
       return (
-        <div className="workspace-layout-map-wraper-mapboxgl" ref={x => (this.container = x)} />
+        <div className="workspace-layout-map-wraper-mapboxgl" ref={x => (this.container = x)}/>
       );
     } else {
       return (

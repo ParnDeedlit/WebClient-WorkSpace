@@ -36,11 +36,6 @@ class WorkSpace extends React.Component<IAppProps, IAppState> {
         </div>
         <div className={"workspace-layout-center"}>
           <div className={"workspace-layout-right"}>
-            <MapRenderer 
-              style={this.props.map.style}
-              state={this.props.map.state}
-              options={this.props.map.options}
-            />
           </div>
           <div className={"workspace-layout-left"}>
             <SideMenuayer />
@@ -61,7 +56,7 @@ function mapStateToProps(state: any, ownProps: any) {
       style: state.mapstyle,
       state: state.mapstate,
       options: state.mapoptions
-    }
+    },
   };
 }
 

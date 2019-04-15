@@ -39,9 +39,6 @@ class App extends React.Component<{}, {}> {
         <Content style={{ padding: '0 0px' }}>
           <WorkspaceAntd />
         </Content>
-        <Footer style={{ textAlign: 'center' }}>
-          MapGIS Design ©2019 Created by 潘卓然Parn Deedlit
-        </Footer>
       </Layout>
     );
   };

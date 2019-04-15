@@ -3,7 +3,7 @@
     flex: 1;
     flex-direction: column;
     width: 100%;
-    height: calc(100vh - 135px);
+    height: calc( 100vh - 64px );
     background: #fff;
   }
   
@@ -12,8 +12,12 @@
     border: 1px solid #e6e9ed;
   }
   
-  .editorBd {
+  .editorCd {
     flex: 1;
+  }
+
+  .editorBd {
+    /* flex: 1; */
   }
   
   .editorSidebar,
@@ -31,6 +35,18 @@
   
     &:last-child {
       border-left: 1px solid #e6e9ed;
+    }
+  }
+
+  .editorStateBar{
+    background: #fafafa;
+    height: 22px;
+    &:first-child {
+      border-top: 1px solid #e6e9ed;
+    }
+  
+    &:last-child {
+      border-bottom: 1px solid #e6e9ed;
     }
   }
   

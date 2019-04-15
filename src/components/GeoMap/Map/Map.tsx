@@ -8,6 +8,7 @@ interface IModelsProps {
   style: any;
   state: any;
   options: any;
+  layout: any;
 }
 
 export default class MapRenderer extends React.Component<IModelsProps, {}> {
@@ -28,7 +29,8 @@ export default class MapRenderer extends React.Component<IModelsProps, {}> {
         /* this.layerWatcher.analyzeMap(e.map);
         this.fetchSources(); */
       },
-      highlightedLayer: selectLayer
+      highlightedLayer: selectLayer,
+      layout: this.props.layout,
     };
     console.log("MapRenderer", mapProps);
 

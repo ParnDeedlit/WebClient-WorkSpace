@@ -1,38 +1,43 @@
 import * as React from 'react';
-import { Menu, Dropdown, Icon } from 'antd';
+import { Tooltip, Menu, Dropdown, Popover, Icon } from 'antd';
 import IconFont from '../IconFont/mapgis';
 
 interface IToolbarMenuProps {
-  command: string,
+  command: any,
   icon:string,
   text: string,
   ui: any,
   ui_content : any,
+  tooltip: string, 
   options: any
 }
 
 class ToolbarMenu extends React.Component<IToolbarMenuProps, {}>{
   render() {
-    const { command, icon, text, ui, ui_content, options } = this.props;
+    const { command, icon, text, ui, ui_content, tooltip,  options } = this.props;
 
     return (
       <div className="mapgis-command-menu">
-        <IconFont type={`${icon || command}`} /> 
+        <IconFont type={`${icon}`} /> 
         {ui == "button" &&
-            <a className="ant-dropdown-link" /* href="#" */>
-              {text}
-            </a>
+            <Tooltip placement="bottom" title={tooltip}>
+              <a className="ant-dropdown-link" onClick={command}>
+                {text}
+              </a>    
+            </Tooltip>
         }
         {ui == "dropdown" &&
             <Dropdown overlay={ui_content} trigger={["click"]}>
-              <a className="ant-dropdown-link" /* href="#" */>
+              <a className="ant-dropdown-link">
                 {text}
               </a>
             </Dropdown>}
-        {ui == "dialog" &&
+        {ui == "popup" &&
+          <Popover placement="bottom" content={ui_content} trigger="click">
             <a className="ant-dropdown-link" /* href="#" */>
-              {text}
+                {text}
             </a>
+          </Popover>
         }
       </div>
     );

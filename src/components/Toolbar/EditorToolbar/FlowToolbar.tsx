@@ -6,13 +6,14 @@ import ToolbarButton from './ToolbarButton';
 import ToolbarMenu from './ToolbarMenu';
 
 import { AddItems, bindAddMenus } from '../Config/ConfigAddItems';
-import DocumentItem from '../Config/ConfigDocument';
-import BackItems from '../Config/ConfigBackItems';
-import {AnalysisItems, bindAnalysisMenus} from '../Config/ConfigAnalysisItems';
+import { DocumentItem, bindDocumentMenus } from '../Config/ConfigDocument';
+import { BackItems, bindBackMenus} from '../Config/ConfigBackItems';
+import { AnalysisItems, bindAnalysisMenus} from '../Config/ConfigAnalysisItems';
 
 import Models from '../../Model/Models';
 
 import { toggleProject, toggleTransform } from '../../../action/command/project';
+import { toggleLeftLayout, toggleRightLayout } from '../../../action/command/layout';
 
 interface IToolbarProps {
   content: any,
@@ -62,15 +63,22 @@ class FlowToolbar extends React.Component<IToolbarProps, IToolbarState> {
   private toggleProject = () => { this.props.dispatch(toggleProject(true)) }
   private toggleTransform = () => { this.props.dispatch(toggleTransform(true)) }
 
+  private toggleLeftLayout = () => { this.props.dispatch(toggleLeftLayout(true)) }
+
   render(): JSX.Element {
     const toggleProject = this.props.commandproject.toggleProject;
     const toggleTransform = this.props.commandproject.toggleTransform;
 
     const addItemBind = bindAddMenus(this.handleAddItemsClick);
     const analysisItemBind = bindAnalysisMenus(this.handleAddItemsClick);
+    const backItemBind = bindBackMenus(this.handleAddItemsClick);
+    const documentItemBind = bindDocumentMenus(this.handleAddItemsClick, DocumentItem.text);
 
+    DocumentItem.ui_content = documentItemBind;
+    DocumentItem.command = this.toggleLeftLayout;
     AddItems.ui_content = addItemBind;
     AnalysisItems.ui_content = analysisItemBind;
+    BackItems.ui_content = backItemBind;
 
     return (
       <div>

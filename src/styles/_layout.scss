@@ -26,7 +26,9 @@
 
   &-map-wraper {
     position: absolute;
-    height: calc(100vh - #{$header-height} - #{$bottom-height} - #{$toolbar-height});
+    height: calc(
+      100vh - #{$header-height} - #{$bottom-height} - #{$toolbar-height}
+    );
     width: 100%;
     &-mapboxgl {
       height: calc(
@@ -39,21 +41,29 @@
   &-left {
     position: absolute;
     width: 10px + $sidebar-width;
-    height: calc(100vh - #{$header-height} - #{$bottom-height} - #{$toolbar-height});
+    height: calc(
+      100vh - #{$header-height} - #{$bottom-height} - #{$toolbar-height}
+    );
   }
 
   &-right {
     position: absolute;
-    height: calc(100vh - #{$header-height} - #{$bottom-height} - #{$toolbar-height});
+    height: calc(
+      100vh - #{$header-height} - #{$bottom-height} - #{$toolbar-height}
+    );
     width: 100%;
   }
 
   &-bottom {
-    bottom: 0px;
+/*     bottom: 0px;
     position: absolute;
-    background-color: #fff;
-    border-top: 1px solid #e1e1e1;
     width: 100%;
     height: $bottom-height;
+
+    background: #fafafa;
+  
+    border-top: 1px solid #e6e9ed;
+    border-bottom: 1px solid #e6e9ed; */
+    
   }
 }

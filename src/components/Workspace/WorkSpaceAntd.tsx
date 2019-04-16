@@ -5,6 +5,8 @@ import { connect } from "dva";
 import MapRenderer from "../GeoMap/Map/Map";
 
 import { FlowToolbar } from '../../components/Toolbar/EditorToolbar';
+import LeftPaneLayer from '../../components/Pane/LeftPane/LeftPaneLayer';
+import Statebar from '../../components/Statebar/Statebar';
 
 import './index.less';
 
@@ -35,8 +37,8 @@ class WorkSpaceAntd extends React.Component<IAppProps, IAppState> {
         if (left && right) {
 
         } else if (left) {
-            width_left = 8;
-            width_center = 16;
+            width_left = 9;
+            width_center = 15;
             width_right = 0;
         } else if (!left) {
             width_left = 1;
@@ -56,7 +58,7 @@ class WorkSpaceAntd extends React.Component<IAppProps, IAppState> {
                 </Row>
                 <Row type="flex" className="editorCd">
                     <Col span={width_left} className="editorSidebar">
-                        {visibleLeft && <div>Left</div>}
+                        {visibleLeft && <LeftPaneLayer></LeftPaneLayer>}
                     </Col>
                     <Col span={width_center} className="editorContent">
                         <MapRenderer
@@ -74,6 +76,7 @@ class WorkSpaceAntd extends React.Component<IAppProps, IAppState> {
                 </Row>
                 <Row type="flex" align="bottom" className="editorBd">
                     <Col span={24} className="editorStateBar">
+                        <Statebar></Statebar>
                     </Col>
                 </Row>
             </div>

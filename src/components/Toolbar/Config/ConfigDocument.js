@@ -8,7 +8,7 @@ export function bindDocumentMenus(click, title) {
 }
 
 export let DocumentItem = {
-    icon:"icon-documentation",
+    icon:"icon-document",
     command: null,
     text:"详细信息", 
     ui:"button", 

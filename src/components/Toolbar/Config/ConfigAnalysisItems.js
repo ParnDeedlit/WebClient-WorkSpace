@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Menu } from 'antd';
-import IconFont from '../IconFont/mapgis';
+import IconFont from '../../IconFont/mapgis';
 
 const Item =Menu.Item;
 const SubMenu = Menu.SubMenu;
@@ -42,8 +42,8 @@ export function bindAnalysisMenus(click) {
 };
 
 export let AnalysisItems = {
-    icon:"icon--analysis",
-    command: "icon--analysis",
+    icon:"icon-analysis",
+    command: "icon-analysis",
     text:"空间分析", 
     ui:"dropdown", 
     ui_content: null,

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Menu } from 'antd';
-import IconFont from '../IconFont/mapgis';
+import IconFont from '../../IconFont/mapgis';
 const Item =Menu. Item;
 
 export function bindAddMenus(click) {
@@ -22,8 +22,8 @@ export function bindAddMenus(click) {
 };
 
 export let AddItems = {
-    icon:"icon-open",
-    command: "icon-open",
+    icon:"icon-add",
+    command: "icon-add",
     text:"添加", 
     ui:"dropdown", 
     ui_content: null,

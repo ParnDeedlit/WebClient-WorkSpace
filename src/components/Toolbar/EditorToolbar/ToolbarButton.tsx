@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Tooltip } from 'antd';
-import IconFont from '../IconFont';
+import IconFont from '../../IconFont';
 import './index.less';
 
 const ToolbarButton = props => {

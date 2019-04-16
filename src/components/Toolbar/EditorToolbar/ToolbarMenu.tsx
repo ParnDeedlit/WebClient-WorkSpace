@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Tooltip, Menu, Dropdown, Popover, Icon } from 'antd';
-import IconFont from '../IconFont/mapgis';
+import IconFont from '../../IconFont/mapgis';
 
 interface IToolbarMenuProps {
   command: any,

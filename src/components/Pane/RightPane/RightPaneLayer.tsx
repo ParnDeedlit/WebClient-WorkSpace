@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { connect } from "dva";
 
-import { Tabs, Drawer } from 'antd';
+import { Tabs } from 'antd';
 import IconFont from '../../IconFont/mapgis';
+import { RightTabs, RightDefaultKey } from '../../ConfigUI/RightPane';
 
 import './index.less'
 
@@ -10,34 +11,45 @@ const TabPane = Tabs.TabPane;
 
 interface IRightPaneProps {
   map: any;
+  activeKey: string;
 }
 
-class RightPaneLayer extends React.Component<IRightPaneProps, {}> {
+interface IRightPaneState {
+  currentKey: string;
+}
+
+class RightPaneLayer extends React.Component<IRightPaneProps, IRightPaneState> {
   //-----------------------------------------Menu 菜单相关配置 开始------------------------------------
+  state : IRightPaneState = {
+    currentKey : RightDefaultKey
+  }
 
-
+  getTabs(tabs) {
+    return tabs.map(tab => {
+      return (<TabPane tab={<span><IconFont type={tab.icon} />{tab.title}</span>} key={tab.key}>
+        <div className="right-pane-wraper">
+          {tab.ui}
+        </div>
+      </TabPane>);
+    });
+  }
 
   //-----------------------------------------Menu 菜单相关配置 结束--------------------------------------------
   render() {
     const { document } = this.props.map;
+    const { activeKey } = this.props;
+    let { currentKey } = this.state;
+
+    currentKey = activeKey;
+
+    const tabUI = this.getTabs(RightTabs);
     return (
-      <div className="right-pane-layer">
-        <Tabs type="line" size="small" tabBarGutter={1} tabPosition="bottom">
-          <TabPane tab={<span><IconFont type="icon-map" />数据源</span>} key="1">
-            <div className="right-pane-wraper">
-              
-            </div>
-          </TabPane>
-          <TabPane tab={<span><IconFont type="icon-shuxingliebiaoxiangqing" />图元属性</span>} key="2">
-            <div className="right-pane-wraper">
-              Content of Tab Pane 2
-            </div>
-          </TabPane>
-          <TabPane tab={<span><IconFont type="icon-shuxingliebiaoxiangqing" />工具箱</span>} key="3">
-            <div className="right-pane-wraper">
-              Content of Tab Pane 3
-            </div>
-          </TabPane>
+      <div >
+        <Tabs type="line" size="small"
+          tabBarGutter={1} tabPosition="bottom"
+          defaultActiveKey={currentKey}
+        >
+          {tabUI}
         </Tabs>
       </div >
     );

@@ -20,6 +20,7 @@ app.model(require('./models/workspace/map/mapstate').default);
 app.model(require('./models/workspace/map/mapoption').default);
 
 app.model(require('./models/workspace/layout/layoutstate').default);
+app.model(require('./models/workspace/layout/layoutkey').default);
 
 
 // 4. Router

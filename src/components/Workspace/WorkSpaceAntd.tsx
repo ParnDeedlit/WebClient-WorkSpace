@@ -29,6 +29,9 @@ class WorkSpaceAntd extends React.Component<IAppProps, IAppState> {
     }
 
     render() {
+        let {layout, map} = this.props;
+        let rightKey = layout.key.right;
+
         let { left, right } = this.props.layout.state;
 
         let width_left = 4;
@@ -72,7 +75,7 @@ class WorkSpaceAntd extends React.Component<IAppProps, IAppState> {
                     </Col>
 
                     {visibleRight && <Col span={width_right} className="editorSidebar">
-                        <RightPaneLayer ></RightPaneLayer>
+                        <RightPaneLayer activeKey={rightKey.activeKey}></RightPaneLayer>
                     </Col>}
                 </Row>
                 <Row type="flex" align="bottom" className="editorBd">
@@ -96,7 +99,8 @@ function mapStateToProps(state: any, ownProps: any) {
             document: state.mapdocument
         },
         layout: {
-            state: state.layoutstate
+            state: state.layoutstate,
+            key: state.layoutkey
         },
     };
 }

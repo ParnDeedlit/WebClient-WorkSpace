@@ -6,6 +6,7 @@ import MapRenderer from "../GeoMap/Map/Map";
 
 import { FlowToolbar } from '../../components/Toolbar/EditorToolbar';
 import LeftPaneLayer from '../../components/Pane/LeftPane/LeftPaneLayer';
+import RightPaneLayer from '../../components/Pane/RightPane/RightPaneLayer';
 import Statebar from '../../components/Statebar/Statebar';
 
 import './index.less';
@@ -37,9 +38,9 @@ class WorkSpaceAntd extends React.Component<IAppProps, IAppState> {
         if (left && right) {
 
         } else if (left) {
-            width_left = 9;
-            width_center = 15;
-            width_right = 0;
+            width_left = 4;
+            width_center = 16;
+            width_right = 4;
         } else if (!left) {
             width_left = 1;
             width_center = 22;
@@ -62,6 +63,7 @@ class WorkSpaceAntd extends React.Component<IAppProps, IAppState> {
                     </Col>
                     <Col span={width_center} className="editorContent">
                         <MapRenderer
+                            document={this.props.map.document}
                             style={this.props.map.style}
                             state={this.props.map.state}
                             options={this.props.map.options}
@@ -70,9 +72,8 @@ class WorkSpaceAntd extends React.Component<IAppProps, IAppState> {
                     </Col>
 
                     {visibleRight && <Col span={width_right} className="editorSidebar">
-                        <div ></div>
+                        <RightPaneLayer ></RightPaneLayer>
                     </Col>}
-
                 </Row>
                 <Row type="flex" align="bottom" className="editorBd">
                     <Col span={24} className="editorStateBar">
@@ -91,11 +92,12 @@ function mapStateToProps(state: any, ownProps: any) {
         map: {
             style: state.mapstyle,
             state: state.mapstate,
-            options: state.mapoptions
+            options: state.mapoptions,
+            document: state.mapdocument
         },
         layout: {
             state: state.layoutstate
-        }
+        },
     };
 }
 

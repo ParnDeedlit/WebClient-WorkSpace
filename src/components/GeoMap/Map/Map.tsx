@@ -5,6 +5,7 @@ import MapboxGlMap from "./MapboxGL/MapboxGlMap";
 import styleTool from "../../../utilities/style";
 
 interface IModelsProps {
+  document: any;
   style: any;
   state: any;
   options: any;
@@ -20,16 +21,8 @@ export default class MapRenderer extends React.Component<IModelsProps, {}> {
       mapStyle: styleTool.replaceAccessTokens(this.props.style, {
         allowFallback: true
       }),
+      document: this.props.document,
       options: this.props.options,
-      onDataChange: e => {
-        /* this.layerWatcher.analyzeMap(e.map);
-        this.fetchSources(); */
-      },
-      onLayerSelect: e => {
-        /* this.layerWatcher.analyzeMap(e.map);
-        this.fetchSources(); */
-      },
-      highlightedLayer: selectLayer,
       layout: this.props.layout,
     };
     console.log("MapRenderer", mapProps);
@@ -51,9 +44,6 @@ export default class MapRenderer extends React.Component<IModelsProps, {}> {
       mapElement = (
         <MapboxGlMap
           {...mapProps}
-          inspectModeEnabled={this.props.state === "inspect"}
-          //onLayerSelect={this.onLayerSelect}
-          //onMapRect={this.onMapRect}
         />
       );
     }

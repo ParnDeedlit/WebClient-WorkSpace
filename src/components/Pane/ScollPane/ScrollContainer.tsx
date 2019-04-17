@@ -1,6 +1,6 @@
 import * as React from 'react';
 interface IScrollProps {
-  children: any;
+  children: React.ReactNode;
 }
 
 class ScrollContainer extends React.Component<IScrollProps, {}> {

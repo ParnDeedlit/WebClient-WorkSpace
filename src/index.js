@@ -14,11 +14,13 @@ const app = dva();
 app.model(require('./models/workspace/command/project').default);
 app.model(require('./models/workspace/command/analysis').default);
 
+app.model(require('./models/workspace/map/mapdocument').default);
 app.model(require('./models/workspace/map/mapstyle').default);
 app.model(require('./models/workspace/map/mapstate').default);
 app.model(require('./models/workspace/map/mapoption').default);
 
 app.model(require('./models/workspace/layout/layoutstate').default);
+
 
 // 4. Router
 app.router(require('./router').default);

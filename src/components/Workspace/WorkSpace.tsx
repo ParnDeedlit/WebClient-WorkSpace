@@ -3,7 +3,6 @@ import { connect } from "dva";
 
 import { Fabric } from "office-ui-fabric-react/lib/Fabric";
 
-import ExtendManager from "../Manager/ExtendManager";
 import ToolbarManager from "../Toolbar/ToolbarManager";
 import MapRenderer from "../GeoMap/Map/Map";
 import SideMenuayer from '../Pane/LeftPane/LeftPaneLayer';

@@ -7,13 +7,15 @@ import ToolbarMenu from './ToolbarMenu';
 
 import { AddItems, bindAddMenus } from '../Config/ConfigAddItems';
 import { DocumentItem, bindDocumentMenus } from '../Config/ConfigDocument';
-import { BackItems, bindBackMenus} from '../Config/ConfigBackItems';
-import { AnalysisItems, bindAnalysisMenus} from '../Config/ConfigAnalysisItems';
+import { BackItems, bindBackMenus } from '../Config/ConfigBackItems';
+import { AnalysisItems, bindAnalysisMenus } from '../Config/ConfigAnalysisItems';
 
 import Models from '../../Model/Models';
 
 import { toggleProject, toggleTransform } from '../../../action/command/project';
 import { toggleLeftLayout, toggleRightLayout } from '../../../action/command/layout';
+import { toggleBackgroud } from '../../../action/map/document';
+
 
 interface IToolbarProps {
   content: any,
@@ -60,10 +62,17 @@ class FlowToolbar extends React.Component<IToolbarProps, IToolbarState> {
     }
   }
 
+  handleBackgroundClick = (id) => {
+    this.toggleBackgroud(id);
+  }
+
   private toggleProject = () => { this.props.dispatch(toggleProject(true)) }
   private toggleTransform = () => { this.props.dispatch(toggleTransform(true)) }
 
   private toggleLeftLayout = () => { this.props.dispatch(toggleLeftLayout(true)) }
+
+  private toggleBackgroud = (id) => { this.props.dispatch(toggleBackgroud(id)) }
+
 
   render(): JSX.Element {
     const toggleProject = this.props.commandproject.toggleProject;
@@ -71,7 +80,7 @@ class FlowToolbar extends React.Component<IToolbarProps, IToolbarState> {
 
     const addItemBind = bindAddMenus(this.handleAddItemsClick);
     const analysisItemBind = bindAnalysisMenus(this.handleAddItemsClick);
-    const backItemBind = bindBackMenus(this.handleAddItemsClick);
+    const backItemBind = bindBackMenus(this.handleBackgroundClick);
     const documentItemBind = bindDocumentMenus(this.handleAddItemsClick, DocumentItem.text);
 
     DocumentItem.ui_content = documentItemBind;

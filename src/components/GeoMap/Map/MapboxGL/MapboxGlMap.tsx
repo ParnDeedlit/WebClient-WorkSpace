@@ -2,13 +2,12 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import * as MapboxGl from "mapbox-gl";
 import * as MapboxInspect from "mapbox-gl-inspect";
-import FeatureLayerPopup from "./FeatureLayerPopup";
-//import FeaturePropertyPopup from './FeaturePropertyPopup';
+
 import tokens from "../../../../config/tokens";
 import colors from "mapbox-gl-inspect/lib/colors";
 import Color from "color";
 import ZoomControl from "./ZoomControl";
-//import MapboxDraw from "@mapbox/mapbox-gl-draw";
+
 import { colorHighlightedLayer } from "../../../../utilities/highlight";
 
 import { layouts, clearLayout, addLayout } from "../Common/geopdf/layout";
@@ -20,16 +19,12 @@ import bbox from "@turf/bbox";
 
 import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
 import "mapbox-gl/dist/mapbox-gl.css";
+import Document from '../../Document/Document';
 //import '../../mapboxgl.css';
 //import "../../../../utilities/mapbox-rtl";
 
 const IS_SUPPORTED = MapboxGl.supported();
 
-function renderPropertyPopup(features) {
-  /*   var mountNode = document.createElement('div');
-  ReactDOM.render(<FeaturePropertyPopup features={features} />, mountNode)
-  return mountNode.innerHTML; */
-}
 
 function buildInspectStyle(originalMapStyle, coloredLayers, highlightedLayer) {
   const backgroundLayer = {
@@ -64,54 +59,28 @@ function buildInspectStyle(originalMapStyle, coloredLayers, highlightedLayer) {
 var self = null;
 
 interface IMapboxGlMapProps {
-  /*   geometry: Object,
-  printOption:Object, */
-  onDataChange: Function;
-  onLayerSelect: Function; //isRequired
-  /* onMapRect: Function, */
+  document: string;
   mapStyle: Object; //isRequired,
-  inspectModeEnabled: boolean; //isRequired,
-  highlightedLayer: Object;
   options: any;
-  layout: any;
 }
 
 interface IMapboxGlMapStates {
   map: any;
-  inspect: any;
-  isPopupOpen: boolean;
-  popupX: number;
-  popupY: number;
-  geomIndex: number;
   isLoad: boolean;
-  printFlag: boolean;
-  printRect: any;
-  printId: number;
 }
 
 export default class MapboxGlMap extends React.Component<
   IMapboxGlMapProps,
   IMapboxGlMapStates
-> {
+  > {
   static defaultProps = {
-    onMapLoaded: () => {},
-    onDataChange: () => {},
-    onLayerSelect: () => {},
     mapboxAccessToken: tokens.mapbox,
     options: {}
   };
 
   public state: IMapboxGlMapStates = {
     map: null,
-    inspect: null,
-    isPopupOpen: false,
-    popupX: 0,
-    popupY: 0,
-    geomIndex: 0,
     isLoad: false,
-    printFlag: false,
-    printRect: null,
-    printId: -1
   };
 
   private container = null;
@@ -123,35 +92,43 @@ export default class MapboxGlMap extends React.Component<
     MapboxGl.accessToken = tokens.mapbox;
   }
 
+  updateBackgroud(){
+    const document = self.props.document;
+    const background = document.background;
+    const {id, tileUrl} = background;
+    if(!id || !tileUrl) return;
+
+    self.state.map.addLayer({
+      "id": id,
+      "type": "raster",
+      //连接图层来源
+      "source":  {
+          "type": "raster",
+          "tiles": [ tileUrl ],
+          "minZoom": 0,
+          "maxZoom": 20
+      },
+      "minzoom": 0,
+      "maxzoom": 22
+    });
+  }
+
   updateMapFromProps(props) {
     var self = this;
     if (!IS_SUPPORTED) return;
 
     if (!this.state.map) return;
 
-    this.state.map.resize();    
+    this.state.map.resize();
 
     const metadata = props.mapStyle.metadata || {};
     MapboxGl.accessToken =
-      metadata["maputnik:mapbox_access_token"] || tokens.mapbox;
+      metadata["mapgis:mapbox_access_token"] || tokens.mapbox;
 
-    if (!props.inspectModeEnabled) {
-      //Mapbox GL now does diffing natively so we don't need to calculate
-      //the necessary operations ourselves!
-      var style = props.mapStyle;
-      //style.sources.GeoJSON.data = props.geometry;
-      this.state.map.setStyle(props.mapStyle, { diff: true });
-      //this.updateGeometry(self);
-    }
-
-    /* if (this.state.printFlag) {
-      if (this.props.printOption.mode == "RECT_PRINT") {
-        if (this.state.printId != this.props.printOption.id) {
-          this.updatePrint();
-          this.state.printId = this.props.printOption.id;
-        }
-      }
-    } */
+    var style = props.mapStyle;
+    this.state.map.setStyle(props.mapStyle, { diff: true });
+          
+    this.updateBackgroud();
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -175,13 +152,6 @@ export default class MapboxGlMap extends React.Component<
     const self = this;
 
     this.updateMapFromProps(this.props);
-
-    if (this.props.inspectModeEnabled !== prevProps.inspectModeEnabled) {
-      this.state.inspect.toggleInspector();
-    }
-    if (this.props.inspectModeEnabled) {
-      this.state.inspect.render();
-    }
 
     if (map) {
       map.showTileBoundaries = this.props.options.showTileBoundaries;
@@ -216,69 +186,18 @@ export default class MapboxGlMap extends React.Component<
     var fpsControl = new FPSControl();
     map.addControl(fpsControl, "top-right");
 
-    const inspect = new MapboxInspect({
-      popup: new MapboxGl.Popup({
-        closeOnClick: false
-      }),
-      showMapPopup: true,
-      showMapPopupOnHover: false,
-      showInspectMapPopupOnHover: true,
-      showInspectButton: false,
-      blockHoverPopupOnClick: false,
-      assignLayerColor: (layerId, alpha) => {
-        return Color(colors.brightColor(layerId, alpha))
-          .desaturate(0.5)
-          .string();
-      },
-      buildInspectStyle: (originalMapStyle, coloredLayers) =>
-        buildInspectStyle(
-          originalMapStyle,
-          coloredLayers,
-          this.props.highlightedLayer
-        ),
-      /* renderPopup: features => {
-        if (this.props.inspectModeEnabled) {
-          return renderPropertyPopup(features);
-        } else {
-          var mountNode = document.createElement("div");
-          ReactDOM.render(
-            <FeatureLayerPopup
-              features={features}
-              onLayerSelect={this.props.onLayerSelect}
-            />,
-            mountNode
-          );
-          return mountNode;
-        }
-      } */
-    });
-
-    /* this.drawTool = new MapboxDraw();
-
-    map.addControl(this.drawTool, "top-right");
- */
-
-    //map.addControl(inspect);
-
     map.on("style.load", () => {
-      this.setState({ map, inspect });
+      this.setState({ map });
       this.setState({ isLoad: true });
+      this.updateBackgroud();
     });
 
-    //map.on('draw.create', this.updateCanvas);
-
-    map.on("data", e => {
-      if (e.dataType !== "tile") return;
-      this.props.onDataChange({
-        map: this.state.map
-      });
-    });
   }
 
   render() {
     if (IS_SUPPORTED) {
       return (
-        <div className="workspace-layout-map-wraper-mapboxgl" ref={x => (this.container = x)}/>
+        <div className="workspace-layout-map-wraper-mapboxgl" ref={x => (this.container = x)} />
       );
     } else {
       return (

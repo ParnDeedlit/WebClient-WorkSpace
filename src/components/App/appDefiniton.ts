@@ -6,6 +6,10 @@ let headerLinks = [
     url: "#/"
   },
   {
+    name: "Studio",
+    url: "#/studio"
+  },
+  {
     name: "首页",
     url: "http://dev.office.com/fabric"
   },

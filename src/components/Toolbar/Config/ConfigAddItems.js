@@ -7,16 +7,16 @@ export function bindAddMenus(click) {
     return (
         <Menu onClick={click}>
             <Item key="search-layer">
-            <IconFont type="icon-search" /> 
-            <span >搜索图层</span>
+                <IconFont type="icon-search" /> 
+                <span >搜索图层</span>
             </Item>
             <Item key="add-web-layer">
-            <IconFont type="icon-WEBqianduan" /> 
-            <span >从Web添加图层</span>
+                <IconFont type="icon-WEBqianduan" /> 
+                <span >从Web添加图层</span>
             </Item>
             <Item key="add-local-layer">
-            <IconFont type="icon-analysischart" /> 
-            <span >从本地添加图层</span>
+                <IconFont type="icon-analysischart" /> 
+                <span >从本地添加图层</span>
             </Item>
         </Menu>);
 };

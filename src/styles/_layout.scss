@@ -26,13 +26,17 @@
 
   &-map-wraper {
     position: absolute;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    /* height: 100%; */
     height: calc(
-      100vh - #{$header-height} - #{$bottom-height} - #{$toolbar-height}
+      100vh - #{$header-height} - #{$bottom-height} - #{$toolbar-height} - #{$center-bottom-height}
     );
     width: 100%;
     &-mapboxgl {
+      /* height: 100%; */
       height: calc(
-        100vh - #{$header-height} - #{$bottom-height} - #{$toolbar-height}
+        100vh - #{$header-height} - #{$bottom-height} - #{$toolbar-height} - #{$center-bottom-height}
       );
       width: 100%;
     }

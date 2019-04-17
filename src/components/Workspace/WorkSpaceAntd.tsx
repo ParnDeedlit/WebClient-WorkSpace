@@ -4,9 +4,13 @@ import { connect } from "dva";
 
 import MapRenderer from "../GeoMap/Map/Map";
 
-import { FlowToolbar } from '../../components/Toolbar/EditorToolbar';
+import SplitterLayout from 'react-splitter-layout';
+import 'react-splitter-layout/lib/index.css';
+
+import { FlowToolbar } from '../../components/ConfigUI/Toolbar';
 import LeftPaneLayer from '../../components/Pane/LeftPane/LeftPaneLayer';
 import RightPaneLayer from '../../components/Pane/RightPane/RightPaneLayer';
+import BottomPaneLayer from '../../components/Pane/BottomPane/BottomPaneLayer';
 import Statebar from '../../components/Statebar/Statebar';
 
 import './index.less';
@@ -29,10 +33,10 @@ class WorkSpaceAntd extends React.Component<IAppProps, IAppState> {
     }
 
     render() {
-        let {layout, map} = this.props;
+        let { layout, map } = this.props;
         let rightKey = layout.key.right;
 
-        let { left, right } = this.props.layout.state;
+        let { left, right, bottom } = this.props.layout.state;
 
         let width_left = 4;
         let width_center = 16;
@@ -65,15 +69,17 @@ class WorkSpaceAntd extends React.Component<IAppProps, IAppState> {
                         {visibleLeft && <LeftPaneLayer></LeftPaneLayer>}
                     </Col>
                     <Col span={width_center} className="editorContent">
-                        <MapRenderer
-                            document={this.props.map.document}
-                            style={this.props.map.style}
-                            state={this.props.map.state}
-                            options={this.props.map.options}
-                            layout={this.props.layout}
-                        />
+                        <SplitterLayout vertical>
+                            <MapRenderer
+                                document={this.props.map.document}
+                                style={this.props.map.style}
+                                state={this.props.map.state}
+                                options={this.props.map.options}
+                                layout={this.props.layout}
+                            />
+                            {bottom && <BottomPaneLayer />}
+                        </SplitterLayout>
                     </Col>
-
                     {visibleRight && <Col span={width_right} className="editorSidebar">
                         <RightPaneLayer activeKey={rightKey.activeKey}></RightPaneLayer>
                     </Col>}

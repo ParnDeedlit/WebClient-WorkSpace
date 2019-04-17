@@ -2,18 +2,19 @@ import * as React from 'react';
 import { connect } from 'dva';
 
 import { Divider } from 'antd';
-import ToolbarButton from './ToolbarButton';
-import ToolbarMenu from './ToolbarMenu';
+import ToolbarButton from '../../Toolbar/EditorToolbar/ToolbarButton';
+import ToolbarMenu from '../../Toolbar/EditorToolbar/ToolbarMenu';
 
-import { AddItems, bindAddMenus } from '../Config/ConfigAddItems';
-import { DocumentItem, bindDocumentMenus } from '../Config/ConfigDocument';
-import { BackItems, bindBackMenus } from '../Config/ConfigBackItems';
-import { AnalysisItems, bindAnalysisMenus } from '../Config/ConfigAnalysisItems';
+import { DocumentItem, bindDocumentMenus } from './ConfigDocument';
+import { AttrItem, bindAttrMenus } from './ConfigAttr';
+import { AddItems, bindAddMenus } from './ConfigAddItems';
+import { BackItems, bindBackMenus } from './ConfigBackItems';
+import { AnalysisItems, bindAnalysisMenus } from './ConfigAnalysisItems';
 
 import Models from '../../Model/Models';
 
 import { toggleProject, toggleTransform } from '../../../action/command/project';
-import { toggleLeftLayout, toggleRightLayout } from '../../../action/command/layout';
+import { toggleLeftLayout, toggleRightLayout, toggleBottomLayout } from '../../../action/command/layout';
 import { toggleBackgroud } from '../../../action/map/document';
 
 
@@ -30,7 +31,7 @@ interface IToolbarState {
   current: string,
 }
 
-class FlowToolbar extends React.Component<IToolbarProps, IToolbarState> {
+export class FlowToolbar extends React.Component<IToolbarProps, IToolbarState> {
   constructor(props: any) {
     super(props)
     this.state = {
@@ -70,6 +71,7 @@ class FlowToolbar extends React.Component<IToolbarProps, IToolbarState> {
   private toggleTransform = () => { this.props.dispatch(toggleTransform(true)) }
 
   private toggleLeftLayout = () => { this.props.dispatch(toggleLeftLayout(true)) }
+  private toggleBottomLayout = () => { this.props.dispatch(toggleBottomLayout(true)) }
 
   private toggleBackgroud = (id) => { this.props.dispatch(toggleBackgroud(id)) }
 
@@ -82,9 +84,12 @@ class FlowToolbar extends React.Component<IToolbarProps, IToolbarState> {
     const analysisItemBind = bindAnalysisMenus(this.handleAddItemsClick);
     const backItemBind = bindBackMenus(this.handleBackgroundClick);
     const documentItemBind = bindDocumentMenus(this.handleAddItemsClick, DocumentItem.text);
+    const attrItemBind = bindAttrMenus(this.handleAddItemsClick, AttrItem.text);
 
     DocumentItem.ui_content = documentItemBind;
     DocumentItem.command = this.toggleLeftLayout;
+    AttrItem.ui_content = attrItemBind;
+    AttrItem.command = this.toggleBottomLayout;
     AddItems.ui_content = addItemBind;
     AnalysisItems.ui_content = analysisItemBind;
     BackItems.ui_content = backItemBind;
@@ -93,6 +98,7 @@ class FlowToolbar extends React.Component<IToolbarProps, IToolbarState> {
       <div>
         <div className="mapgis-command-toolbar">
           <ToolbarMenu {...DocumentItem} />
+          <ToolbarMenu {...AttrItem} />
           <ToolbarMenu {...AddItems} />
           <Divider type="vertical" />
           <ToolbarMenu {...AnalysisItems} />

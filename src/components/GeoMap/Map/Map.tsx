@@ -58,7 +58,7 @@ export default class MapRenderer extends React.Component<IModelsProps, {}> {
     }
  */
     return (
-      <div /* style={elementStyle} */ className="workspace-layout-map-wraper">
+      <div className="workspace-layout-map-wraper">
         {mapElement}
       </div>
     );

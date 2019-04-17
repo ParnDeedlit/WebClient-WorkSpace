@@ -13,7 +13,7 @@ export let DocumentItem = {
     text:"详细信息", 
     ui:"button", 
     ui_content: null,
-    tooltip: "点击收缩/展开面板",
+    tooltip: "点击收缩/展开两侧面板",
     onClick: null,
     options: {
     }

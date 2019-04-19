@@ -4,8 +4,10 @@ import MapboxGlMap from "./MapboxGL/MapboxGlMap";
 
 import styleTool from "../../../utilities/style";
 
+import {IDocument} from '../../../utilities/document';
+
 interface IModelsProps {
-  document: any;
+  document: IDocument;
   style: any;
   state: any;
   options: any;

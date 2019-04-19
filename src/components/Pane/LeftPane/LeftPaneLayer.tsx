@@ -4,13 +4,17 @@ import { connect } from "dva";
 import { Tabs, Drawer } from 'antd';
 import IconFont from '../../IconFont/mapgis';
 
-import { LeftTabs, LeftDefaultKey } from '../../ConfigUI/LeftPane';
+import { LeftTabs } from '../../ConfigUI/LeftPane';
+
+import { IDocument } from '../../../utilities/document';
+import { NameSpaceDocument } from '../../../models/workspace';
 
 import './index.less'
 
 const TabPane = Tabs.TabPane;
 
 interface ILeftPaneProps {
+  document: IDocument;
   map: any;
   layout: any;
 }
@@ -18,18 +22,18 @@ interface ILeftPaneProps {
 class LeftPaneLayer extends React.Component<ILeftPaneProps, {}> {
   //-----------------------------------------Menu 菜单相关配置 开始------------------------------------
 
-  getTabs(tabs, map, layout) {
+  getTabs(tabs, document: IDocument, map, layout) {
     return tabs.map(tab => {
       return (<TabPane tab={<span><IconFont type={tab.icon} />{tab.title}</span>} key={tab.key}>
-          {tab.ui(map, layout)}
+        {tab.ui(document, map, layout)}
       </TabPane>);
     });
   }
 
   //-----------------------------------------Menu 菜单相关配置 结束--------------------------------------------
   render() {
-    const { map, layout } = this.props;
-    const tabUI = this.getTabs(LeftTabs, map, layout);
+    const { document, map, layout } = this.props;
+    const tabUI = this.getTabs(LeftTabs, document, map, layout);
     return (
       <div className="card-container">
         <Tabs type="line" size="small" tabBarGutter={1}>
@@ -42,16 +46,7 @@ class LeftPaneLayer extends React.Component<ILeftPaneProps, {}> {
 
 function mapStateToProps(state: any, ownProps: any) {
   return {
-    content: state.content,
-    map: {
-      style: state.mapstyle,
-      state: state.mapstate,
-      options: state.mapoptions,
-      document: state.mapdocument
-    },
-    layout: {
-      state: state.layoutstate
-    }
+    document: state[NameSpaceDocument],
   };
 }
 

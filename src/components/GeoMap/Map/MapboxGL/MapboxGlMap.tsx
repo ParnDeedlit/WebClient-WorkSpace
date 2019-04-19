@@ -19,7 +19,10 @@ import bbox from "@turf/bbox";
 
 import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
 import "mapbox-gl/dist/mapbox-gl.css";
-import Document from '../../Document/Document';
+
+import { IDocument } from '../../../../utilities/document';
+import backgrouds from '../../../../config/backgroud';
+
 //import '../../mapboxgl.css';
 //import "../../../../utilities/mapbox-rtl";
 
@@ -59,7 +62,7 @@ function buildInspectStyle(originalMapStyle, coloredLayers, highlightedLayer) {
 var self = null;
 
 interface IMapboxGlMapProps {
-  document: string;
+  document: IDocument;
   mapStyle: Object; //isRequired,
   options: any;
 }
@@ -92,25 +95,31 @@ export default class MapboxGlMap extends React.Component<
     MapboxGl.accessToken = tokens.mapbox;
   }
 
-  updateBackgroud(){
+  updateBackgroud() {
     const document = self.props.document;
-    const background = document.background;
-    const {id, tileUrl} = background;
-    if(!id || !tileUrl) return;
+    const backgrounds = document.backgrounds;
 
-    self.state.map.addLayer({
-      "id": id,
-      "type": "raster",
-      //连接图层来源
-      "source":  {
+    console.log("mapboxGL", backgrounds)
+
+    backgrounds.forEach(background => {
+      const { id, tileUrl } = background;
+      if (!id || !tileUrl) return;
+
+      self.state.map.addLayer({
+        "id": id,
+        "type": "raster",
+        //连接图层来源
+        "source": {
           "type": "raster",
-          "tiles": [ tileUrl ],
+          "tiles": [tileUrl],
           "minZoom": 0,
           "maxZoom": 20
-      },
-      "minzoom": 0,
-      "maxzoom": 22
+        },
+        "minzoom": 0,
+        "maxzoom": 22
+      });
     });
+
   }
 
   updateMapFromProps(props) {
@@ -127,7 +136,7 @@ export default class MapboxGlMap extends React.Component<
 
     var style = props.mapStyle;
     this.state.map.setStyle(props.mapStyle, { diff: true });
-          
+
     this.updateBackgroud();
   }
 

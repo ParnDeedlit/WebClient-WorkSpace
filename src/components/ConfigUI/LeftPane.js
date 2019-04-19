@@ -1,11 +1,12 @@
 import * as React from "react";
 import Document from "../GeoMap/Document/Document";
+//import { IDocument } from "../../utilities/document";
 
-export function getDocument(map, layout) {
-  return <Document document={map.document} />;
+export function getDocument(document, map, layout) {
+  return <Document document={document} />;
 }
 
-export function getEmptry(map, layout) {
+export function getEmptry(document, map, layout) {
   return <div />;
 }
 

@@ -6,9 +6,11 @@ import BackPopver from '../../Popover/BackPopver';
 import VectorTilePopver from '../../Popover/VectorTilePopver';
 import RasterTilePopver from '../../Popover/RasterTilePopver';
 
-import {IDocument, toggleCurrent} from '../../../utilities/document';
+import { IDocument, toggleCurrent } from '../../../utilities/document';
+import { LayerType, ILayer, BackGround } from '../../../utilities/layer';
 
 import './index.less';
+import { getBackground } from '../../../config/backgroud';
 
 const { TreeNode } = Tree;
 
@@ -96,6 +98,7 @@ class Document extends React.Component<IDocumentProps, IDocumentState> {
     }
 
     renderTreeNodes = data => data.map((item) => {
+        console.log(item);
         if (item.children) {
             if (item.icon) {
                 return <TreeNode icon={<IconFont type={item.icon} />} title={item.title} key={item.key} dataRef={item}>
@@ -108,17 +111,40 @@ class Document extends React.Component<IDocumentProps, IDocumentState> {
                 </TreeNode>
             );
         }
-        if (item.icon && item.type == "background") {
+        if (item.icon && item.type == LayerType.BackGround) {
             return <TreeNode {...item} icon={<BackPopver {...item} />} />
-        } else if (item.icon && item.type == "rastertile") {
+        } else if (item.icon && item.type == LayerType.RasterTile) {
             return <TreeNode {...item} icon={<RasterTilePopver {...item} />} />
-        } else if (item.icon && item.type == "vectortile") {
+        } else if (item.icon && item.type == LayerType.VectorTile) {
             return <TreeNode {...item} icon={<VectorTilePopver {...item} />} />
         }
         return <TreeNode {...item} />;
     })
 
+    getBackgrounds(backgrounds: Array<BackGround>){
+        let backgournd = {
+            title: '背景底图',
+            icon: 'icon-background',
+            key: 'background',
+            type: LayerType.BackGround,
+            children: []
+        };
+        backgrounds.map(back=>{
+            backgournd.children.push(back);
+        });
+        return backgournd;
+    }
+
     render() {
+        if (!this.props.document) return (<div />);
+
+        let { backgrounds, layers } = this.props.document;
+
+        let trees = [];
+        let groupBack = this.getBackgrounds(backgrounds);
+
+        trees.push(groupBack);
+
         return (
             <div>
                 <Tree
@@ -134,7 +160,7 @@ class Document extends React.Component<IDocumentProps, IDocumentState> {
                     /* onSelect={this.onSelect} */
                     selectedKeys={this.state.selectedKeys}
                 >
-                    {this.renderTreeNodes(treeData)}
+                    {this.renderTreeNodes(trees)}
                 </Tree>
             </div>
         );

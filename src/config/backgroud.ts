@@ -2,6 +2,9 @@ export let defaultBackground = {
   title: "黑色背景",
   name: "MapBox黑色背景",
   id: "mapboxdark",
+  key: "mapboxdark",
+  icon: "icon-background",
+  type: "background",
   tileUrl:
     "https://api.tiles.mapbox.com/v4/mapbox.dark/{z}/{x}/{y}.png?access_token=sk.eyJ1IjoiY2hlbmdkYWRhIiwiYSI6ImNqZDFjaGo0ZjFzcnoyeG54enoxdnNuZHUifQ.hTWXXBUQ0wdGeuDF3GWeUw",
   imgUrl:
@@ -13,6 +16,9 @@ export let backgrouds = [
     title: "黑色背景",
     name: "MapBox黑色背景",
     id: "mapboxdark",
+    key: "mapboxdark",
+    icon: "icon-background",
+    type: "background",
     tileUrl:
       "https://api.tiles.mapbox.com/v4/mapbox.dark/{z}/{x}/{y}.png?access_token=sk.eyJ1IjoiY2hlbmdkYWRhIiwiYSI6ImNqZDFjaGo0ZjFzcnoyeG54enoxdnNuZHUifQ.hTWXXBUQ0wdGeuDF3GWeUw",
     imgUrl:
@@ -22,6 +28,9 @@ export let backgrouds = [
     title: "浅色背景",
     name: "MapBox浅色背景",
     id: "mapboxlight",
+    key: "mapboxlight",
+    icon: "icon-background",
+    type: "background",
     tileUrl:
       "https://api.tiles.mapbox.com/v4/mapbox.light/{z}/{x}/{y}.png?access_token=sk.eyJ1IjoiY2hlbmdkYWRhIiwiYSI6ImNqZDFjaGo0ZjFzcnoyeG54enoxdnNuZHUifQ.hTWXXBUQ0wdGeuDF3GWeUw",
     imgUrl:
@@ -31,6 +40,9 @@ export let backgrouds = [
     title: "街道地图",
     name: "MapBox街道地图",
     id: "mapboxstreets",
+    key: "mapboxstreets",
+    icon: "icon-background",
+    type: "background",
     tileUrl:
       "https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=sk.eyJ1IjoiY2hlbmdkYWRhIiwiYSI6ImNqZDFjaGo0ZjFzcnoyeG54enoxdnNuZHUifQ.hTWXXBUQ0wdGeuDF3GWeUw",
     imgUrl:
@@ -40,6 +52,9 @@ export let backgrouds = [
     title: "高德地图",
     name: "高德地图",
     id: "gaode",
+    key: "gaode",
+    icon: "icon-background",
+    type: "background",
     tileUrl:
       "https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=sk.eyJ1IjoiY2hlbmdkYWRhIiwiYSI6ImNqZDFjaGo0ZjFzcnoyeG54enoxdnNuZHUifQ.hTWXXBUQ0wdGeuDF3GWeUw",
     imgUrl:

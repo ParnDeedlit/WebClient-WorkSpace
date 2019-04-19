@@ -53,7 +53,7 @@ export class ProjectModel extends React.Component<
             <Radio.Button value="lonlat">经纬度</Radio.Button>
             <Radio.Button value="gauss">高斯投影</Radio.Button>
           </Radio.Group>
-          <br/>
+          <br />
           {this.state.optionSelected == "mercator" && <MercatorView />}
           {this.state.optionSelected == "lonlat" && <LonlatView />}
           {this.state.optionSelected == "gauss" && <GaussView />}

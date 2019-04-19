@@ -1,3 +1,4 @@
 import FlowToolbar from './FlowToolbar';
+import DocToolbar from './DocToolbar';
 
-export { FlowToolbar };
+export { DocToolbar, FlowToolbar };

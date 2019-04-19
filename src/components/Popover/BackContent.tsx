@@ -10,18 +10,22 @@ const data = [
     {
         title: '缩放',
         icon: "icon-zoom",
+        key: "zoom",
     },
     {
         title: '透明度',
         icon: "icon-transparency",
+        key: "opticty",
     },
     {
         title: '设置可见范围',
         icon: "icon-range",
+        key: "range",
     },
     {
         title: '重命名',
         icon: "icon-rename",
+        key: "rename",
     },
 ];
 
@@ -34,18 +38,19 @@ interface IBackProps {
 class BackContent extends React.Component<IBackProps, {}> {
 
     getMenuItem(item) {
-        return (<Item>
-            <IconText type={item.icon} text={item.title} />
+        return (<Item key={item.key}>
+            <IconText type={item.icon} text={item.title}  />
         </Item>)
     }
 
     getSubMenu(data) {
         return data.map((item) => {
-            return (<SubMenu
+            return this.getMenuItem(item);
+            /* return (<SubMenu
                 title={<IconText type={item.icon} text={item.title} />}
             >
                 {this.getMenuItem(item)}
-            </SubMenu>)
+            </SubMenu>) */
         });
     }
 

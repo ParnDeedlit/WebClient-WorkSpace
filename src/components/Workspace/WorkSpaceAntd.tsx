@@ -2,12 +2,17 @@ import * as React from 'react';
 import { Row, Col } from 'antd';
 import { connect } from "dva";
 
+import {Document} from '../../utilities/document';
+
 import MapRenderer from "../GeoMap/Map/Map";
 
 import SplitterLayout from 'react-splitter-layout';
 import 'react-splitter-layout/lib/index.css';
 
-import { FlowToolbar } from '../../components/ConfigUI/Toolbar';
+import {NameSpaceDocument, NameSpaceMapState, NameSpaceMapOption, NameSpaceMapStyle, 
+    NameSpaceLayoutState, NameSpaceLayoutKey} from '../../models/workspace';
+
+import { DocToolbar, FlowToolbar } from '../../components/ConfigUI/Toolbar';
 import LeftPaneLayer from '../../components/Pane/LeftPane/LeftPaneLayer';
 import RightPaneLayer from '../../components/Pane/RightPane/RightPaneLayer';
 import BottomPaneLayer from '../../components/Pane/BottomPane/BottomPaneLayer';
@@ -16,11 +21,10 @@ import Statebar from '../../components/Statebar/Statebar';
 import './index.less';
 
 interface IAppProps {
-    content: any;
-    size?: string; //非必填
-    map: any;
-    layout: any;
-    dispatch: any;
+    document?: Document;
+    map?: any;
+    layout?: any;
+    dispatch?: any;
 }
 interface IAppState {
     id: number;
@@ -60,9 +64,15 @@ class WorkSpaceAntd extends React.Component<IAppProps, IAppState> {
         return (
             <div className="editor">
                 <Row type="flex" className="editorHd">
-                    <Col span={24}>
+                    <Col span={7}>            
+                        <DocToolbar />
+                    </Col>
+                     <Col span={7} >
                         <FlowToolbar />
                     </Col>
+{/*                     <Col span={8} >
+                        <FlowToolbar />
+                    </Col> */}
                 </Row>
                 <Row type="flex" className="editorCd">
                     <Col span={width_left} className="editorSidebar">
@@ -71,7 +81,7 @@ class WorkSpaceAntd extends React.Component<IAppProps, IAppState> {
                     <Col span={width_center} className="editorContent">
                         <SplitterLayout vertical>
                             <MapRenderer
-                                document={this.props.map.document}
+                                document={this.props.document}
                                 style={this.props.map.style}
                                 state={this.props.map.state}
                                 options={this.props.map.options}
@@ -97,16 +107,15 @@ class WorkSpaceAntd extends React.Component<IAppProps, IAppState> {
 
 function mapStateToProps(state: any, ownProps: any) {
     return {
-        content: state.content,
+        document: state[NameSpaceDocument],
         map: {
-            style: state.mapstyle,
-            state: state.mapstate,
-            options: state.mapoptions,
-            document: state.mapdocument
+            style: state[NameSpaceMapStyle],
+            state: state[NameSpaceMapState],
+            options: state[NameSpaceMapOption],
         },
         layout: {
-            state: state.layoutstate,
-            key: state.layoutkey
+            state: state[NameSpaceLayoutState],
+            key: state[NameSpaceLayoutKey],
         },
     };
 }

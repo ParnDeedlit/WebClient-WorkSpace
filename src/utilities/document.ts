@@ -9,11 +9,13 @@ import { LayerType, ILayer, BackGround, defaultId } from "./layer";
 export class Current {
   id: string;
   type: LayerType;
+  name?: string;
 }
 
 export const defaultCurrent = {
   id: defaultId,
-  type: LayerType.UnKnow
+  type: LayerType.UnKnow,
+  name: defaultId
 };
 
 /**
@@ -57,6 +59,7 @@ export class IDocument {
       if (back.id == id) {
         current.id = back.id;
         current.type = LayerType.BackGround;
+        current.name = back.name;
         return current;
       }
     }
@@ -66,6 +69,7 @@ export class IDocument {
       if (layer.id == id) {
         current.id = layer.id;
         current.type = layer.type;
+        current.name = layer.name;
         return current;
       }
     }
@@ -117,7 +121,8 @@ export const defaultLayers: Array<ILayer> = [
   {
     type: LayerType.VectorTile,
     url: "http://localhost:6163/igs/rest/mrms/vtiles/styles/vectortile.json",
-    mapstyle: "http://localhost:6163/igs/rest/mrms/vtiles/styles/vectortile.json",
+    mapstyle:
+      "http://localhost:6163/igs/rest/mrms/vtiles/styles/vectortile.json",
     name: "地类图斑",
     title: "地类图斑",
     id: "hunan",

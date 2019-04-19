@@ -70,9 +70,6 @@ class WorkSpaceAntd extends React.Component<IAppProps, IAppState> {
                      <Col span={7} >
                         <FlowToolbar />
                     </Col>
-{/*                     <Col span={8} >
-                        <FlowToolbar />
-                    </Col> */}
                 </Row>
                 <Row type="flex" className="editorCd">
                     <Col span={width_left} className="editorSidebar">

@@ -147,7 +147,7 @@ class Document extends React.Component<IDocumentProps, IDocumentState> {
         vectortile.children.push(customChldren);
         return vectortile;
 
-        /* vectortiles.map(layer => {
+/*         vectortiles.map(layer => {
             if (layer.type == LayerType.VectorTile) {
                 vectortile.children.push(layer);
             }

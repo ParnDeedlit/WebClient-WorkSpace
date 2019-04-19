@@ -3,10 +3,13 @@ import { connect } from 'dva';
 
 import { Row, Col, Progress, Tag, Input } from 'antd';
 
+import { NameSpaceDocument } from '../../models/workspace';
+
 import './index.less';
+import IDocument from '../../utilities/document';
 
 export interface IStatebarProps {
-
+  document: IDocument
 }
 
 export interface IStatebarState {
@@ -23,6 +26,8 @@ class Statebar extends React.Component<IStatebarProps, IStatebarState> {
   public render(): JSX.Element {
     /* '0%': '#108ee9',
     '100%': '#87d068', */
+    const { current } = this.props.document;
+    const { name } = current;
     return (
       <Row type="flex" justify="space-between">
         <Col span={4} >
@@ -39,8 +44,8 @@ class Statebar extends React.Component<IStatebarProps, IStatebarState> {
           </div>
 
         </Col>
-        <Col span={11} >
-
+        <Col span={8} >
+          <Tag >当前选中的图层是:</Tag> <Tag color="#0079c1">{name}</Tag>
         </Col>
         <Col span={3} >
           <div className="rightState">
@@ -64,7 +69,7 @@ class Statebar extends React.Component<IStatebarProps, IStatebarState> {
 
 function mapStateToProps(state: any, ownProps: any) {
   return {
-    //content: state.content
+    document: state[NameSpaceDocument]
   }
 }
 

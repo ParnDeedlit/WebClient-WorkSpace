@@ -1,5 +1,7 @@
+import { NameSpaceMapState } from "../index";
+
 export default {
-  namespace: "mapstate",
+  namespace: NameSpaceMapState,
   state: {
     selectedLayerIndex: 0,
     selectedLayer: {},

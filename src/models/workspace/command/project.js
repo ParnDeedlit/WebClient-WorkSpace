@@ -1,5 +1,7 @@
+import { NameSpaceCommand } from "../index";
+
 export default {
-  namespace: "commandproject",
+  namespace: NameSpaceCommand,
   state: {
     toggleProject: false,
     toggleTransform: false

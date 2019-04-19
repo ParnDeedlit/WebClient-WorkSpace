@@ -1,9 +1,12 @@
+import { NameSpaceLayoutState } from "../index";
+
 export default {
-  namespace: "layoutstate",
+  namespace: NameSpaceLayoutState,
   state: {
     left: true,
     right: false,
     bottom: false,
+    toolbar: ["basic", "vectortile", "rastertile"],
   },
   reducers: {
     toggleLeftLayout(state) {

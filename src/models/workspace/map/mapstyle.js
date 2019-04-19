@@ -1,5 +1,7 @@
+import { NameSpaceMapStyle } from "../index";
+
 export default {
-  namespace: "mapstyle",
+  namespace: NameSpaceMapStyle,
   state: {
     version: 8,
     name: "default style",

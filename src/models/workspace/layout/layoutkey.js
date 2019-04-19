@@ -1,7 +1,8 @@
+import { NameSpaceLayoutKey } from "../index";
 import {RightDefaultKey} from '../../../components/ConfigUI/RightPane';
 
 export default {
-  namespace: "layoutkey",
+  namespace: NameSpaceLayoutKey,
   state: {
     left: {
 

@@ -1,5 +1,7 @@
+import { NameSpaceMapOption } from "../index";
+
 export default {
-  namespace: "mapoption",
+  namespace: NameSpaceMapOption,
   state: {
     print: {}
   },

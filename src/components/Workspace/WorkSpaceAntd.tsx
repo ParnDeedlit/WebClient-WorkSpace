@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Row, Col } from 'antd';
 import { connect } from "dva";
 
-import {Document} from '../../utilities/document';
+import {IDocument} from '../../utilities/document';
 
 import MapRenderer from "../GeoMap/Map/Map";
 
@@ -21,7 +21,7 @@ import Statebar from '../../components/Statebar/Statebar';
 import './index.less';
 
 interface IAppProps {
-    document?: Document;
+    document?: IDocument;
     map?: any;
     layout?: any;
     dispatch?: any;

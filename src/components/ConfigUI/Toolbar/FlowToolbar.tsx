@@ -5,7 +5,7 @@ import { Divider, Row, Col } from 'antd';
 
 import { NameSpaceDocument } from '../../../models/workspace';
 
-import { Document } from '../../../utilities/document';
+import { IDocument } from '../../../utilities/document';
 import { LayerType } from '../../../utilities/layer';
 
 import {isEnable} from '../../../utilities/toolbar';
@@ -17,7 +17,7 @@ import ToolbarButton from '../../Toolbar/EditorToolbar/ToolbarButton';
 interface IToolbarProps {
   content: any,
   dispatch: any,
-  document: Document,
+  document: IDocument,
 }
 
 interface IToolbarState {

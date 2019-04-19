@@ -1,4 +1,6 @@
-import { defaultBackground } from "../config/backgroud";
+import { defaultBackground, getBackground } from "../config/backgroud";
+import { NameSpaceDocument } from "../models/workspace";
+
 import { LayerType, ILayer } from "./layer";
 
 export class Current {
@@ -19,7 +21,11 @@ export class BackGround {
   imgUrl: string;
 }
 
-export class Document {
+/**
+ * @author 潘卓然
+ * @description 通用地图文档接口
+ */
+export class IDocument {
   current: Current; //实例属性
   background: BackGround; //实例属性
   layers: Array<ILayer>;
@@ -32,13 +38,13 @@ export class Document {
   }
 
   //实例方法
-  getBackgroud(document) {
+  getBackgroud(document: IDocument) {
     if (!document) return defaultBackground;
-    if (!document.backgroud) return defaultBackground;
-    return document.backgroud;
+    if (!document.background) return defaultBackground;
+    return document.background;
   }
 
-  getCurrent(document) {
+  getCurrent(document: IDocument) {
     if (!document) return defaultCurrent;
     if (!document.current) return defaultCurrent;
     return document.current;
@@ -76,4 +82,28 @@ export class Document {
   /* static area(r: number) {return Document.PI * r * r;} */
 }
 
-export default Document;
+/**
+ * @function 改变底图背景
+ * @param id
+ * @return 触发对应的action行为，让model里面的document的reduer函数响应
+ */
+export function toggleBackgroud(id: string) {
+  return {
+    type: NameSpaceDocument + "/changeBackgroud",
+    payload: getBackground(id)
+  };
+}
+
+/**
+ * @function 改变当前选中
+ * @param currnet
+ * @return 触发对应的action行为，让model里面的document的reduer函数响应
+ */
+export function toggleCurrent(current: Current) {
+  return {
+    type: NameSpaceDocument + "/current",
+    payload: current
+  };
+}
+
+export default IDocument;

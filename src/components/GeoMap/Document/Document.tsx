@@ -6,8 +6,9 @@ import BackPopver from '../../Popover/BackPopver';
 import VectorTilePopver from '../../Popover/VectorTilePopver';
 import RasterTilePopver from '../../Popover/RasterTilePopver';
 
-import './index.less';
+import {IDocument, toggleCurrent} from '../../../utilities/document';
 
+import './index.less';
 
 const { TreeNode } = Tree;
 
@@ -40,7 +41,7 @@ const treeData = [{
 }];
 
 interface IDocumentProps {
-    document: any;
+    document: IDocument;
 }
 
 interface IDocumentState {

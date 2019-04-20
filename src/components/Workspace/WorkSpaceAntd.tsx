@@ -61,7 +61,7 @@ class WorkSpaceAntd extends React.Component<IAppProps, IAppState> {
         }
 
         let visibleLeft = width_left > 1 ? true : false;
-        let visibleRight = width_right > 0 ? true : false;
+        let visibleRight = width_right > 1 ? true : false;
 
         return (
             <div className="editor">
@@ -89,9 +89,9 @@ class WorkSpaceAntd extends React.Component<IAppProps, IAppState> {
                             {bottom && <BottomPaneLayer />}
                         </SplitterLayout>
                     </Col>
-                    {visibleRight && <Col span={width_right} className="editorSidebar">
-                        <RightPaneLayer activeKey={rightKey.activeKey}></RightPaneLayer>
-                    </Col>}
+                    <Col span={width_right} className="editorSidebar">
+                        {visibleRight && <RightPaneLayer ></RightPaneLayer>}
+                    </Col>
                 </Row>
                 <Row type="flex" align="bottom" className="editorBd">
                     <Col span={24} className="editorStateBar">

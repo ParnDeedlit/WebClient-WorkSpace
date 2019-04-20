@@ -47,22 +47,22 @@ class Statebar extends React.Component<IStatebarProps, IStatebarState> {
               status="active"
             />
           </div>
-
         </Col>
-        <Col span={8} >
+        <Col span={1} ></Col>
+        <Col span={6} >
           <Tag >当前选中的图层是:</Tag> <Tag color="#0079c1">{name}</Tag>
         </Col>
         <Col span={3} >
           <div className="rightState">
-            <Input addonBefore="级别:" addonAfter="级" defaultValue="0" size="small" value={zoom}/>
+            <Input addonBefore="级别:" addonAfter="级" defaultValue="0" size="small" value={zoom} />
           </div>
         </Col>
-        <Col span={3}>
+        <Col span={5}>
           <div className="rightState">
             <Input addonBefore="X坐标:" addonAfter="度" defaultValue="0" size="small" value={lng} />
           </div>
         </Col>
-        <Col span={3}>
+        <Col span={5}>
           <div className="rightState">
             <Input addonBefore="Y坐标:" addonAfter="度" defaultValue="0" size="small" value={lat} />
           </div>

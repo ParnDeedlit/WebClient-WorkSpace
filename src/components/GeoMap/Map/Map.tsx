@@ -8,6 +8,7 @@ import {IDocument} from '../../../utilities/document';
 
 interface IModelsProps {
   document: IDocument;
+  dispatch: any;
   style: any;
   state: any;
   options: any;
@@ -16,9 +17,9 @@ interface IModelsProps {
 
 export default class MapRenderer extends React.Component<IModelsProps, {}> {
   render() {
-    const layers = this.props.style.layers;
-    const selectedIndex = this.props.state.selectedLayerIndex;
-    const selectLayer = layers == undefined ? null : layers.length ? layers[selectedIndex] : null;
+    //const layers = this.props.style.layers;
+    //const selectedIndex = this.props.state.selectedLayerIndex;
+    //const selectLayer = layers == undefined ? null : layers.length ? layers[selectedIndex] : null;
     const mapProps = {
       mapStyle: styleTool.replaceAccessTokens(this.props.style, {
         allowFallback: true
@@ -26,6 +27,7 @@ export default class MapRenderer extends React.Component<IModelsProps, {}> {
       document: this.props.document,
       options: this.props.options,
       layout: this.props.layout,
+      dispatch: this.props.dispatch,
     };
     console.log("MapRenderer", mapProps);
 

@@ -1,14 +1,22 @@
 import { NameSpaceMapState } from "../index";
+import { defaultMapState } from "../../../utilities/map";
 
 export default {
   namespace: NameSpaceMapState,
   state: {
+    ...defaultMapState,
     selectedLayerIndex: 0,
-    selectedLayer: {},
-    viewState: "map",
-    mapRect: []
+    selectedLayer: {}
   },
   reducers: {
+    zoom(state, { payload: zoom }) {
+      var newState = { ...state, zoom };
+      return newState;
+    },
+    mousePosition(state, { payload: mousePosition }) {
+      var newState = { ...state, mousePosition };
+      return newState;
+    },
     selectedLayerIndex(state, { payload: selectedLayerIndex }) {
       var newState = { ...state, selectedLayerIndex };
       return newState;

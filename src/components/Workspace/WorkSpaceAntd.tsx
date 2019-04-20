@@ -2,15 +2,17 @@ import * as React from 'react';
 import { Row, Col } from 'antd';
 import { connect } from "dva";
 
-import {IDocument} from '../../utilities/document';
+import { IDocument } from '../../utilities/document';
 
 import MapRenderer from "../GeoMap/Map/Map";
 
 import SplitterLayout from 'react-splitter-layout';
 import 'react-splitter-layout/lib/index.css';
 
-import {NameSpaceDocument, NameSpaceMapState, NameSpaceMapOption, NameSpaceMapStyle, 
-    NameSpaceLayoutState, NameSpaceLayoutKey} from '../../models/workspace';
+import {
+    NameSpaceDocument, NameSpaceMapState, NameSpaceMapOption, NameSpaceMapStyle,
+    NameSpaceLayoutState, NameSpaceLayoutKey
+} from '../../models/workspace';
 
 import { DocToolbar, FlowToolbar } from '../../components/ConfigUI/Toolbar';
 import LeftPaneLayer from '../../components/Pane/LeftPane/LeftPaneLayer';
@@ -64,10 +66,10 @@ class WorkSpaceAntd extends React.Component<IAppProps, IAppState> {
         return (
             <div className="editor">
                 <Row type="flex" className="editorHd">
-                    <Col span={7}>            
+                    <Col span={7}>
                         <DocToolbar />
                     </Col>
-                     <Col span={7} >
+                    <Col span={7} >
                         <FlowToolbar />
                     </Col>
                 </Row>
@@ -77,12 +79,12 @@ class WorkSpaceAntd extends React.Component<IAppProps, IAppState> {
                     </Col>
                     <Col span={width_center} className="editorContent">
                         <SplitterLayout vertical>
-                            <MapRenderer
-                                document={this.props.document}
+                            <MapRenderer document={this.props.document}
                                 style={this.props.map.style}
                                 state={this.props.map.state}
                                 options={this.props.map.options}
                                 layout={this.props.layout}
+                                dispatch={this.props.dispatch}
                             />
                             {bottom && <BottomPaneLayer />}
                         </SplitterLayout>

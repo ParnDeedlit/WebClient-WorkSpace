@@ -22,9 +22,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 
 import { IDocument } from '../../../../utilities/document';
 import backgrouds from '../../../../config/backgroud';
-
-//import '../../mapboxgl.css';
-//import "../../../../utilities/mapbox-rtl";
+import { MapMouseEvent, Positon, toggleMousePosition, toggleZoomLevel } from '../../../../utilities/map';
 
 const IS_SUPPORTED = MapboxGl.supported();
 
@@ -64,7 +62,9 @@ var self = null;
 interface IMapboxGlMapProps {
   document: IDocument;
   mapStyle: Object; //isRequired,
+  layout: any;
   options: any;
+  dispatch?: any;
 }
 
 interface IMapboxGlMapStates {
@@ -75,7 +75,25 @@ interface IMapboxGlMapStates {
 export default class MapboxGlMap extends React.Component<
   IMapboxGlMapProps,
   IMapboxGlMapStates
-  > {
+  > implements MapMouseEvent {
+
+  zoom(zoom: number): number {
+    this.props.dispatch(toggleZoomLevel(zoom));
+    return zoom;
+  }
+
+  currentPosition(point: Positon): Positon {
+    //throw new Error("Method not implemented.");
+    let position: Positon = [0, 0];
+    if (!point) return position;
+    this.props.dispatch(toggleMousePosition(point));
+    return point;
+  }
+
+  click(event: any) {
+    //throw new Error("Method not implemented.");
+  }
+
   static defaultProps = {
     mapboxAccessToken: tokens.mapbox,
     options: {}
@@ -186,9 +204,6 @@ export default class MapboxGlMap extends React.Component<
     map.showCollisionBoxes = mapOpts.showCollisionBoxes;
     map.showOverdrawInspector = mapOpts.showOverdrawInspector;
 
-    const zoom = new ZoomControl();
-    map.addControl(zoom, "top-right");
-
     const nav = new MapboxGl.NavigationControl();
     map.addControl(nav, "top-right");
 
@@ -199,6 +214,16 @@ export default class MapboxGlMap extends React.Component<
       this.setState({ map });
       this.setState({ isLoad: true });
       this.updateBackgroud();
+    });
+
+    map.on("mousemove", (e) => {
+      this.currentPosition([e.lngLat.lng, e.lngLat.lat]);
+    });
+
+    map.on("zoomend", (e) => {
+      let level = e.target.style.z;
+      console.log("zoom", e, level);
+      this.zoom(level);
     });
 
   }

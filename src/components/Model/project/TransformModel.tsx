@@ -5,7 +5,7 @@ import { Modal, Input, Divider  } from 'antd';
 
 import ProjectSelect from "../../GeoMap/Project/ProjectSelect";
 
-import { toggleTransform } from "../../../action/command/project";
+import { toggleTransform } from "../../../action/command/models";
 
 import {proj4Transform} from '../../../utilities/proj4tool';
 

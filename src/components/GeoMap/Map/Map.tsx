@@ -29,7 +29,7 @@ export default class MapRenderer extends React.Component<IModelsProps, {}> {
       layout: this.props.layout,
       dispatch: this.props.dispatch,
     };
-    console.log("MapRenderer", mapProps);
+    //console.log("MapRenderer", mapProps);
 
     const metadata = this.props.style.metadata || {};
     const renderer = metadata["maputnik:renderer"] || "mbgljs";

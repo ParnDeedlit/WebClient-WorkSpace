@@ -7,7 +7,7 @@ import MercatorView from "./MercatorView";
 import LonlatView from "./LonlatView";
 import GaussView from "./GaussView";
 
-import { toggleProject } from "../../../action/command/project";
+import { toggleProject } from "../../../action/command/models";
 
 interface IProjectModelProps {
   toggleDialog: boolean;

@@ -23,6 +23,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import { IDocument } from '../../../../utilities/document';
 import backgrouds from '../../../../config/backgroud';
 import { MapMouseEvent, Positon, toggleMousePosition, toggleZoomLevel } from '../../../../utilities/map';
+import { LayerType, BackGround } from '../../../../utilities/layer';
 
 const IS_SUPPORTED = MapboxGl.supported();
 
@@ -69,6 +70,7 @@ interface IMapboxGlMapProps {
 
 interface IMapboxGlMapStates {
   map: any;
+  backgrounds: Array<BackGround>;
   isLoad: boolean;
 }
 
@@ -102,6 +104,7 @@ export default class MapboxGlMap extends React.Component<
   public state: IMapboxGlMapStates = {
     map: null,
     isLoad: false,
+    backgrounds: []
   };
 
   private container = null;
@@ -114,29 +117,63 @@ export default class MapboxGlMap extends React.Component<
   }
 
   updateBackgroud() {
+    let map = self.state.map;
     const document = self.props.document;
-    const backgrounds = document.backgrounds;
+    let backgrounds = this.state.backgrounds;
 
-    console.log("mapboxGL", backgrounds)
+    if(!map) return;
+
+    backgrounds.forEach(background => {
+      const { id, tileUrl } = background;
+      if (!id || !tileUrl) return;
+      var current = map.getLayer(background.id);
+      if (current && current.id) {
+        map.removeSource(background.id);
+        map.removeLayer(background.id);
+      }
+    });
+
+    backgrounds = document.backgrounds;
+    this.setState({ backgrounds: backgrounds });
 
     backgrounds.forEach(background => {
       const { id, tileUrl } = background;
       if (!id || !tileUrl) return;
 
-      self.state.map.addLayer({
+      if (map.getLayer(id)) {
+        map.removeLayer(id);
+      }
+      if (map.getSource(id)) {
+        map.removeSource(id);
+      }
+      map.addSource(id, {
+        "type": "raster",
+        "tiles": [tileUrl],
+        "minZoom": 0,
+        "maxZoom": 20
+      });
+      map.addLayer({
         "id": id,
         "type": "raster",
-        //连接图层来源
-        "source": {
-          "type": "raster",
-          "tiles": [tileUrl],
-          "minZoom": 0,
-          "maxZoom": 20
-        },
+        "source": id,
         "minzoom": 0,
-        "maxzoom": 22
-      });
+        "maxzoom": 20
+      }, "background");
     });
+  }
+
+  updateStyle() {
+    const document = self.props.document;
+    const layers = document.layers;
+    var style = null;
+
+    for (var i = 0; i < layers.length; i++) {
+      var layer = layers[i];
+      if (layer.type == LayerType.VectorTile) {
+        style = layer.mapstyle;
+        return style;
+      }
+    }
 
   }
 
@@ -152,9 +189,11 @@ export default class MapboxGlMap extends React.Component<
     MapboxGl.accessToken =
       metadata["mapgis:mapbox_access_token"] || tokens.mapbox;
 
-    var style = props.mapStyle;
-    this.state.map.setStyle(props.mapStyle, { diff: true });
-
+    //var style = props.mapStyle;
+    //var style = this.updateStyle();
+    //this.state.map.setStyle(style, { diff: true });
+    //console.log("updateMapFromProps", style)
+    //this.state.map.remove();
     this.updateBackgroud();
   }
 
@@ -190,10 +229,14 @@ export default class MapboxGlMap extends React.Component<
   componentDidMount() {
     if (!IS_SUPPORTED) return;
 
+    const style = this.updateStyle();
+    const { current, backgrounds, layers } = this.props.document;
+    //let iDocument = new IDocument(current, backgrounds, layers);
+
     const mapOpts = {
       ...this.props.options,
       container: this.container,
-      style: this.props.mapStyle,
+      style: style,//this.props.mapStyle,
       //hash: true,
       preserveDrawingBuffer: true //特别注意，打印的时候必须启动该配置项
     };
@@ -213,6 +256,7 @@ export default class MapboxGlMap extends React.Component<
     map.on("style.load", () => {
       this.setState({ map });
       this.setState({ isLoad: true });
+      this.setState({ backgrounds: backgrounds });
       this.updateBackgroud();
     });
 

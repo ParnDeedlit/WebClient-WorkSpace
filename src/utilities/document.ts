@@ -120,13 +120,12 @@ export const defaultBacks: Array<BackGround> = [
 export const defaultLayers: Array<ILayer> = [
   {
     type: LayerType.VectorTile,
-    url: "http://localhost:6163/igs/rest/mrms/vtiles/styles/vectortile.json",
-    mapstyle:
-      "http://localhost:6163/igs/rest/mrms/vtiles/styles/军测最终.json",
-    name: "地类图斑",
-    title: "地类图斑",
-    id: "hunan",
-    key: "hunan",
+    url: "http://localhost:6163/igs/rest/mrms/vtiles/styles/军测最终.json",
+    mapstyle: "http://localhost:6163/igs/rest/mrms/vtiles/styles/军测最终.json",
+    name: "军测矢量瓦片",
+    title: "军测矢量瓦片",
+    id: "military",
+    key: "military",
     icon: "icon-vector"
   }
 ];
@@ -149,6 +148,12 @@ export function toggleBackgroud(id: string) {
   };
 }
 
+export function resetDocument(document: IDocument) {
+  return {
+    type: NameSpaceDocument + "/resetDocument",
+    payload: document
+  };
+}
 /**
  * @function 改变当前选中
  * @param id 对应唯一的键值

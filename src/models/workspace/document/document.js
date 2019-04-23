@@ -15,7 +15,16 @@ export default {
     layers: defaultLayers
   },
   reducers: {
-    current(state,{ payload: current }) {
+    resetDocument(state, { payload: document }) {
+      var newState = {
+        name: document.name,
+        current: defaultCurrent,
+        backgrounds: document.backgrounds,
+        layers: document.layers
+      };
+      return newState;
+    },
+    current(state, { payload: current }) {
       var newState = { ...state, current };
       return newState;
     },

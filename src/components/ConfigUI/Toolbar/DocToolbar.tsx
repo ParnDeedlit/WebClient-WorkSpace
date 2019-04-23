@@ -80,6 +80,7 @@ export class DocToolbar extends React.Component<IToolbarProps, IToolbarState> {
     const toggleProject = this.props[NameSpaceCommand].toggleProject;
     const toggleTransform = this.props[NameSpaceCommand].toggleTransform;
     const toggleImport = this.props[NameSpaceCommand].toggleImport;
+    const toggleExport = this.props[NameSpaceCommand].toggleExport;
 
     const addItemBind = bindAddMenus(this.handleDocItemsClick);
     const analysisItemBind = bindAnalysisMenus(this.handleAddItemsClick);
@@ -110,6 +111,7 @@ export class DocToolbar extends React.Component<IToolbarProps, IToolbarState> {
             toggleProject={toggleProject}
             toggleTransform={toggleTransform}
             toggleImport={toggleImport}
+            toggleExport={toggleExport}
           ></Models>
         </div>
       </div>

@@ -4,13 +4,17 @@ import { connect } from "dva";
 import Slugify from "slugify";
 import { saveAs } from "file-saver";
 
-import { Modal, Button, Divider } from "antd";
+import { Modal, Button } from "antd";
 
-import { toggleImport } from "../../../action/command/models";
+import { toggleExport } from "../../../action/command/models";
 import {
-  NameSpaceDocument, NameSpaceMapState, NameSpaceMapOption, NameSpaceMapStyle,
-  NameSpaceLayoutState, NameSpaceLayoutKey
-} from '../../models/workspace';
+  NameSpaceDocument,
+  NameSpaceMapState,
+  NameSpaceMapOption,
+  NameSpaceMapStyle,
+  NameSpaceLayoutState,
+  NameSpaceLayoutKey
+} from "../../../models/workspace";
 
 var self = null;
 
@@ -28,8 +32,8 @@ export class ExportModel extends React.Component {
 
   downloadStyle() {
     const document = this.props.document;
-
-    const blob = new Blob([document], {
+    
+    const blob = new Blob([JSON.stringify(document)], {
       type: "application/json;charset=utf-8"
     });
     let exportName;
@@ -39,7 +43,7 @@ export class ExportModel extends React.Component {
         lower: true
       });
     } else {
-      exportName = this.props.document.id;
+      exportName = "未命名";
     }
     saveAs(blob, exportName + ".json");
   }
@@ -57,7 +61,7 @@ export class ExportModel extends React.Component {
           maskClosable={true}
         >
           <Button block onClick={this.downloadStyle.bind(this)}>
-            加载计算机style.json文件
+            保存地图文档JSON格式文件
           </Button>
         </Modal>
       </div>
@@ -65,7 +69,7 @@ export class ExportModel extends React.Component {
   }
 
   closeDialog = () => {
-    this.props.dispatch(toggleImport(false));
+    this.props.dispatch(toggleExport(false));
   };
 }
 

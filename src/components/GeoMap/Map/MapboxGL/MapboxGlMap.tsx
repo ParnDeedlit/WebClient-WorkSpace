@@ -128,8 +128,8 @@ export default class MapboxGlMap extends React.Component<
       if (!id || !tileUrl) return;
       var current = map.getLayer(background.id);
       if (current && current.id) {
-        map.removeSource(background.id);
-        map.removeLayer(background.id);
+        //map.removeSource(current.id);
+        map.removeLayer(current.id);
       }
     });
 
@@ -189,12 +189,14 @@ export default class MapboxGlMap extends React.Component<
     MapboxGl.accessToken =
       metadata["mapgis:mapbox_access_token"] || tokens.mapbox;
 
-    //var style = props.mapStyle;
-    //var style = this.updateStyle();
-    //this.state.map.setStyle(style, { diff: true });
-    //console.log("updateMapFromProps", style)
-    //this.state.map.remove();
+    var style = this.updateStyle();
+    this.state.map.setStyle(style, { diff: true });
+
+    //this.state.map.remove();     
     this.updateBackgroud();
+    this.state.map.on("style.load", () => {
+      this.updateBackgroud();
+    });
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -253,13 +255,22 @@ export default class MapboxGlMap extends React.Component<
     var fpsControl = new FPSControl();
     map.addControl(fpsControl, "top-right");
 
-    map.on("style.load", () => {
+    map.on("load", () => {
       this.setState({ map });
       this.setState({ isLoad: true });
       this.setState({ backgrounds: backgrounds });
       this.updateBackgroud();
+      console.log("load!!")
     });
 
+    /* map.on("styledata", (e) => {
+      console.log("styledata!!", e)
+    });
+
+    map.on("data", (e) => {
+      console.log("data!!", e)
+    });
+ */
     map.on("mousemove", (e) => {
       this.currentPosition([e.lngLat.lng, e.lngLat.lat]);
     });

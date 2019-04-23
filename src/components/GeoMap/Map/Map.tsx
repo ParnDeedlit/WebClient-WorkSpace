@@ -1,10 +1,13 @@
 import * as React from "react";
 
 import MapboxGlMap from "./MapboxGL/MapboxGlMap";
+import CesiumMap from "./Cesium/CesiumMap.jsx";
 
 import styleTool from "../../../utilities/style";
 
 import { IDocument, MapRender } from '../../../utilities/document';
+
+import './index.less';
 
 interface IModelsProps {
   document: IDocument;
@@ -40,7 +43,7 @@ export default class MapRenderer extends React.Component<IModelsProps, {}> {
 
     // Check if OL code has been loaded?
     if (renderer === MapRender.Cesium) {
-      <div />
+      mapElement = (<CesiumMap {...mapProps} />);
     } else if (renderer === MapRender.MapBoxGL) {
       mapElement = (<MapboxGlMap {...mapProps} />);
     }

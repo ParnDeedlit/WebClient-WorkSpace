@@ -13,3 +13,17 @@ export function toggleTransform(toggle: Boolean) {
     payload: toggle
   };
 }
+
+export function toggleImport(toggle: Boolean) {
+  return {
+    type: NameSpaceCommand + "/toggleImport",
+    payload: toggle
+  };
+}
+
+export function toggleExport(toggle: Boolean) {
+  return {
+    type: NameSpaceCommand + "/toggleExport",
+    payload: toggle
+  };
+}

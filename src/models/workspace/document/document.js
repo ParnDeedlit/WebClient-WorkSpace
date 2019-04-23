@@ -9,6 +9,7 @@ import {
 export default {
   namespace: NameSpaceDocument,
   state: {
+    name: "新地图文档",
     current: defaultCurrent,
     backgrounds: defaultBacks,
     layers: defaultLayers
@@ -20,10 +21,6 @@ export default {
     },
     changeBackgroud(state, { payload: backgrounds }) {
       var newState = { ...state, backgrounds };
-      return newState;
-    },
-    getLayers(state, { payload: layer }) {
-      var newState = { ...state };
       return newState;
     }
   }

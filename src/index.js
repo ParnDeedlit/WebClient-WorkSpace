@@ -11,8 +11,7 @@ const app = dva();
 // app.use({});
 
 // 3. Model
-app.model(require('./models/workspace/command/project').default);
-app.model(require('./models/workspace/command/analysis').default);
+app.model(require('./models/workspace/command/models').default);
 
 app.model(require('./models/workspace/document/document').default);
 

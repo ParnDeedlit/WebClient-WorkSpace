@@ -122,7 +122,7 @@ export const defaultLayers: Array<ILayer> = [
     type: LayerType.VectorTile,
     url: "http://localhost:6163/igs/rest/mrms/vtiles/styles/vectortile.json",
     mapstyle:
-      "http://localhost:6163/igs/rest/mrms/vtiles/styles/vectortile.json",
+      "http://localhost:6163/igs/rest/mrms/vtiles/styles/军测最终.json",
     name: "地类图斑",
     title: "地类图斑",
     id: "hunan",
@@ -159,6 +159,20 @@ export function toggleCurrent(id: string, document: IDocument) {
   return {
     type: NameSpaceDocument + "/current",
     payload: current
+  };
+}
+
+export function toggleImport(toggle: Boolean) {
+  return {
+    type: NameSpaceDocument + "/import",
+    payload: toggle
+  };
+}
+
+export function toggleExport(toggle: Boolean) {
+  return {
+    type: NameSpaceDocument + "/export",
+    payload: toggle
   };
 }
 

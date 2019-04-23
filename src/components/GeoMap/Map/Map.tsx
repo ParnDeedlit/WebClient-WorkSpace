@@ -4,7 +4,7 @@ import MapboxGlMap from "./MapboxGL/MapboxGlMap";
 
 import styleTool from "../../../utilities/style";
 
-import {IDocument} from '../../../utilities/document';
+import { IDocument, MapRender } from '../../../utilities/document';
 
 interface IModelsProps {
   document: IDocument;
@@ -16,7 +16,9 @@ interface IModelsProps {
 }
 
 export default class MapRenderer extends React.Component<IModelsProps, {}> {
+
   render() {
+    let document = this.props.document;
     //const layers = this.props.style.layers;
     //const selectedIndex = this.props.state.selectedLayerIndex;
     //const selectLayer = layers == undefined ? null : layers.length ? layers[selectedIndex] : null;
@@ -24,7 +26,7 @@ export default class MapRenderer extends React.Component<IModelsProps, {}> {
       mapStyle: styleTool.replaceAccessTokens(this.props.style, {
         allowFallback: true
       }),
-      document: this.props.document,
+      document: document,
       layout: this.props.layout,
       options: this.props.options,
       dispatch: this.props.dispatch,
@@ -32,24 +34,15 @@ export default class MapRenderer extends React.Component<IModelsProps, {}> {
     //console.log("MapRenderer", mapProps);
 
     const metadata = this.props.style.metadata || {};
-    const renderer = metadata["maputnik:renderer"] || "mbgljs";
+    const renderer = document.maprender;
 
     let mapElement;
 
     // Check if OL code has been loaded?
-    if (renderer === "ol") {
-      //mapElement = <OpenLayersMap {...mapProps} />;
-    } else if (renderer === "cesium") {
-      //mapElement = <CesiumMap {...mapProps} />;
-    } else {
-/*       mapElement = (
-        <div></div>
-      ); */
-      mapElement = (
-        <MapboxGlMap
-          {...mapProps}
-        />
-      );
+    if (renderer === MapRender.Cesium) {
+      <div />
+    } else if (renderer === MapRender.MapBoxGL) {
+      mapElement = (<MapboxGlMap {...mapProps} />);
     }
 
     /* let filterName;

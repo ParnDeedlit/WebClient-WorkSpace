@@ -27,6 +27,11 @@ export function bindAddMenus(click) {
         <IconFont type="icon-analysischart" />
         <span>从本地添加图层</span>
       </Item>
+      <Menu.Divider />
+      <Item key="add-local-setting">
+        <IconFont type="icon-quanjushezhi" />
+        <span>设置</span>
+      </Item>
     </Menu>
   );
 }
@@ -34,7 +39,7 @@ export function bindAddMenus(click) {
 export let AddItems = {
   icon: "icon-add",
   command: "icon-add",
-  text: "添加",
+  text: "常规",
   ui: "dropdown",
   ui_content: null,
   options: {}

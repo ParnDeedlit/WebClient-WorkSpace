@@ -13,10 +13,10 @@ import { AnalysisItems, bindAnalysisMenus } from './ConfigAnalysisItems';
 
 import Models from '../../Model/Models';
 
-import {NameSpaceCommand} from '../../../models/workspace';
+import { NameSpaceCommand } from '../../../models/workspace';
 
-import { toggleProject, toggleTransform, toggleImport, toggleExport } from '../../../action/command/models';
-import { toggleLeftLayout, toggleRightLayout, toggleBottomLayout } from '../../../action/command/layout';
+import { toggleProject, toggleTransform, toggleImport, toggleExport, toggleSetting } from '../../../action/command/models';
+import { toggleLeftLayout, toggleBottomLayout } from '../../../action/command/layout';
 import { toggleBackgroud } from '../../../utilities/document';
 
 interface IToolbarProps {
@@ -45,7 +45,10 @@ export class DocToolbar extends React.Component<IToolbarProps, IToolbarState> {
         break;
       case "document-export":
         this.toggleExport();
-        break
+        break;
+      case "add-local-setting":
+        this.toggleSetting();
+        break;
     }
   }
 
@@ -64,8 +67,8 @@ export class DocToolbar extends React.Component<IToolbarProps, IToolbarState> {
     this.toggleBackgroud(id);
   }
 
-  private toggleImport= () => {this.props.dispatch(toggleImport(true))}
-  private toggleExport= () => {this.props.dispatch(toggleExport(true))}
+  private toggleImport = () => { this.props.dispatch(toggleImport(true)) }
+  private toggleExport = () => { this.props.dispatch(toggleExport(true)) }
 
   private toggleProject = () => { this.props.dispatch(toggleProject(true)) }
   private toggleTransform = () => { this.props.dispatch(toggleTransform(true)) }
@@ -74,13 +77,14 @@ export class DocToolbar extends React.Component<IToolbarProps, IToolbarState> {
   private toggleBottomLayout = () => { this.props.dispatch(toggleBottomLayout(true)) }
 
   private toggleBackgroud = (id) => { this.props.dispatch(toggleBackgroud(id)) }
-
+  private toggleSetting = () => { this.props.dispatch(toggleSetting(true)) }
 
   render(): JSX.Element {
     const toggleProject = this.props[NameSpaceCommand].toggleProject;
     const toggleTransform = this.props[NameSpaceCommand].toggleTransform;
     const toggleImport = this.props[NameSpaceCommand].toggleImport;
     const toggleExport = this.props[NameSpaceCommand].toggleExport;
+    const toggleSetting = this.props[NameSpaceCommand].toggleSetting;
 
     const addItemBind = bindAddMenus(this.handleDocItemsClick);
     const analysisItemBind = bindAnalysisMenus(this.handleAddItemsClick);
@@ -112,6 +116,7 @@ export class DocToolbar extends React.Component<IToolbarProps, IToolbarState> {
             toggleTransform={toggleTransform}
             toggleImport={toggleImport}
             toggleExport={toggleExport}
+            toggleSetting={toggleSetting}
           ></Models>
         </div>
       </div>

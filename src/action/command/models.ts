@@ -27,3 +27,12 @@ export function toggleExport(toggle: Boolean) {
     payload: toggle
   };
 }
+
+export function toggleSetting(toggle: Boolean) {
+  return {
+    type: NameSpaceCommand + "/toggleSetting",
+    payload: toggle
+  };
+}
+
+

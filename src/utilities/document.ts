@@ -6,6 +6,11 @@ import { NameSpaceDocument } from "../models/workspace";
 
 import { LayerType, ILayer, BackGround, defaultId } from "./layer";
 
+export enum MapRender {
+  MapBoxGL = "mapboxgl",
+  Cesium = "cesium",
+}
+
 export class Current {
   id: string;
   type: LayerType;
@@ -24,6 +29,7 @@ export const defaultCurrent = {
  */
 export class IDocument {
   current: Current; //实例属性
+  maprender: MapRender;
   backgrounds: Array<BackGround>; //实例属性
   layers: Array<ILayer>;
 
@@ -36,6 +42,7 @@ export class IDocument {
     this.current = current;
     this.backgrounds = backgrounds;
     this.layers = layers;
+    this.maprender = MapRender.MapBoxGL;
   }
 
   //实例方法
@@ -101,6 +108,8 @@ export class IDocument {
   /* static area(r: number) {return Document.PI * r * r;} */
 }
 
+export const defaultMapRender: MapRender = MapRender.MapBoxGL;
+
 export const defaultBacks: Array<BackGround> = [
   {
     title: "浅色背景",
@@ -129,6 +138,7 @@ export const defaultLayers: Array<ILayer> = [
     icon: "icon-vector"
   }
 ];
+
 export const defaultDocument: IDocument = new IDocument(
   defaultCurrent,
   defaultBacks,
@@ -154,6 +164,14 @@ export function resetDocument(document: IDocument) {
     payload: document
   };
 }
+
+export function resetMapRender(maprender: MapRender) {
+  return {
+    type: NameSpaceDocument + "/maprender",
+    payload: maprender
+  };
+}
+
 /**
  * @function 改变当前选中
  * @param id 对应唯一的键值
@@ -164,20 +182,6 @@ export function toggleCurrent(id: string, document: IDocument) {
   return {
     type: NameSpaceDocument + "/current",
     payload: current
-  };
-}
-
-export function toggleImport(toggle: Boolean) {
-  return {
-    type: NameSpaceDocument + "/import",
-    payload: toggle
-  };
-}
-
-export function toggleExport(toggle: Boolean) {
-  return {
-    type: NameSpaceDocument + "/export",
-    payload: toggle
   };
 }
 

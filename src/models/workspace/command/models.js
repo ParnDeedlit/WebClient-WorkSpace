@@ -6,7 +6,8 @@ export default {
     toggleProject: false,
     toggleTransform: false,
     toggleImport: false,
-    toggleExport: false
+    toggleExport: false,
+    toggleSetting: false,
   },
   reducers: {
     toggleProject(state, { payload: toggleProject }) {
@@ -26,6 +27,10 @@ export default {
     toggleExport(state, { payload: toggleExport }) {
       var newState = { ...state, toggleExport };
       return newState;
-    }
+    },
+    toggleSetting(state, { payload: toggleSetting }) {
+      var newState = { ...state, toggleSetting };
+      return newState;
+    },
   }
 };

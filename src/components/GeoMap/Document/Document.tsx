@@ -132,7 +132,7 @@ class Document extends React.Component<IDocumentProps, IDocumentState> {
             children: []
         };
 
-        let customChldren = {
+/*         let customChldren = {
             title: '湖南',
             icon: 'icon-vector',
             key: 'vectortile',
@@ -145,14 +145,14 @@ class Document extends React.Component<IDocumentProps, IDocumentState> {
             }
         });
         vectortile.children.push(customChldren);
-        return vectortile;
+        return vectortile; */
 
-/*         vectortiles.map(layer => {
+        vectortiles.map(layer => {
             if (layer.type == LayerType.VectorTile) {
                 vectortile.children.push(layer);
             }
         });
-        return vectortile; */
+        return vectortile;
     }
 
     render() {

@@ -25,8 +25,8 @@ export default class MapRenderer extends React.Component<IModelsProps, {}> {
         allowFallback: true
       }),
       document: this.props.document,
-      options: this.props.options,
       layout: this.props.layout,
+      options: this.props.options,
       dispatch: this.props.dispatch,
     };
     //console.log("MapRenderer", mapProps);

@@ -4,67 +4,28 @@ import * as MapboxGl from "mapbox-gl";
 import * as MapboxInspect from "mapbox-gl-inspect";
 
 import tokens from "../../../../config/tokens";
-import colors from "mapbox-gl-inspect/lib/colors";
-import Color from "color";
-import ZoomControl from "./ZoomControl";
-
-import { colorHighlightedLayer } from "../../../../utilities/highlight";
 
 import { layouts, clearLayout, addLayout } from "../Common/geopdf/layout";
 import { printCanvas } from "../Common/png/printCanvas";
 
 import { FPSControl } from "../Common/unit";
 
-import bbox from "@turf/bbox";
-
 import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 import { IDocument } from '../../../../utilities/document';
-import backgrouds from '../../../../config/backgroud';
 import { MapMouseEvent, Positon, toggleMousePosition, toggleZoomLevel } from '../../../../utilities/map';
 import { LayerType, BackGround } from '../../../../utilities/layer';
 
 const IS_SUPPORTED = MapboxGl.supported();
-
-
-function buildInspectStyle(originalMapStyle, coloredLayers, highlightedLayer) {
-  const backgroundLayer = {
-    id: "background",
-    type: "background",
-    paint: {
-      "background-color": "#1c1f24"
-    }
-  };
-
-  const layer = colorHighlightedLayer(highlightedLayer);
-  if (layer) {
-    coloredLayers.push(layer);
-  }
-
-  const sources = {};
-  Object.keys(originalMapStyle.sources).forEach(sourceId => {
-    const source = originalMapStyle.sources[sourceId];
-    if (source.type !== "raster" && source.type !== "raster-dem") {
-      sources[sourceId] = source;
-    }
-  });
-
-  const inspectStyle = {
-    ...originalMapStyle,
-    sources: sources,
-    layers: [backgroundLayer].concat(coloredLayers)
-  };
-  return inspectStyle;
-}
 
 var self = null;
 
 interface IMapboxGlMapProps {
   document: IDocument;
   mapStyle: Object; //isRequired,
-  layout: any;
   options: any;
+  layout: any;
   dispatch?: any;
 }
 
@@ -121,7 +82,7 @@ export default class MapboxGlMap extends React.Component<
     const document = self.props.document;
     let backgrounds = this.state.backgrounds;
 
-    if(!map) return;
+    if (!map) return;
 
     backgrounds.forEach(background => {
       const { id, tileUrl } = background;
@@ -183,8 +144,6 @@ export default class MapboxGlMap extends React.Component<
 
     if (!this.state.map) return;
 
-    this.state.map.resize();
-
     const metadata = props.mapStyle.metadata || {};
     MapboxGl.accessToken =
       metadata["mapgis:mapbox_access_token"] || tokens.mapbox;
@@ -201,15 +160,20 @@ export default class MapboxGlMap extends React.Component<
 
   shouldComponentUpdate(nextProps, nextState) {
     let should = false;
+    should =
+      JSON.stringify(this.props.layout) !==
+      JSON.stringify(nextProps.layout);
+
+    if (should) {
+      if (this.state.map) this.state.map.resize();
+      return false;
+    }
+
     try {
       should =
         JSON.stringify(this.props) !==
-        JSON.stringify(
-          nextProps
-        ); /* || JSON.stringify(this.state) !== JSON.stringify(nextState); */
-    } catch (e) {
-      // no biggie, carry on
-    }
+        JSON.stringify(nextProps);
+    } catch (e) { }
     return should;
   }
 

@@ -23,7 +23,6 @@ var self = null;
 
 interface IMapboxGlMapProps {
   document: IDocument;
-  mapStyle: Object; //isRequired,
   options: any;
   layout: any;
   dispatch?: any;
@@ -139,20 +138,15 @@ export default class MapboxGlMap extends React.Component<
   }
 
   updateMapFromProps(props) {
-    var self = this;
     if (!IS_SUPPORTED) return;
 
     if (!this.state.map) return;
 
-    const metadata = props.mapStyle.metadata || {};
-    MapboxGl.accessToken =
-      metadata["mapgis:mapbox_access_token"] || tokens.mapbox;
+    MapboxGl.accessToken = tokens.mapbox;
 
     var style = this.updateStyle();
-    this.state.map.setStyle(style, { diff: true });
-
-    //this.state.map.remove();     
-    this.updateBackgroud();
+    this.state.map.setStyle(style, { diff: false });
+   
     this.state.map.on("style.load", () => {
       this.updateBackgroud();
     });
@@ -160,20 +154,25 @@ export default class MapboxGlMap extends React.Component<
 
   shouldComponentUpdate(nextProps, nextState) {
     let should = false;
-    should =
-      JSON.stringify(this.props.layout) !==
-      JSON.stringify(nextProps.layout);
+    should = JSON.stringify(this.props.layout) !== JSON.stringify(nextProps.layout);
 
     if (should) {
       if (this.state.map) this.state.map.resize();
       return false;
     }
 
+    const oldDocument = this.props.document;
+    const newDocument = nextProps.document;
+    const { layers, backgrounds } = oldDocument;
+    const newLayers = newDocument.layers;
+    const newBackgrounds = newDocument.backgrounds;
+
     try {
-      should =
-        JSON.stringify(this.props) !==
-        JSON.stringify(nextProps);
+      should = JSON.stringify(layers) !== JSON.stringify(newLayers)
+        || JSON.stringify(backgrounds) !== JSON.stringify(newBackgrounds);
     } catch (e) { }
+
+    if(should) console.log("shouldComponentUpdate", backgrounds, newBackgrounds)
     return should;
   }
 
@@ -224,7 +223,6 @@ export default class MapboxGlMap extends React.Component<
       this.setState({ isLoad: true });
       this.setState({ backgrounds: backgrounds });
       this.updateBackgroud();
-      console.log("load!!")
     });
 
     /* map.on("styledata", (e) => {

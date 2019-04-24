@@ -80,7 +80,6 @@ class WorkSpaceAntd extends React.Component<IAppProps, IAppState> {
                     <Col span={width_center} className="editorContent">
                         <SplitterLayout vertical>
                             <MapRenderer document={this.props.document}
-                                style={this.props.map.style}
                                 state={this.props.map.state}
                                 options={this.props.map.options}
                                 layout={this.props.layout}
@@ -108,7 +107,6 @@ function mapStateToProps(state: any, ownProps: any) {
     return {
         document: state[NameSpaceDocument],
         map: {
-            style: state[NameSpaceMapStyle],
             state: state[NameSpaceMapState],
             options: state[NameSpaceMapOption],
         },

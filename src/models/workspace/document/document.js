@@ -20,6 +20,7 @@ export default {
     resetDocument(state, { payload: document }) {
       var newState = {
         name: document.name,
+        maprender: document.maprender,
         current: defaultCurrent,
         backgrounds: document.backgrounds,
         layers: document.layers

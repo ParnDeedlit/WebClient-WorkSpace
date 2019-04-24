@@ -15,7 +15,7 @@ app.model(require('./models/workspace/command/models').default);
 
 app.model(require('./models/workspace/document/document').default);
 
-app.model(require('./models/workspace/map/mapstyle').default);
+//app.model(require('./models/workspace/map/mapstyle').default);
 app.model(require('./models/workspace/map/mapstate').default);
 app.model(require('./models/workspace/map/mapoption').default);
 

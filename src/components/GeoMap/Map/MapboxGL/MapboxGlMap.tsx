@@ -3,6 +3,8 @@ import * as ReactDOM from "react-dom";
 import * as MapboxGl from "mapbox-gl";
 import * as MapboxInspect from "mapbox-gl-inspect";
 
+import { MapContext } from './Global/context';
+
 import tokens from "../../../../config/tokens";
 
 import { layouts, clearLayout, addLayout } from "../Common/geopdf/layout";
@@ -26,6 +28,7 @@ interface IMapboxGlMapProps {
   options: any;
   layout: any;
   dispatch?: any;
+  children?: JSX.Element | JSX.Element[] | Array<JSX.Element | undefined>;
 }
 
 interface IMapboxGlMapStates {
@@ -34,7 +37,7 @@ interface IMapboxGlMapStates {
   isLoad: boolean;
 }
 
-export default class MapboxGlMap extends React.Component<
+export class MapboxGlMap extends React.Component<
   IMapboxGlMapProps,
   IMapboxGlMapStates
   > implements MapMouseEvent {
@@ -146,7 +149,7 @@ export default class MapboxGlMap extends React.Component<
 
     var style = this.updateStyle();
     this.state.map.setStyle(style, { diff: false });
-   
+
     this.state.map.on("style.load", () => {
       this.updateBackgroud();
     });
@@ -172,7 +175,7 @@ export default class MapboxGlMap extends React.Component<
         || JSON.stringify(backgrounds) !== JSON.stringify(newBackgrounds);
     } catch (e) { }
 
-    if(should) console.log("shouldComponentUpdate", backgrounds, newBackgrounds)
+    if (should) console.log("shouldComponentUpdate", backgrounds, newBackgrounds)
     return should;
   }
 
@@ -239,16 +242,24 @@ export default class MapboxGlMap extends React.Component<
 
     map.on("zoomend", (e) => {
       let level = e.target.style.z;
-      console.log("zoom", e, level);
+      //console.log("zoom", e, level);
       this.zoom(level);
     });
 
   }
 
   render() {
+    const { children } = this.props;
     if (IS_SUPPORTED) {
       return (
-        <div className="workspace-layout-map-wraper-mapboxgl" ref={x => (this.container = x)} />
+        <MapContext.Provider value={this.state.map}>
+          <div
+            ref={x => (this.container = x)}
+            className="workspace-layout-map-wraper-mapboxgl"
+          >
+            {children}
+          </div>
+        </MapContext.Provider>
       );
     } else {
       return (
@@ -261,3 +272,5 @@ export default class MapboxGlMap extends React.Component<
     }
   }
 }
+
+export default MapboxGlMap; 

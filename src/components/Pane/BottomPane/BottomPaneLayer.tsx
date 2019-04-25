@@ -4,6 +4,12 @@ import { connect } from "dva";
 import { Tabs } from 'antd';
 import IconFont from '../../IconFont/mapgis';
 
+import {
+  NameSpaceDocument, 
+  NameSpaceMapState, NameSpaceMapOption,
+  NameSpaceLayoutState, NameSpaceLayoutKey
+} from '../../../models/workspace';
+import IDocument from '../../../utilities/document';
 import { BottomTabs, BottomDefaultKey } from '../../ConfigUI/BottomPane';
 
 import './index.less'
@@ -11,24 +17,25 @@ import './index.less'
 const TabPane = Tabs.TabPane;
 
 interface IBottomPaneProps {
+  document: IDocument;
   map: any;
   layout: any;
 }
 
 class BottomPaneLayer extends React.Component<IBottomPaneProps, {}> {
   //-----------------------------------------Menu 菜单相关配置 开始------------------------------------
-  getTabs(tabs, map, layout) {
+  getTabs(tabs, document, map, layout) {
     return tabs.map(tab => {
       return (<TabPane tab={<span><IconFont type={tab.icon} />{tab.title}</span>} key={tab.key}>
-          {tab.ui(map, layout)}
+        {tab.ui(document, map, layout)}
       </TabPane>);
     });
   }
 
   //-----------------------------------------Menu 菜单相关配置 结束--------------------------------------------
   render() {
-    const { map, layout } = this.props;
-    const tabUI = this.getTabs(BottomTabs, map, layout);
+    const { map, layout, document } = this.props;
+    const tabUI = this.getTabs(BottomTabs, document, map, layout);
     return (
       <div className="card-container">
         <Tabs type="line" size="small" tabBarGutter={1}>
@@ -41,16 +48,15 @@ class BottomPaneLayer extends React.Component<IBottomPaneProps, {}> {
 
 function mapStateToProps(state: any, ownProps: any) {
   return {
-    content: state.content,
+    document: state[NameSpaceDocument],
     map: {
-      style: state.mapstyle,
-      state: state.mapstate,
-      options: state.mapoptions,
-      document: state.mapdocument
+      state: state[NameSpaceMapState],
+      options: state[NameSpaceMapOption],
     },
     layout: {
-      state: state.layoutstate
-    }
+      state: state[NameSpaceLayoutState],
+      key: state[NameSpaceLayoutKey],
+    },
   };
 }
 

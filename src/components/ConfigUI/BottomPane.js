@@ -1,9 +1,12 @@
 import * as React from "react";
-export function getAttrInfo(map, layout) {
-  return  <div />;
+import AttrPane from "../Pane/BottomPane/AttrPane";
+
+export function getAttrInfo(document, map, layout) {
+  console.log("getAttrInfo", document);
+  return <AttrPane document={document} />;
 }
 
-export function getEmptry(map, layout) {
+export function getEmptry(document, map, layout) {
   return <div />;
 }
 
@@ -20,6 +23,12 @@ export const BottomTabs = [
     title: "图表统计",
     icon: "icon-chart",
     key: "bottom-chart-info",
+    ui: getEmptry
+  },
+  {
+    title: "性能分析",
+    icon: "icon-performance",
+    key: "bottom-chart-performance",
     ui: getEmptry
   }
 ];

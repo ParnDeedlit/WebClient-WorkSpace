@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import MapboxGlMap from "./MapboxGL/MapboxGlMap";
+import MapboxGlWraper from "./MapboxGL/MapboxGlWraper";
 import CesiumMap from "./Cesium/CesiumMap.jsx";
 
 import styleTool from "../../../utilities/style";
@@ -41,7 +41,7 @@ export default class MapRenderer extends React.Component<IModelsProps, {}> {
     if (renderer === MapRender.Cesium) {
       mapElement = (<CesiumMap {...mapProps} />);
     } else {
-      mapElement = (<MapboxGlMap {...mapProps} />);
+      mapElement = (<MapboxGlWraper {...mapProps} />);
     }
 
     /* let filterName;

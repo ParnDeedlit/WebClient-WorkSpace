@@ -13,6 +13,7 @@ export class ILayer {
   name: string;
   id: string;
   key: string;
+  description: string;
 
   /**
    * @member UI框架用来进行文字绑定的关键字与name一致即可

@@ -1,27 +1,26 @@
 import * as React from 'react';
 import * as MapboxGL from 'mapbox-gl';
 import { withMap } from '../Global/context';
-import { BackGround, BackGroundStyle, defaultBackGroundStyle } from '../../../../../utilities/layer';
+import { RasterTileLayer } from '../../../../../utilities/layer';
 
-interface IBackgroundsProps {
+interface IRasterTileProps {
     map: MapboxGL.Map;
-    background: BackGround;
-    style?: BackGroundStyle;
+    rastertile: RasterTileLayer;
     before?: string;
 }
 
-interface IBackgroundsStates {
+interface IRasterTileStates {
 
 }
 
-export class Backgrounds extends React.Component<IBackgroundsProps, IBackgroundsStates> {
-    public state: IBackgroundsStates = {
+export class RasterTile extends React.Component<IRasterTileProps, IRasterTileStates> {
+    public state: IRasterTileStates = {
 
     };
 
     constructor(props) {
         super(props);
-        console.log("background constructor", props);
+        console.log("RasterTile constructor", props);
     }
 
     onStyleDataChange() {
@@ -32,28 +31,13 @@ export class Backgrounds extends React.Component<IBackgroundsProps, IBackgrounds
         this.createLayer();
     }
 
-    parsePaint(style) {
-        return {
-            "raster-opacity": style.opacity,
-            "raster-hue-rotate": style.hue,
-        }
-    }
-
-    parseLayout(style) {
-        return {
-            "visibility": style.visible ? "visible" : "none",
-        }
-    }
-
     private createLayer = () => {
-        let { map, background, before, style } = this.props;
-        if (!style) style = defaultBackGroundStyle;
-        let paint = this.parsePaint(style);
-        let layout = this.parseLayout(style);
+        let { map, rastertile, before } = this.props;
 
         if (!before) before = "background";
 
-        const { id, tileUrl } = background;
+
+        const { id, tileUrl } = rastertile;
         if (!id || !tileUrl) return;
 
         map.addSource(id, {
@@ -67,8 +51,6 @@ export class Backgrounds extends React.Component<IBackgroundsProps, IBackgrounds
             "id": id,
             "type": "raster",
             "source": id,
-            "layout": layout,
-            "paint": paint,
             "minzoom": 0,
             "maxzoom": 20
         }, before);
@@ -76,26 +58,25 @@ export class Backgrounds extends React.Component<IBackgroundsProps, IBackgrounds
     };
 
     private unbind() {
-        const { map, background } = this.props;
-        console.log("background unbind", background)
+        const { map, rastertile } = this.props;
 
         map.off('styledata', this.onStyleDataChange);
 
-        if (map.getSource(background.id)) {
+        if (map.getSource(rastertile.id)) {
             const { layers } = map.getStyle();
 
             if (layers) {
                 layers
-                    .filter(layer => layer.source === background.id)
+                    .filter(layer => layer.source === rastertile.id)
                     .forEach(layer => map.removeLayer(layer.id));
             }
 
-            map.removeSource(background.id);
+            map.removeSource(rastertile.id);
         }
     }
 
     public componentWillMount() {
-        console.log("background componentWillMount");
+        console.log("RasterTile componentWillMount");
         const { map } = this.props;
         this.initialize();
         map.on('styledata', this.onStyleDataChange);
@@ -111,14 +92,14 @@ export class Backgrounds extends React.Component<IBackgroundsProps, IBackgrounds
         this.unbind();
     }
 
-    public componentWillReceiveProps(props: IBackgroundsProps) {
+    public componentWillReceiveProps(props: IRasterTileProps) {
 
     }
 
     public render() {
-        console.log("background render");
+        console.log("RasterTile render");
         return null;
     }
 }
 
-export default withMap(Backgrounds);
+export default withMap(RasterTile);

@@ -41,7 +41,7 @@ class Document extends React.Component<IDocumentProps, IDocumentState> {
     }
 
     public state: IDocumentState = {
-        expandedKeys: ['background', '0-0-1'],
+        expandedKeys: [],
         autoExpandParent: true,
         checkedKeys: ['background'],
         selectedKeys: [],
@@ -63,8 +63,8 @@ class Document extends React.Component<IDocumentProps, IDocumentState> {
         });
     }
 
-    onCheck = (checkedKeys) => {
-        console.log('onCheck', checkedKeys);
+    onCheck = (checkedKeys, change) => {
+        console.log('onCheck', checkedKeys, change);
         this.setState({ checkedKeys });
     }
 

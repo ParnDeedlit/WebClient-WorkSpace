@@ -9,16 +9,17 @@ export enum LayerType {
 
 export class ILayer {
   type: LayerType;
-
   name: string;
   id: string;
   key: string;
-  description: string;
+
+  description?: string;
+  visible?: boolean;
 
   /**
    * @member UI框架用来进行文字绑定的关键字与name一致即可
    */
-  title? : string;
+  title?: string;
 
   /**
    * @member 地图url
@@ -38,8 +39,25 @@ export class BackGround extends ILayer {
   title: string;
   tileUrl: string;
   imgUrl: string;
+  style?: BackGroundStyle;
 }
 
-export class RasterTileLayer extends ILayer {}
+export class RasterTileLayer extends ILayer {
+  title: string;
+  tileUrl: string;
+  imgUrl: string;
+}
 
 export class VectorTileLayer extends ILayer {}
+
+export class BackGroundStyle {
+  visible: boolean;
+  opacity: number;
+  hue: number;
+}
+
+export const defaultBackGroundStyle: BackGroundStyle = {
+  visible: true,
+  opacity: 1,
+  hue: 0
+};

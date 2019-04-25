@@ -8,7 +8,7 @@ import { LayerType, ILayer, BackGround, defaultId } from "./layer";
 
 export enum MapRender {
   MapBoxGL = "mapboxgl",
-  Cesium = "cesium",
+  Cesium = "cesium"
 }
 
 export class Current {
@@ -119,6 +119,7 @@ export const defaultBacks: Array<BackGround> = [
     description: "MapboxGL提供的浅色背景图，版本是v4, WMTS服务",
     icon: "icon-background",
     type: LayerType.BackGround,
+    visible: true,
     url: "",
     tileUrl:
       "https://api.tiles.mapbox.com/v4/mapbox.light/{z}/{x}/{y}.png?access_token=sk.eyJ1IjoiY2hlbmdkYWRhIiwiYSI6ImNqZDFjaGo0ZjFzcnoyeG54enoxdnNuZHUifQ.hTWXXBUQ0wdGeuDF3GWeUw",
@@ -130,13 +131,14 @@ export const defaultBacks: Array<BackGround> = [
 export const defaultLayers: Array<ILayer> = [
   {
     type: LayerType.VectorTile,
-    url: "http://localhost:6163/igs/rest/mrms/vtiles/styles/军测最终.json",
-    mapstyle: "http://localhost:6163/igs/rest/mrms/vtiles/styles/军测最终.json",
+    url: "http://localhost:6163/igs/rest/mrms/vtiles/styles/世界地图.json",
+    mapstyle: "http://localhost:6163/igs/rest/mrms/vtiles/styles/世界地图.json",
     description: "军测矢量瓦片, WMTS服务",
-    name: "军测矢量瓦片",
-    title: "军测矢量瓦片",
-    id: "military",
-    key: "military",
+    visible: true,
+    name: "世界地图",
+    title: "世界地图",
+    id: "world",
+    key: "world",
     icon: "icon-vector"
   }
 ];

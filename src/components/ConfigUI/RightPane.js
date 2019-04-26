@@ -12,12 +12,12 @@ export function getEmptry(document, map, layout) {
 }
 
 export const RightTabs = [
-  {
+/*   {
     title: "数据源",
     icon: "icon-map",
     key: "right-source-attr",
     ui: getEmptry
-  },
+  }, */
   {
     title: "图层属性",
     icon: "icon-bianjibiaoge",

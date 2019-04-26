@@ -17,7 +17,7 @@ class BodyStyle extends React.Component<IProps, {}> {
                 ...style
             }}
         >
-            <h3 className="style-body-title">{title}</h3>
+            <h3 className="style-body-title"><strong>{title}</strong></h3>
             {children}
         </div>)
     }

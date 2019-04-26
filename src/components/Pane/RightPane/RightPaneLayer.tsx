@@ -6,10 +6,12 @@ import IconFont from '../../IconFont/mapgis';
 import { RightTabs, RightDefaultKey } from '../../ConfigUI/RightPane';
 
 import './index.less'
+import { IDocument } from '../../../utilities/document';
 
 const TabPane = Tabs.TabPane;
 
 interface IRightPaneProps {
+  document: IDocument;
   map: any;
   activeKey: string;
 }
@@ -20,16 +22,14 @@ interface IRightPaneState {
 
 class RightPaneLayer extends React.Component<IRightPaneProps, IRightPaneState> {
   //-----------------------------------------Menu 菜单相关配置 开始------------------------------------
-  state : IRightPaneState = {
-    currentKey : RightDefaultKey
+  state: IRightPaneState = {
+    currentKey: RightDefaultKey
   }
 
-  getTabs(tabs) {
+  getTabs(tabs, document: IDocument) {
     return tabs.map(tab => {
       return (<TabPane tab={<span><IconFont type={tab.icon} />{tab.title}</span>} key={tab.key}>
-        <div className="right-pane-wraper">
-          {tab.ui}
-        </div>
+        {tab.ui(document)}
       </TabPane>);
     });
   }
@@ -42,11 +42,11 @@ class RightPaneLayer extends React.Component<IRightPaneProps, IRightPaneState> {
 
     currentKey = activeKey;
 
-    const tabUI = this.getTabs(RightTabs);
+    const tabUI = this.getTabs(RightTabs, document);
     return (
-      <div >
+      <div className="card-container">
         <Tabs type="line" size="small"
-          tabBarGutter={1} tabPosition="bottom"
+          tabBarGutter={1} tabPosition="top"
           defaultActiveKey={currentKey}
         >
           {tabUI}

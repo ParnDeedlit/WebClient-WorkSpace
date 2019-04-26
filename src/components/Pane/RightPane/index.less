@@ -1,4 +1,12 @@
-.right-pane-wraper{
+@import "../../index.less";
+
+@tab-height : 36.8px;
+
+.right-pane-wraper {
   display: flex;
-  height: calc( 100vh - 190px );
+  height: 100%;
+  /* height: calc(
+    100vh - @header-height - @toolbar-height - @bottom-height -
+      @center-bottom-height - @tab-height
+  ); */
 }

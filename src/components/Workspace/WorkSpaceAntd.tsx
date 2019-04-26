@@ -39,7 +39,9 @@ class WorkSpaceAntd extends React.Component<IAppProps, IAppState> {
     }
 
     render() {
-        let { layout, map } = this.props;
+        let { layout, map, document } = this.props;
+        //let idocument = new IDocument(document.current, document.backgrounds, document.layers, document.maprender);
+
         let rightKey = layout.key.right;
 
         let { left, right, bottom } = this.props.layout.state;
@@ -79,7 +81,7 @@ class WorkSpaceAntd extends React.Component<IAppProps, IAppState> {
                     </Col>
                     <Col span={width_center} className="editorContent">
                         <SplitterLayout vertical>
-                            <MapRenderer document={this.props.document}
+                            <MapRenderer document={document}
                                 state={this.props.map.state}
                                 options={this.props.map.options}
                                 layout={this.props.layout}

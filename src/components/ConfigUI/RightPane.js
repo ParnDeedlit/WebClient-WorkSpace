@@ -1,10 +1,11 @@
 import * as React from "react";
 import BackgroudStyleView from "../Style/BackgroundStyle";
+import StyleLayer from '../Pane/RightPane/StyleLayer';
 
 export const RightDefaultKey = "right-layer-attr";
 
-export function getBackStyle(document) {
-  return <BackgroudStyleView document={document}/>;
+export function getStyleLayer(document) {
+  return <StyleLayer document={document}/>;
 }
 
 export function getEmptry(document, map, layout) {
@@ -22,7 +23,7 @@ export const RightTabs = [
     title: "图层属性",
     icon: "icon-bianjibiaoge",
     key: "right-layer-attr",
-    ui: getBackStyle
+    ui: getStyleLayer
   },
   {
     title: "图元属性",

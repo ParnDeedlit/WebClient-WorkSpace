@@ -7,6 +7,7 @@ import { RightTabs, RightDefaultKey } from '../../ConfigUI/RightPane';
 
 import './index.less'
 import { IDocument } from '../../../utilities/document';
+import { NameSpaceDocument } from '../../../models/workspace';
 
 const TabPane = Tabs.TabPane;
 
@@ -36,18 +37,13 @@ class RightPaneLayer extends React.Component<IRightPaneProps, IRightPaneState> {
 
   //-----------------------------------------Menu 菜单相关配置 结束--------------------------------------------
   render() {
-    const { document } = this.props.map;
-    const { activeKey } = this.props;
-    let { currentKey } = this.state;
-
-    currentKey = activeKey;
+    const { document } = this.props;
 
     const tabUI = this.getTabs(RightTabs, document);
     return (
       <div className="card-container">
         <Tabs type="line" size="small"
           tabBarGutter={1} tabPosition="top"
-          defaultActiveKey={currentKey}
         >
           {tabUI}
         </Tabs>
@@ -58,16 +54,7 @@ class RightPaneLayer extends React.Component<IRightPaneProps, IRightPaneState> {
 
 function mapStateToProps(state: any, ownProps: any) {
   return {
-    content: state.content,
-    map: {
-      style: state.mapstyle,
-      state: state.mapstate,
-      options: state.mapoptions,
-      document: state.mapdocument
-    },
-    layout: {
-      state: state.layoutstate
-    }
+    document: state[NameSpaceDocument],
   };
 }
 

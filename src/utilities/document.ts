@@ -37,12 +37,13 @@ export class IDocument {
   constructor(
     current: Current,
     backgrounds: Array<BackGround>,
-    layers: Array<ILayer>
+    layers: Array<ILayer>,
+    maprender?: MapRender 
   ) {
     this.current = current;
     this.backgrounds = backgrounds;
     this.layers = layers;
-    this.maprender = MapRender.MapBoxGL;
+    this.maprender = maprender;
   }
 
   //实例方法
@@ -56,6 +57,26 @@ export class IDocument {
     if (!document) return defaultCurrent;
     if (!document.current) return defaultCurrent;
     return document.current;
+  }
+
+  getCurrentLayer() {
+    if (this.current.type == LayerType.UnKnow) {
+      return [defaultLayer];
+    }
+    if (this.current.type == LayerType.BackGround) {
+      return this.backgrounds;
+    }
+    if (
+      this.current.type == LayerType.VectorTile ||
+      this.current.type == LayerType.RasterTile
+    ) {
+      return this.layers.filter(layer => {
+        if (this.current.id == layer.id) {
+          return true;
+        }
+      });
+    }
+    return [defaultLayer];
   }
 
   changeCurrent(id: string) {
@@ -109,6 +130,13 @@ export class IDocument {
 }
 
 export const defaultMapRender: MapRender = MapRender.MapBoxGL;
+
+export const defaultLayer: ILayer = {
+  type: LayerType.UnKnow,
+  name: LayerType.UnKnow,
+  id: LayerType.UnKnow,
+  key: LayerType.UnKnow
+};
 
 export const defaultBacks: Array<BackGround> = [
   {

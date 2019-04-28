@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as MapboxGL from 'mapbox-gl';
 import { withMap } from '../Global/context';
 import { BackGround, BackGroundStyle, defaultBackGroundStyle } from '../../../../../utilities/layer';
+import style from '../../../../../utilities/style';
 
 interface IBackgroundsProps {
     map: MapboxGL.Map;
@@ -21,25 +22,20 @@ export class Backgrounds extends React.Component<IBackgroundsProps, IBackgrounds
 
     constructor(props) {
         super(props);
-        console.log("background constructor", props);
     }
 
     onStyleDataChange() {
         //throw new Error("Method not implemented.");
     }
 
-    initialize() {
-        this.createLayer();
-    }
-
-    parsePaint(style) {
+    parsePaint(style: BackGroundStyle) {
         return {
             "raster-opacity": style.opacity,
             "raster-hue-rotate": style.hue,
         }
     }
 
-    parseLayout(style) {
+    parseLayout(style: BackGroundStyle) {
         return {
             "visibility": style.visible ? "visible" : "none",
         }
@@ -72,12 +68,20 @@ export class Backgrounds extends React.Component<IBackgroundsProps, IBackgrounds
             "minzoom": 0,
             "maxzoom": 20
         }, before);
-
     };
+
+    private changeLayerStyle(style: BackGroundStyle) {
+        const { map, background } = this.props;
+        map.setPaintProperty(background.id, "raster-opacity", style.opacity);
+        map.setPaintProperty(background.id, "raster-hue-rotate", style.hue);
+    }
+
+    private bind() {
+        this.createLayer();
+    }
 
     private unbind() {
         const { map, background } = this.props;
-        console.log("background unbind", background)
 
         map.off('styledata', this.onStyleDataChange);
 
@@ -95,9 +99,8 @@ export class Backgrounds extends React.Component<IBackgroundsProps, IBackgrounds
     }
 
     public componentWillMount() {
-        console.log("background componentWillMount");
         const { map } = this.props;
-        this.initialize();
+        this.bind();
         map.on('styledata', this.onStyleDataChange);
     }
 
@@ -111,12 +114,13 @@ export class Backgrounds extends React.Component<IBackgroundsProps, IBackgrounds
         this.unbind();
     }
 
-    public componentWillReceiveProps(props: IBackgroundsProps) {
-
+    public componentWillReceiveProps(nextProps: IBackgroundsProps) {
+        if (this.props.style != nextProps.style) {
+            this.changeLayerStyle(nextProps.style);
+        }
     }
 
     public render() {
-        console.log("background render");
         return null;
     }
 }

@@ -22,10 +22,14 @@ class IntegerStep extends React.Component<IProps, IStates> {
     inputValue: 1,
   }
 
-  onChange = (value) => {
+  onSlideChange = (value) => {
+    let { onChange } = this.props;
     this.setState({
       inputValue: value,
     });
+    if (onChange) {
+      onChange(value);
+    }
   }
 
 
@@ -50,7 +54,7 @@ class IntegerStep extends React.Component<IProps, IStates> {
             max={max}
             step={step}
             marks={marks}
-            onChange={this.onChange}
+            onChange={this.onSlideChange}
             value={typeof inputValue === 'number' ? inputValue : 0}
           />
         </Col>
@@ -61,7 +65,7 @@ class IntegerStep extends React.Component<IProps, IStates> {
             step={step}
             style={{ marginLeft: 16, marginTop: 12.5 }}
             value={inputValue}
-            onChange={this.onChange}
+            onChange={this.onSlideChange}
           />
         </Col>
       </Row>

@@ -48,8 +48,7 @@ class Document extends React.Component<IDocumentProps, IDocumentState> {
     };
 
     changeCurrent = (id) => {
-        const { current, backgrounds, layers } = this.props.document;
-        let document: IDocument = new IDocument(current, backgrounds, layers);
+        const { document } = this.props;
         this.props.dispatch(toggleCurrent(id, document))
     }
 

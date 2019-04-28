@@ -13,14 +13,13 @@ interface IBottomPaneProps {
 class AttrPane extends React.Component<IBottomPaneProps, {}> {
     getType(doc) {
         let ui = null;
-        const {current, backgrounds, layers} = doc;
-        let document = new IDocument(current, backgrounds, layers);
+
+        let document = new IDocument(doc.name, doc.current, doc.backgroud, doc.layers, doc.maprender);
         const type = document.current.type;
         const backs = document.getBackgrouds(document);
 
         switch (type) {
             case LayerType.BackGround:
-                console.log("getType", backs, doc);
                 ui = <BackgroudCard backgroud={backs[0]} />
                 break;
             case LayerType.RasterTile:
@@ -56,7 +55,7 @@ class AttrPane extends React.Component<IBottomPaneProps, {}> {
         return (
             <div >
                 {!visible && <Alert message="警告" description={message} type="warning" showIcon />}
-                {visible &&  ui }
+                {visible && ui}
             </div >
         );
     }

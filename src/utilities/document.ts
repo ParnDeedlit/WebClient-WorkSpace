@@ -23,11 +23,14 @@ export const defaultCurrent = {
   name: defaultId
 };
 
+export const defaultName = "默认地图文档";
+
 /**
  * @author 潘卓然
  * @description 通用地图文档接口
  */
 export class IDocument {
+  name: string;
   current: Current; //实例属性
   maprender: MapRender;
   backgrounds: Array<BackGround>; //实例属性
@@ -35,15 +38,17 @@ export class IDocument {
 
   //构造函数
   constructor(
+    name: string,
     current: Current,
     backgrounds: Array<BackGround>,
     layers: Array<ILayer>,
-    maprender?: MapRender 
+    maprender?: MapRender
   ) {
-    this.current = current;
-    this.backgrounds = backgrounds;
-    this.layers = layers;
-    this.maprender = maprender;
+    this.name = name ? name : defaultName;
+    this.current = current ? current : defaultCurrent;
+    this.backgrounds = backgrounds ? backgrounds : defaultBacks;
+    this.layers = layers ? layers : defaultLayers;
+    this.maprender = maprender ? maprender : MapRender.MapBoxGL;
   }
 
   //实例方法
@@ -172,9 +177,11 @@ export const defaultLayers: Array<ILayer> = [
 ];
 
 export const defaultDocument: IDocument = new IDocument(
+  defaultName,
   defaultCurrent,
   defaultBacks,
-  defaultLayers
+  defaultLayers,
+  MapRender.MapBoxGL
 );
 
 /**

@@ -19,14 +19,13 @@ class StyleLayer extends React.Component<IProps, IState> {
     }
 
     changeStyle(doc: IDocument) {
-        const idocment = new IDocument(doc.current, doc.backgrounds, doc.layers, doc.maprender);
-        const currents = idocment.getCurrentLayer();
+        let document = new IDocument(doc.name, doc.current, doc.backgrounds, doc.layers, doc.maprender);
+        const currents = document.getCurrentLayer();
         if (currents.length > 0) {
             const layer = currents[0];
             switch (layer.type) {
                 case LayerType.BackGround:
-                    return <BackgroudStyleView document={doc} />
-                    break;
+                    return <BackgroudStyleView document={document} />
             }
         }
         return;

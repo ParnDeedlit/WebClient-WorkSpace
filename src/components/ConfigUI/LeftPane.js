@@ -18,7 +18,7 @@ export const LeftTabs = [
     icon: "icon-map",
     key: "left-document-tree",
     ui: getDocument
-  },
+  }/* ,
   {
     title: "图例",
     icon: "icon-briefInfosprite",
@@ -36,7 +36,7 @@ export const LeftTabs = [
     icon: "icon-other",
     key: "left-other-info",
     ui: getEmptry
-  }
+  } */
 ];
 
 export default LeftTabs;

@@ -164,12 +164,12 @@ export const defaultBacks: Array<BackGround> = [
 export const defaultLayers: Array<ILayer> = [
   {
     type: LayerType.VectorTile,
-    url: "http://localhost:6163/igs/rest/mrms/vtiles/styles/世界地图.json",
-    mapstyle: "http://localhost:6163/igs/rest/mrms/vtiles/styles/世界地图.json",
+    url: "http://localhost:6163/igs/rest/mrms/vtiles/styles/军测最终.json",
+    mapstyle: "http://localhost:6163/igs/rest/mrms/vtiles/styles/军测最终.json",
     description: "军测矢量瓦片, WMTS服务",
     visible: true,
-    name: "世界地图",
-    title: "世界地图",
+    name: "军测最终",
+    title: "军测最终",
     id: "world",
     key: "world",
     icon: "icon-vector"

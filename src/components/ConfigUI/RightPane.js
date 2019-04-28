@@ -24,7 +24,7 @@ export const RightTabs = [
     icon: "icon-bianjibiaoge",
     key: "right-layer-attr",
     ui: getStyleLayer
-  },
+  }/* ,
   {
     title: "图元属性",
     icon: "icon-map",
@@ -36,7 +36,7 @@ export const RightTabs = [
     icon: "icon-map",
     key: "right-toolbar-attr",
     ui: getEmptry
-  }
+  } */
 ];
 
 export default RightTabs;

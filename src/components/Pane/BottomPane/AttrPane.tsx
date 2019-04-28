@@ -14,7 +14,7 @@ class AttrPane extends React.Component<IBottomPaneProps, {}> {
     getType(doc) {
         let ui = null;
 
-        let document = new IDocument(doc.name, doc.current, doc.backgroud, doc.layers, doc.maprender);
+        let document = new IDocument(doc.name, doc.current, doc.backgrounds, doc.layers, doc.maprender);
         const type = document.current.type;
         const backs = document.getBackgrouds(document);
 

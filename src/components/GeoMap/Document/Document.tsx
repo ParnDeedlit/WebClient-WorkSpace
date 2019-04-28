@@ -8,7 +8,7 @@ import VectorTilePopver from '../../Popover/VectorTilePopver';
 import RasterTilePopver from '../../Popover/RasterTilePopver';
 
 import { NameSpaceDocument } from '../../../models/workspace';
-import { IDocument, toggleCurrent } from '../../../utilities/document';
+import { IDocument, toggleCurrent, cloneDocument } from '../../../utilities/document';
 import { LayerType, ILayer, BackGround, VectorTileLayer } from '../../../utilities/layer';
 
 import './index.less';
@@ -49,7 +49,8 @@ class Document extends React.Component<IDocumentProps, IDocumentState> {
 
     changeCurrent = (id) => {
         const { document } = this.props;
-        this.props.dispatch(toggleCurrent(id, document))
+        let idoc = cloneDocument(document);
+        this.props.dispatch(toggleCurrent(id, idoc))
     }
 
     onExpand = (expandedKeys) => {

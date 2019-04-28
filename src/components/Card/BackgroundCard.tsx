@@ -11,15 +11,18 @@ interface IBottomPaneProps {
 
 class BackgroudCard extends React.Component<IBottomPaneProps, {}> {
 
+    getImage(name) {
+        return require('../../assets/background/' + name + '.png')
+    }
 
     render() {
         const style = { "marginLeft": 20 };
-        const { name, key, description, imgUrl, tileUrl } = this.props.backgroud;
-        const img = imgUrl ? <img alt="图片预览" src={imgUrl} /> : null
+        const { name, key, description, tileUrl } = this.props.backgroud;
+        const img = <img alt="图片预览" src={this.getImage(key)} />;
         return (<div style={style}>
             <Card
                 hoverable
-                style={{ width: 300 }}
+                style={{ width: 250 }}
                 cover={img}
                 actions={
                     [

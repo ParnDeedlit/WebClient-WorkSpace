@@ -8,7 +8,7 @@ export let defaultBackground = {
   tileUrl:
     "https://api.tiles.mapbox.com/v4/mapbox.dark/{z}/{x}/{y}.png?access_token=sk.eyJ1IjoiY2hlbmdkYWRhIiwiYSI6ImNqZDFjaGo0ZjFzcnoyeG54enoxdnNuZHUifQ.hTWXXBUQ0wdGeuDF3GWeUw",
   imgUrl:
-    "https://www.arcgis.com/sharing/rest/content/items/bf024b8d0b4b48f5a486070214e87c5f/info/thumbnail/ago_downloaded.png?token=J2AaiNAlnstPvsJzidWbhWK2R4Tmq8nbd-FGwxlRjIHbNuHK4LzX5YLOUhHa7czJxP2X2XzObWfL__l_L6Ff_0EcOJmNcBzWf2NU6vX4Mn28lKikRg3RYkuwhUU0b_9ZnB-QBI6yTXi-CEg-waKgVoEZzs18ElFJr0KZP8854o_Il3stSyJMXBM21Dw51FEz"
+    "https://user-images.githubusercontent.com/23654117/56859979-16e31c80-69c4-11e9-9b5d-12d48eb85f0d.png"
 };
 
 export let backgrouds = [
@@ -22,7 +22,7 @@ export let backgrouds = [
     tileUrl:
       "https://api.tiles.mapbox.com/v4/mapbox.dark/{z}/{x}/{y}.png?access_token=sk.eyJ1IjoiY2hlbmdkYWRhIiwiYSI6ImNqZDFjaGo0ZjFzcnoyeG54enoxdnNuZHUifQ.hTWXXBUQ0wdGeuDF3GWeUw",
     imgUrl:
-      "https://www.arcgis.com/sharing/rest/content/items/bf024b8d0b4b48f5a486070214e87c5f/info/thumbnail/ago_downloaded.png?token=J2AaiNAlnstPvsJzidWbhWK2R4Tmq8nbd-FGwxlRjIHbNuHK4LzX5YLOUhHa7czJxP2X2XzObWfL__l_L6Ff_0EcOJmNcBzWf2NU6vX4Mn28lKikRg3RYkuwhUU0b_9ZnB-QBI6yTXi-CEg-waKgVoEZzs18ElFJr0KZP8854o_Il3stSyJMXBM21Dw51FEz"
+      "https://user-images.githubusercontent.com/23654117/56859978-164a8600-69c4-11e9-97bc-6bf8439483b0.png"
   },
   {
     title: "浅色背景",
@@ -34,7 +34,7 @@ export let backgrouds = [
     tileUrl:
       "https://api.tiles.mapbox.com/v4/mapbox.light/{z}/{x}/{y}.png?access_token=sk.eyJ1IjoiY2hlbmdkYWRhIiwiYSI6ImNqZDFjaGo0ZjFzcnoyeG54enoxdnNuZHUifQ.hTWXXBUQ0wdGeuDF3GWeUw",
     imgUrl:
-      "https://www.arcgis.com/sharing/rest/content/items/23fe7e8317ba4331b6ca72bf2a8eddb6/info/thumbnail/_E5_BE_AE_E5_8D_9A_E6_A1_8C_E9_9D_A2_E6_88_AA_E5_9B_BE_20130828171658.jpg?token=J2AaiNAlnstPvsJzidWbhWK2R4Tmq8nbd-FGwxlRjIHbNuHK4LzX5YLOUhHa7czJxP2X2XzObWfL__l_L6Ff_0EcOJmNcBzWf2NU6vX4Mn28lKikRg3RYkuwhUU0b_9ZnB-QBI6yTXi-CEg-waKgVoEZzs18ElFJr0KZP8854o_Il3stSyJMXBM21Dw51FEz"
+      "https://user-images.githubusercontent.com/23654117/56859979-16e31c80-69c4-11e9-9b5d-12d48eb85f0d.png"
   },
   {
     title: "街道地图",
@@ -46,19 +46,7 @@ export let backgrouds = [
     tileUrl:
       "https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=sk.eyJ1IjoiY2hlbmdkYWRhIiwiYSI6ImNqZDFjaGo0ZjFzcnoyeG54enoxdnNuZHUifQ.hTWXXBUQ0wdGeuDF3GWeUw",
     imgUrl:
-      "https://www.arcgis.com/sharing/rest/content/items/017a6ec857ec4150a1f6d51e74d755bb/info/thumbnail/ago_downloaded.png?token=J2AaiNAlnstPvsJzidWbhWK2R4Tmq8nbd-FGwxlRjIHbNuHK4LzX5YLOUhHa7czJxP2X2XzObWfL__l_L6Ff_0EcOJmNcBzWf2NU6vX4Mn28lKikRg3RYkuwhUU0b_9ZnB-QBI6yTXi-CEg-waKgVoEZzs18ElFJr0KZP8854o_Il3stSyJMXBM21Dw51FEz"
-  },
-  {
-    title: "高德地图",
-    name: "高德地图",
-    id: "gaode",
-    key: "gaode",
-    icon: "icon-background",
-    type: "background",
-    tileUrl:
-      "https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=sk.eyJ1IjoiY2hlbmdkYWRhIiwiYSI6ImNqZDFjaGo0ZjFzcnoyeG54enoxdnNuZHUifQ.hTWXXBUQ0wdGeuDF3GWeUw",
-    imgUrl:
-      "https://www.arcgis.com/sharing/rest/content/items/017a6ec857ec4150a1f6d51e74d755bb/info/thumbnail/ago_downloaded.png?token=J2AaiNAlnstPvsJzidWbhWK2R4Tmq8nbd-FGwxlRjIHbNuHK4LzX5YLOUhHa7czJxP2X2XzObWfL__l_L6Ff_0EcOJmNcBzWf2NU6vX4Mn28lKikRg3RYkuwhUU0b_9ZnB-QBI6yTXi-CEg-waKgVoEZzs18ElFJr0KZP8854o_Il3stSyJMXBM21Dw51FEz"
+      "https://user-images.githubusercontent.com/23654117/56859980-16e31c80-69c4-11e9-9e15-0980bd7ff947.png"
   }
 ];
 

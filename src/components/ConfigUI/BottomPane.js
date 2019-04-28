@@ -2,7 +2,6 @@ import * as React from "react";
 import AttrPane from "../Pane/BottomPane/AttrPane";
 
 export function getAttrInfo(document, map, layout) {
-  console.log("getAttrInfo", document);
   return <AttrPane document={document} />;
 }
 

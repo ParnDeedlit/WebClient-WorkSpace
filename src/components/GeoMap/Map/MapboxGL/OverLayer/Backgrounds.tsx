@@ -74,6 +74,9 @@ export class Backgrounds extends React.Component<IBackgroundsProps, IBackgrounds
         const { map, background } = this.props;
         map.setPaintProperty(background.id, "raster-opacity", style.opacity);
         map.setPaintProperty(background.id, "raster-hue-rotate", style.hue);
+
+        let visible = style.visible ? 'visible' : 'none';
+        map.setLayoutProperty(background.id, "visibility", visible);
     }
 
     private bind() {

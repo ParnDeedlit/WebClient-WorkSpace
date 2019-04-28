@@ -17,8 +17,16 @@ interface IProps {
     dispatch: any;
 }
 
+interface IStates {
+    value: string;
+}
+
 let self = null;
-class BackgroudStyleView extends React.Component<IProps, {}> implements IBackGroundSytle {
+class BackgroudStyleView extends React.Component<IProps, IStates> implements IBackGroundSytle {
+    public state: IStates = {
+        value: "visible"
+    };
+
     constructor(props: IProps) {
         super(props);
         self = this;
@@ -55,6 +63,21 @@ class BackgroudStyleView extends React.Component<IProps, {}> implements IBackGro
         self.dispatchStyleChange(backgrounds, newStyle);
     }
 
+    onVisibleChange(value) {
+        let visible = value == "visible" ? true : false;
+        let { backgrounds } = self.props.document;
+        if (backgrounds.length <= 0) return;
+
+        let { style } = backgrounds[0];
+        if (!style) style = defaultBackGroundStyle;
+        let { opacity, hue } = style;
+
+        let newStyle = new BackGroundStyle(visible, opacity, hue);
+
+        self.dispatchStyleChange(backgrounds, newStyle);
+        this.setState({ value: value });
+    }
+
     render() {
         const { document } = this.props;
         return (
@@ -63,18 +86,18 @@ class BackgroudStyleView extends React.Component<IProps, {}> implements IBackGro
                     <BlockCheckbox
                         list={[
                             {
-                                key: 'dark',
+                                key: 'visible',
                                 url: 'https://gw.alipayobjects.com/zos/rmsportal/LCkqqYNmvBEbokSDscrm.svg',
-                                title: "黑暗主题",
+                                title: "可见状态",
                             },
                             {
-                                key: 'light',
+                                key: 'unvisible',
                                 url: 'https://gw.alipayobjects.com/zos/rmsportal/jpRkZQMyYRryryPNtyIC.svg',
-                                title: '亮色主题',
+                                title: '不可见状态',
                             },
                         ]}
-                        value="dark"
-                        onChange={value => console.log(value)}
+                        value={this.state.value}
+                        onChange={value => this.onVisibleChange(value)}
                     />
                 </BodyStyle>
 

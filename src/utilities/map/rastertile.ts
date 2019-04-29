@@ -2,9 +2,9 @@ import { ILayer } from "./layer";
 import { NameSpaceDocument } from "../../models/workspace";
 
 export class RasterTileLayer extends ILayer {
-  title: string;
-  tileUrl: string;
-  imgUrl: string;
+  title?: string;
+  tileUrl?: string;
+  imgUrl?: string;
   style?: RasterTileStyle;
 }
 

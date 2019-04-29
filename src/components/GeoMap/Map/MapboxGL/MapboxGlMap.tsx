@@ -29,6 +29,7 @@ interface IMapboxGlMapProps {
   options: any;
   layout: any;
   dispatch?: any;
+  onStyleLoad?: Function;
   children?: JSX.Element | JSX.Element[] | Array<JSX.Element | undefined>;
 }
 
@@ -92,6 +93,27 @@ export class MapboxGlMap extends React.Component<
     }
   }
 
+  getFirstLayer(layers) {
+    if (!layers) return "";
+    if (layers.length <= 0) return "";
+
+    var backgrounds = layers.filter(layer => {
+      return layer.type === 'background';
+    });
+    if (backgrounds && backgrounds.length > 0) {
+      //有背景图层存在,返回最后一个背景图层id
+      return backgrounds[backgrounds.length - 1];
+    }
+    var rastertiles = layers.filter(layer => {
+      return layer.type === 'rastertile';
+    });
+    if (rastertiles && rastertiles.length > 0) {
+      //有栅格图层存在,返回第一个栅格图层id
+      return rastertiles[rastertiles.length - 1];
+    }
+    return layers[0];
+  }
+
   public componentWillReceiveProps(nextProps) {
     const { map } = this.state;
     if (!map) {
@@ -101,8 +123,10 @@ export class MapboxGlMap extends React.Component<
   }
 
   componentDidMount() {
-    console.log("mapbox componentDidMount");
+    //console.log("mapbox componentDidMount");
     if (!IS_SUPPORTED) return;
+
+    const { onStyleLoad } = this.props;
 
     const style = this.updateStyle();
     const { current, backgrounds, layers } = this.props.document;
@@ -127,8 +151,13 @@ export class MapboxGlMap extends React.Component<
     var fpsControl = new FPSControl();
     map.addControl(fpsControl, "top-right");
 
-    map.on("load", () => {
+    map.on("load", (e, target) => {
       this.setState({ map: map, isLoad: true });
+      if (onStyleLoad) {
+        var beforeId = this.getFirstLayer(map.getStyle().layers);
+        var option = { before: beforeId };
+        onStyleLoad(e, target, option);
+      }
     });
 
     map.on("mousemove", (e) => {
@@ -150,7 +179,7 @@ export class MapboxGlMap extends React.Component<
     const { children } = this.props;
     const { isLoad, map } = this.state;
 
-    console.log("mapboxgl map render", children);
+    //console.log("mapboxgl map render", children);
 
     if (IS_SUPPORTED) {
       return (

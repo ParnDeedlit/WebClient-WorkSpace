@@ -7,6 +7,7 @@ import { NameSpaceDocument } from "../../models/workspace";
 import { LayerType, ILayer, defaultId } from "./layer";
 import { defaultRasterLayer } from '../../config/layers';
 import { BackGroundLayer } from './background';
+import { RasterTileLayer } from './rastertile';
 
 export enum MapRender {
   MapBoxGL = "mapboxgl",
@@ -37,6 +38,7 @@ export class IDocument {
   maprender: MapRender;
   backgrounds: Array<BackGroundLayer>; //实例属性
   layers: Array<ILayer>;
+  before?: string; //表示堆顶图层
 
   //构造函数
   constructor(
@@ -54,10 +56,8 @@ export class IDocument {
   }
 
   //实例方法
-  getBackgrouds(document: IDocument) {
-    if (!document) return defaultBackground;
-    if (!document.backgrounds) return defaultBackground;
-    return document.backgrounds;
+  getBackgrouds() {
+    return this.backgrounds;
   }
 
   getCurrent(document: IDocument) {
@@ -172,8 +172,8 @@ export const defaultLayers: Array<ILayer> = [
     visible: true,
     name: "军测最终",
     title: "军测最终",
-    id: "world",
-    key: "world",
+    id: "military",
+    key: "military",
     icon: "icon-vector"
   }
 ].concat(defaultRasterLayer);

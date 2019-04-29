@@ -41,19 +41,18 @@ export class RasterTile extends React.Component<IProps, IStates> {
     }
 
     private createLayer = () => {
-        let { map, rastertile, before, style } = this.props;
+        let { map, rastertile, before, style } = this.props
+
         if (!style) style = defaultRasterTileStyle;
         let paint = this.parsePaint(style);
         let layout = this.parseLayout(style);
 
-        if (!before) before = "background";
-
-        const { id, tileUrl } = rastertile;
-        if (!id || !tileUrl) return;
+        const { id, tileUrl, url } = rastertile;
+        if (!id || !(url || tileUrl)) return;
 
         map.addSource(id, {
             "type": "raster",
-            "tiles": [tileUrl],
+            "tiles": [url || tileUrl],
             "minZoom": 0,
             "maxZoom": 20
         });

@@ -3,6 +3,18 @@ import { LayerType } from "../utilities/map/layer";
 export const defaultRasterLayer = [
   {
     type: LayerType.RasterTile,
+    url: "http://localhost:6163/igs/rest/mrms/tile/世界地图/{z}/{y}/{x}",
+    mapstyle: "",
+    description: "世界地图",
+    visible: true,
+    name: "世界地图",
+    title: "世界地图",
+    id: "world",
+    key: "world",
+    icon: "icon-raster_tile"
+  },
+  {
+    type: LayerType.RasterTile,
     url: "http://localhost:6163/igs/rest/mrms/tile/省级行政区/{z}/{y}/{x}",
     mapstyle: "",
     description: "省级行政区",

@@ -2,7 +2,6 @@ import * as React from 'react';
 import * as MapboxGL from 'mapbox-gl';
 import { withMap } from '../Global/context';
 import { BackGroundLayer, BackGroundStyle, defaultBackGroundStyle } from '../../../../../utilities/map/background';
-import style from '../../../../../utilities/style';
 
 interface IBackgroundsProps {
     map: MapboxGL.Map;
@@ -41,20 +40,30 @@ export class Backgrounds extends React.Component<IBackgroundsProps, IBackgrounds
         }
     }
 
+    getFirstLayer() {
+        const { map } = this.props;
+        if (!map) return undefined
+        const layers = map.getStyle().layers;
+        if (layers.length <= 0) return undefined
+        return layers[0].id;
+    }
+
     private createLayer = () => {
-        let { map, background, before, style } = this.props;
+        let { map, background, before, style } = this.props
+        let layerTop = this.getFirstLayer();
+
+        before = layerTop ? layerTop : before;
+
         if (!style) style = defaultBackGroundStyle;
         let paint = this.parsePaint(style);
         let layout = this.parseLayout(style);
 
-        if (!before) before = "background";
-
-        const { id, tileUrl } = background;
-        if (!id || !tileUrl) return;
+        const { id, tileUrl, url } = background;
+        if (!id || !(url || tileUrl)) return;
 
         map.addSource(id, {
             "type": "raster",
-            "tiles": [tileUrl],
+            "tiles": [url || tileUrl],
             "minZoom": 0,
             "maxZoom": 20
         });

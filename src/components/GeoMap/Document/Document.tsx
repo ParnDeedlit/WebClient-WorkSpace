@@ -8,8 +8,12 @@ import VectorTilePopver from '../../Popover/VectorTilePopver';
 import RasterTilePopver from '../../Popover/RasterTilePopver';
 
 import { NameSpaceDocument } from '../../../models/workspace';
-import { IDocument, toggleCurrent, cloneDocument } from '../../../utilities/document';
-import { LayerType, ILayer, BackGround, VectorTileLayer } from '../../../utilities/layer';
+import { IDocument, toggleCurrent, cloneDocument } from '../../../utilities/map/document';
+import { LayerType, ILayer } from '../../../utilities/map/layer';
+import { BackGroundLayer } from '../../../utilities/map/background';
+import { VectorTileLayer } from '../../../utilities/map/vectortile';
+import { RasterTileLayer } from '../../../utilities/map/rastertile';
+
 
 import './index.less';
 
@@ -109,7 +113,7 @@ class Document extends React.Component<IDocumentProps, IDocumentState> {
         return <TreeNode {...item} />;
     })
 
-    getBackgrounds(backgrounds: Array<BackGround>) {
+    getBackgrounds(backgrounds: Array<BackGroundLayer>) {
         let backgournd = {
             title: '背景底图',
             icon: 'icon-background',
@@ -123,7 +127,24 @@ class Document extends React.Component<IDocumentProps, IDocumentState> {
         return backgournd;
     }
 
-    getVectorTiles(vectortiles: Array<VectorTileLayer>) {
+    getRasterTiles(rastertiles: Array<ILayer>) {
+        let rastertile = {
+            title: '栅格瓦片',
+            icon: 'icon-raster_tile',
+            key: 'rastertile',
+            type: LayerType.RasterTile,
+            children: []
+        };
+
+        rastertiles.map(layer => {
+            if (layer.type == LayerType.RasterTile) {
+                rastertile.children.push(layer);
+            }
+        });
+        return rastertile;
+    }
+
+    getVectorTiles(vectortiles: Array<ILayer>) {
         let vectortile = {
             title: '矢量瓦片',
             icon: 'icon-vector',
@@ -132,20 +153,20 @@ class Document extends React.Component<IDocumentProps, IDocumentState> {
             children: []
         };
 
-/*         let customChldren = {
-            title: '湖南',
-            icon: 'icon-vector',
-            key: 'vectortile',
-            type: LayerType.VectorTile,
-            children: []
-        };
-        vectortiles.map(layer => {
-            if (layer.type == LayerType.VectorTile) {
-                customChldren.children.push(layer);
-            }
-        });
-        vectortile.children.push(customChldren);
-        return vectortile; */
+        /*         let customChldren = {
+                    title: '湖南',
+                    icon: 'icon-vector',
+                    key: 'vectortile',
+                    type: LayerType.VectorTile,
+                    children: []
+                };
+                vectortiles.map(layer => {
+                    if (layer.type == LayerType.VectorTile) {
+                        customChldren.children.push(layer);
+                    }
+                });
+                vectortile.children.push(customChldren);
+                return vectortile; */
 
         vectortiles.map(layer => {
             if (layer.type == LayerType.VectorTile) {
@@ -163,8 +184,10 @@ class Document extends React.Component<IDocumentProps, IDocumentState> {
         let trees = [];
         let groupBack = this.getBackgrounds(backgrounds);
         let groupVectorTile = this.getVectorTiles(layers);
+        let groupRasterTile = this.getRasterTiles(layers);
 
         trees.push(groupBack);
+        trees.push(groupRasterTile);
         trees.push(groupVectorTile);
 
         return (

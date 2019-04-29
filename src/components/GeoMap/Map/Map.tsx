@@ -5,7 +5,7 @@ import CesiumMap from "./Cesium/CesiumMap.jsx";
 
 import styleTool from "../../../utilities/style";
 
-import { IDocument, MapRender } from '../../../utilities/document';
+import { IDocument, MapRender } from '../../../utilities/map/document';
 
 import './index.less';
 

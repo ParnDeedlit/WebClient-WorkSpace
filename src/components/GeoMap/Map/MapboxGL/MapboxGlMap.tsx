@@ -15,9 +15,10 @@ import { FPSControl } from "../Common/unit";
 import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
 import "mapbox-gl/dist/mapbox-gl.css";
 
-import { IDocument } from '../../../../utilities/document';
+import { IDocument } from '../../../../utilities/map/document';
 import { MapMouseEvent, Positon, toggleMousePosition, toggleZoomLevel } from '../../../../utilities/map';
-import { LayerType, BackGround } from '../../../../utilities/layer';
+import { LayerType } from '../../../../utilities/map/layer';
+import { BackGroundLayer } from '../../../../utilities/map/background';
 
 const IS_SUPPORTED = MapboxGL.supported();
 

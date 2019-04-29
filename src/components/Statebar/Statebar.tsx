@@ -6,7 +6,7 @@ import { Row, Col, Progress, Tag, Input } from 'antd';
 import { NameSpaceDocument, NameSpaceMapState } from '../../models/workspace';
 
 import './index.less';
-import IDocument from '../../utilities/document';
+import IDocument from '../../utilities/map/document';
 import { State } from '../../utilities/map';
 
 export interface IStatebarProps {

@@ -1,56 +1,12 @@
-import { NameSpaceDocument } from "../models/workspace";
+import { ILayer } from "./layer";
+import { NameSpaceDocument } from "../../models/workspace";
 
-export const defaultId: string = "unknow";
-
-export enum LayerType {
-  BackGround = "background",
-  RasterTile = "rastertile",
-  VectorTile = "vectortile",
-  UnKnow = "unknow"
-}
-
-export class ILayer {
-  type: LayerType;
-  name: string;
-  id: string;
-  key: string;
-
-  description?: string;
-  visible?: boolean;
-
-  /**
-   * @member UI框架用来进行文字绑定的关键字与name一致即可
-   */
-  title?: string;
-
-  /**
-   * @member 地图url
-   */
-  url?: string;
-  /**
-   * @member 地图样式
-   */
-  mapstyle?: string;
-  /**
-   * @member 表示font图标，和iconfont强绑定
-   */
-  icon?: string;
-}
-
-export class BackGround extends ILayer {
+export class BackGroundLayer extends ILayer {
   title: string;
   tileUrl: string;
   imgUrl: string;
   style?: BackGroundStyle;
 }
-
-export class RasterTileLayer extends ILayer {
-  title: string;
-  tileUrl: string;
-  imgUrl: string;
-}
-
-export class VectorTileLayer extends ILayer {}
 
 //-------------------------------------BackGroundStyle----------------------------------
 //---------------------------------------背景样式-开始-----------------------------------
@@ -76,15 +32,19 @@ export class BackGroundStyle {
 }
 
 export interface IBackGroundSytle {
-  dispatchStyleChange(backgrounds: Array<BackGround>, style: BackGroundStyle);
+  dispatchStyleChange(backgrounds: Array<BackGroundLayer>, style: BackGroundStyle);
   onOpacityChange(opacity: number);
   onHueChange(hue: number);
 }
 
-export const defaultBackGroundStyle: BackGroundStyle = new BackGroundStyle(true, 1, 0);
+export const defaultBackGroundStyle: BackGroundStyle = new BackGroundStyle(
+  true,
+  1,
+  0
+);
 
 export function changeBackgroundStyle(
-  backgrounds: Array<BackGround>,
+  backgrounds: Array<BackGroundLayer>,
   style: BackGroundStyle
 ) {
   if (backgrounds.length <= 0) return null;

@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { connect } from "dva";
 import { Divider } from 'antd';
-import IDocument from '../../utilities/document';
+import IDocument from '../../utilities/map/document';
 import BodyStyle from './BodyStyle';
 import BlockCheckbox from '../Common/Select/BlockChecbox';
 import BlockSlider from '../Common/Select/BlockSlider';
 import { opacityMarks, hueMarks } from '../Common/Select/BlockSliderMarker';
 import { NameSpaceDocument } from '../../models/workspace';
-import { changeBackgroundStyle, BackGround, BackGroundStyle, IBackGroundSytle, defaultBackGroundStyle } from '../../utilities/layer';
+import { changeBackgroundStyle, BackGroundLayer, BackGroundStyle, IBackGroundSytle, defaultBackGroundStyle } from '../../utilities/map/background';
 
 
 import './index.less';
@@ -32,7 +32,7 @@ class BackgroudStyleView extends React.Component<IProps, IStates> implements IBa
         self = this;
     }
 
-    dispatchStyleChange(backgrounds: Array<BackGround>, style: BackGroundStyle) {
+    dispatchStyleChange(backgrounds: Array<BackGroundLayer>, style: BackGroundStyle) {
         const { dispatch } = this.props;
         dispatch(changeBackgroundStyle(backgrounds, style));
     }

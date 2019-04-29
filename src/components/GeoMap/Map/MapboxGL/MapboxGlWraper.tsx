@@ -1,9 +1,11 @@
 import * as React from "react";
 
-import { IDocument } from '../../../../utilities/document';
+import { IDocument } from '../../../../utilities/map/document';
 import MapboxGlMap from './MapboxGlMap'
 import Backgrounds from './OverLayer/Backgrounds';
-import { BackGround, RasterTileLayer } from '../../../../utilities/layer';
+import { BackGroundLayer } from '../../../../utilities/map/background';
+import { RasterTileLayer } from '../../../../utilities/map/rastertile';
+
 
 
 interface IMapboxGlMapProps {
@@ -33,7 +35,7 @@ export class MapboxGlWraper extends React.Component<
         super(props);
     }
 
-    renderBackground(backgrounds: Array<BackGround>) {
+    renderBackground(backgrounds: Array<BackGroundLayer>) {
         return backgrounds.map(background => {
             return <Backgrounds
                 background={background}

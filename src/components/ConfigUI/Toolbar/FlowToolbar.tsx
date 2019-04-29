@@ -5,8 +5,8 @@ import { Divider, Row, Col } from 'antd';
 
 import { NameSpaceDocument } from '../../../models/workspace';
 
-import { IDocument } from '../../../utilities/document';
-import { LayerType } from '../../../utilities/layer';
+import { IDocument } from '../../../utilities/map/document';
+import { LayerType } from '../../../utilities/map/layer';
 
 import {isEnable} from '../../../utilities/toolbar';
 

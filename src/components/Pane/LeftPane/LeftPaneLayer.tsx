@@ -6,7 +6,7 @@ import IconFont from '../../IconFont/mapgis';
 
 import { LeftTabs } from '../../ConfigUI/LeftPane';
 
-import { IDocument } from '../../../utilities/document';
+import { IDocument } from '../../../utilities/map/document';
 import { NameSpaceDocument } from '../../../models/workspace';
 
 import './index.less'

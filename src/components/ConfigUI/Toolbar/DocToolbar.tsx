@@ -17,7 +17,7 @@ import { NameSpaceCommand } from '../../../models/workspace';
 
 import { toggleProject, toggleTransform, toggleImport, toggleExport, toggleSetting } from '../../../action/command/models';
 import { toggleLeftLayout, toggleBottomLayout } from '../../../action/command/layout';
-import { toggleBackgroud } from '../../../utilities/document';
+import { toggleBackgroud } from '../../../utilities/map/document';
 
 interface IToolbarProps {
   content: any,

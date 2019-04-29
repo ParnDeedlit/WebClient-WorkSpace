@@ -6,7 +6,7 @@ import IconFont from '../../IconFont/mapgis';
 import { RightTabs, RightDefaultKey } from '../../ConfigUI/RightPane';
 
 import './index.less'
-import { IDocument } from '../../../utilities/document';
+import { IDocument } from '../../../utilities/map/document';
 import { NameSpaceDocument } from '../../../models/workspace';
 
 const TabPane = Tabs.TabPane;

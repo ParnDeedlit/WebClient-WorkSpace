@@ -6,7 +6,7 @@ import {
   defaultMapRender,
   defaultBacks,
   defaultLayers
-} from "../../../utilities/document";
+} from "../../../utilities/map/document";
 
 export default {
   namespace: NameSpaceDocument,

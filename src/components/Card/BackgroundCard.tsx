@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { Card, Icon, Avatar, Tooltip } from 'antd';
-import { BackGround, LayerType } from '../../utilities/layer';
+import { LayerType } from '../../utilities/map/layer';
+import { BackGroundLayer } from '../../utilities/map/background';
 
 
 const { Meta } = Card;
 
 interface IBottomPaneProps {
-    backgroud: BackGround;
+    backgroud: BackGroundLayer;
 }
 
 class BackgroudCard extends React.Component<IBottomPaneProps, {}> {

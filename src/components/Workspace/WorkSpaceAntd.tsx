@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Row, Col } from 'antd';
 import { connect } from "dva";
 
-import { IDocument } from '../../utilities/document';
+import { IDocument } from '../../utilities/map/document';
 
 import MapRenderer from "../GeoMap/Map/Map";
 

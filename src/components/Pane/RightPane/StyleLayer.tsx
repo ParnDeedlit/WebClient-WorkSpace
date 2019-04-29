@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { IDocument } from '../../../utilities/document';
+import { IDocument } from '../../../utilities/map/document';
 import './index.less'
-import { ILayer, LayerType } from '../../../utilities/layer';
+import { ILayer, LayerType } from '../../../utilities/map/layer';
 import BackgroudStyleView from '../../Style/BackgroundStyle';
 
 interface IProps {

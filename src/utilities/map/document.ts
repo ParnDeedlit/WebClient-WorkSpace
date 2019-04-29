@@ -1,10 +1,12 @@
 import backgrouds, {
   defaultBackground,
   getBackground
-} from "../config/backgroud";
-import { NameSpaceDocument } from "../models/workspace";
+} from "../../config/backgroud";
+import { NameSpaceDocument } from "../../models/workspace";
 
-import { LayerType, ILayer, BackGround, defaultId } from "./layer";
+import { LayerType, ILayer, defaultId } from "./layer";
+import { defaultRasterLayer } from '../../config/layers';
+import { BackGroundLayer } from './background';
 
 export enum MapRender {
   MapBoxGL = "mapboxgl",
@@ -33,14 +35,14 @@ export class IDocument {
   name: string;
   current: Current; //实例属性
   maprender: MapRender;
-  backgrounds: Array<BackGround>; //实例属性
+  backgrounds: Array<BackGroundLayer>; //实例属性
   layers: Array<ILayer>;
 
   //构造函数
   constructor(
     name: string,
     current: Current,
-    backgrounds: Array<BackGround>,
+    backgrounds: Array<BackGroundLayer>,
     layers: Array<ILayer>,
     maprender?: MapRender
   ) {
@@ -143,7 +145,7 @@ export const defaultLayer: ILayer = {
   key: LayerType.UnKnow
 };
 
-export const defaultBacks: Array<BackGround> = [
+export const defaultBacks: Array<BackGroundLayer> = [
   {
     title: "浅色背景",
     name: "MapBox浅色背景",
@@ -174,7 +176,7 @@ export const defaultLayers: Array<ILayer> = [
     key: "world",
     icon: "icon-vector"
   }
-];
+].concat(defaultRasterLayer);
 
 export const defaultDocument: IDocument = new IDocument(
   defaultName,

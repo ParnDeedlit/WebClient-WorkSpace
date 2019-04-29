@@ -1,12 +1,12 @@
 import * as React from 'react';
 import * as MapboxGL from 'mapbox-gl';
 import { withMap } from '../Global/context';
-import { BackGround, BackGroundStyle, defaultBackGroundStyle } from '../../../../../utilities/layer';
+import { BackGroundLayer, BackGroundStyle, defaultBackGroundStyle } from '../../../../../utilities/map/background';
 import style from '../../../../../utilities/style';
 
 interface IBackgroundsProps {
     map: MapboxGL.Map;
-    background: BackGround;
+    background: BackGroundLayer;
     style?: BackGroundStyle;
     before?: string;
 }

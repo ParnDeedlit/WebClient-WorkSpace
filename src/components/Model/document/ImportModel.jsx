@@ -5,7 +5,7 @@ import FileReaderInput from "react-file-reader-input";
 import { Modal, Button, Spin, Alert } from "antd";
 
 import { toggleImport } from "../../../action/command/models";
-import { resetDocument } from "../../../utilities/document";
+import { resetDocument } from "../../../utilities/map/document";
 
 var self = null;
 

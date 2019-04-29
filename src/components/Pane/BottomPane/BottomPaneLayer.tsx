@@ -9,7 +9,7 @@ import {
   NameSpaceMapState, NameSpaceMapOption,
   NameSpaceLayoutState, NameSpaceLayoutKey
 } from '../../../models/workspace';
-import IDocument from '../../../utilities/document';
+import IDocument from '../../../utilities/map/document';
 import { BottomTabs, BottomDefaultKey } from '../../ConfigUI/BottomPane';
 
 import './index.less'

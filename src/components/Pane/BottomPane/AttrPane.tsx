@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { Alert } from 'antd';
 import IconFont from '../../IconFont/mapgis';
-import { LayerType } from '../../../utilities/layer';
-import IDocument, { Current } from '../../../utilities/document';
+import { LayerType } from '../../../utilities/map/layer';
+import IDocument, { Current } from '../../../utilities/map/document';
 
 import BackgroudCard from '../../Card/BackgroundCard';
 

@@ -7,7 +7,7 @@ import { toggleSetting } from "../../../action/command/models";
 import { NameSpaceDocument } from "../../../models/workspace";
 
 import SettingMap from './SettingMap';
-import IDocument from '../../../utilities/document';
+import IDocument from '../../../utilities/map/document';
 
 const TabPane = Tabs.TabPane;
 

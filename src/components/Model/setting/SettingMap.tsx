@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Radio } from "antd";
 
-import { IDocument, MapRender, resetMapRender } from '../../../utilities/document';
+import { IDocument, MapRender, resetMapRender } from '../../../utilities/map/document';
 
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;

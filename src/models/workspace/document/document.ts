@@ -37,6 +37,10 @@ export default {
     changeBackgroundStyle(state, { payload: backgrounds }) {
       var newState = { ...state, backgrounds };
       return newState;
+    },
+    changeRasterTileStyle(state, { payload: layers }) {
+      var newState = { ...state, layers };
+      return newState;
     }
   }
 };

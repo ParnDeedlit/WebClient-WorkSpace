@@ -1,4 +1,6 @@
 import * as React from 'react';
+import './index.less';
+
 interface IScrollProps {
   children: React.ReactNode;
 }

@@ -1,66 +1,67 @@
-@import '../index.less';
+@import "../index.less";
 
 .editor {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    width: 100%;
-    height: calc( 100vh - 64px );
-    /* padding: 1px 3px; */
-    background: #fff;
-  }
-  
-  .editorHd {
-    padding: 8px;
-    border: 1px solid #e6e9ed;
-  }
-  
-  .editorCd {
-    flex: 1;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: calc(100vh - @header-height);
+  /* padding: 1px 3px; */
+  background: #fff;
+}
+
+.editorHd {
+  padding: 8px;
+  border: 1px solid #e6e9ed;
+}
+
+.editorCd {
+  flex: 1;
+}
+
+.editorBd {
+  /* flex: 1; */
+}
+
+.editorSidebar,
+.editorContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.editorContentBottom {
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+.editorSidebar {
+  background: #fafafa;
+
+  &:first-child {
+    border-right: 1px solid #e6e9ed;
   }
 
-  .editorBd {
-    /* flex: 1; */
+  &:last-child {
+    border-left: 1px solid #e6e9ed;
   }
-  
-  .editorSidebar,
-  .editorContent {
-    display: flex;
-    flex-direction: column;
+}
+
+.editorStateBar {
+  background: #fafafa;
+  height: 29px;
+  &:first-child {
+    border-top: 1px solid #e6e9ed;
   }
 
-  .editorContentBottom{
-    overflow-x: hidden;
-    overflow-y: hidden;
+  &:last-child {
+    border-bottom: 1px solid #e6e9ed;
   }
-  
-  .editorSidebar {
-    background: #fafafa;
-  
-    &:first-child {
-      border-right: 1px solid #e6e9ed;
-    }
-  
-    &:last-child {
-      border-left: 1px solid #e6e9ed;
-    }
-  }
+}
 
-  .editorStateBar{
-    background: #fafafa;
-    height: 29px;
-    &:first-child {
-      border-top: 1px solid #e6e9ed;
-    }
-  
-    &:last-child {
-      border-bottom: 1px solid #e6e9ed;
-    }
-  }
-  
-  .flow,
-  .mind,
-  .koni {
-    flex: 1;
-  }
-  
+.flow,
+.mind,
+.koni {
+  flex: 1;
+}

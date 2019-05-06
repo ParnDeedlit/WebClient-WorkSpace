@@ -1,5 +1,6 @@
-import { ILayer } from "./layer";
+import { ILayer, LayerType, IStyle } from "./layer";
 import { NameSpaceDocument } from "../../models/workspace";
+import IDocument from "./document";
 
 export class RasterTileLayer extends ILayer {
   title?: string;
@@ -11,12 +12,13 @@ export class RasterTileLayer extends ILayer {
 //-------------------------------------RasterTileStyle----------------------------------
 //---------------------------------------栅格样式-开始-----------------------------------
 //-------------------------------------RasterTileStyle----------------------------------
-export class RasterTileStyle {
-  visible: boolean;
-  opacity: number;
-  hue: number;
+export class RasterTileStyle extends IStyle {
+  visible?: boolean;
+  opacity?: number;
+  hue?: number;
 
   constructor(visible: boolean, opacity: number, hue: number) {
+    super();
     this.visible = visible ? true : false;
     this.opacity = opacity ? opacity : 1;
     this.hue = hue ? hue : 0;
@@ -32,10 +34,7 @@ export class RasterTileStyle {
 }
 
 export interface IRasterTileSytle {
-  dispatchStyleChange(
-    RasterTiles: Array<RasterTileLayer>,
-    style: RasterTileStyle
-  );
+  dispatchStyleChange(layer: ILayer, style: RasterTileStyle, doc: IDocument);
   onOpacityChange(opacity: number);
   onHueChange(hue: number);
 }
@@ -47,17 +46,24 @@ export const defaultRasterTileStyle: RasterTileStyle = new RasterTileStyle(
 );
 
 export function changeRasterTileStyle(
-  RasterTiles: Array<RasterTileLayer>,
-  style: RasterTileStyle
+  raster: ILayer,
+  style: any,
+  document: IDocument
 ) {
-  if (RasterTiles.length <= 0) return null;
-  RasterTiles.map(rastertile => {
-    rastertile.style = style;
+  let layers = document.layers;
+  if (!layers) return undefined;
+
+  layers.map(layer => {
+    if (layer.id == raster.id) {
+      if (layer.type == LayerType.RasterTile) {
+        layer.style = style;
+      }
+    }
   });
 
   return {
     type: NameSpaceDocument + "/changeRasterTileStyle",
-    payload: RasterTiles
+    payload: layers
   };
 }
 

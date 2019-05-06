@@ -29,7 +29,10 @@ class RightPaneLayer extends React.Component<IRightPaneProps, IRightPaneState> {
 
   getTabs(tabs, document: IDocument) {
     return tabs.map(tab => {
-      return (<TabPane tab={<span><IconFont type={tab.icon} />{tab.title}</span>} key={tab.key}>
+      return (<TabPane
+        className="right-list-tab"
+        tab={<span><IconFont type={tab.icon} />{tab.title}</span>}
+        key={tab.key}>
         {tab.ui(document)}
       </TabPane>);
     });
@@ -41,13 +44,12 @@ class RightPaneLayer extends React.Component<IRightPaneProps, IRightPaneState> {
 
     const tabUI = this.getTabs(RightTabs, document);
     return (
-      <div className="card-container">
-        <Tabs type="line" size="small"
-          tabBarGutter={1} tabPosition="top"
-        >
-          {tabUI}
-        </Tabs>
-      </div >
+      <Tabs type="line" size="small"
+        tabBarGutter={1} tabPosition="top"
+        className="right-list-tabs"
+      >
+        {tabUI}
+      </Tabs>
     );
   }
 }

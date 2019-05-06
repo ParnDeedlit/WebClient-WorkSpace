@@ -5,9 +5,9 @@ import backgrouds, {
 import { NameSpaceDocument } from "../../models/workspace";
 
 import { LayerType, ILayer, defaultId } from "./layer";
-import { defaultRasterLayer } from '../../config/layers';
-import { BackGroundLayer } from './background';
-import { RasterTileLayer } from './rastertile';
+import { defaultRasterLayer } from "../../config/layers";
+import { BackGroundLayer } from "./background";
+import { RasterTileLayer } from "./rastertile";
 
 export enum MapRender {
   MapBoxGL = "mapboxgl",
@@ -66,7 +66,7 @@ export class IDocument {
     return document.current;
   }
 
-  getCurrentLayer() {
+  getCurrentLayers() {
     if (this.current.type == LayerType.UnKnow) {
       return [defaultLayer];
     }
@@ -84,6 +84,49 @@ export class IDocument {
       });
     }
     return [defaultLayer];
+  }
+
+  getCurrentLayer() {
+    if (this.current.type == LayerType.UnKnow) {
+      return defaultLayer;
+    }
+    if (this.current.type == LayerType.BackGround) {
+      if (this.backgrounds && this.backgrounds.length >= 1)
+        return this.backgrounds[0];
+    }
+    if (
+      this.current.type == LayerType.VectorTile ||
+      this.current.type == LayerType.RasterTile
+    ) {
+      const results = this.layers.filter(layer => {
+        if (this.current.id == layer.id) {
+          return true;
+        }
+      });
+      if (results && results.length >= 1) return results[0];
+    }
+    return defaultLayer;
+  }
+
+  getCurrentStyle() {
+    let layers = this.getCurrentLayers();
+    if (layers && layers.length >= 1) {
+      let layer = layers[0];
+      switch (layer.type) {
+        case LayerType.BackGround:
+          if (layer instanceof BackGroundLayer) {
+            return (<BackGroundLayer>layer).style;
+          }
+          break;
+        case LayerType.RasterTile:
+          if (layer instanceof RasterTileLayer) {
+            return (<RasterTileLayer>layer).style;
+          }
+          break;
+        case LayerType.VectorTile:
+          break;
+      }
+    }
   }
 
   changeCurrent(id: string) {

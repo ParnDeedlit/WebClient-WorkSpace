@@ -7,8 +7,9 @@ import RasterTile from './OverLayer/RasterTile';
 import { BackGroundLayer } from '../../../../utilities/map/background';
 import { RasterTileLayer } from '../../../../utilities/map/rastertile';
 import { MapEvent } from '../../../../utilities/map/mapevent';
-import { LayerType } from '../../../../utilities/map/layer';
+import { LayerType, ILayer } from '../../../../utilities/map/layer';
 import { array } from 'prop-types';
+import { VectorTileLayer } from '../../../../utilities/map/vectortile';
 
 
 
@@ -83,7 +84,7 @@ export class MapboxGlWraper extends React.Component<
         });
     }
 
-    renderRasterTile(rastertiles: Array<RasterTileLayer>) {
+    renderRasterTile(rastertiles: Array<ILayer>) {
         if (!this.state.before) return;
         return rastertiles.map(rastertile => {
             return <RasterTile

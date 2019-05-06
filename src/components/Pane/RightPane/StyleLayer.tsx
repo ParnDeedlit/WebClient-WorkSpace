@@ -3,6 +3,7 @@ import { IDocument } from '../../../utilities/map/document';
 import './index.less'
 import { ILayer, LayerType } from '../../../utilities/map/layer';
 import BackgroudStyleView from '../../Style/BackgroundStyle';
+import RasterStyleView from '../../Style/RasterStyle';
 
 interface IProps {
     document: IDocument;
@@ -20,14 +21,15 @@ class StyleLayer extends React.Component<IProps, IState> {
 
     changeStyle(doc: IDocument) {
         let document = new IDocument(doc.name, doc.current, doc.backgrounds, doc.layers, doc.maprender);
-        const currents = document.getCurrentLayer();
-        if (currents.length > 0) {
-            const layer = currents[0];
-            switch (layer.type) {
-                case LayerType.BackGround:
-                    return <BackgroudStyleView document={document} />
-            }
+        const current = document.getCurrentLayer();
+
+        switch (current.type) {
+            case LayerType.BackGround:
+                return <BackgroudStyleView document={document} />
+            case LayerType.RasterTile:
+                return <RasterStyleView document={document} />
         }
+
         return;
     }
 
@@ -36,7 +38,7 @@ class StyleLayer extends React.Component<IProps, IState> {
         const { document } = this.props;
         const tabUI = this.changeStyle(document);
         return (
-            <div className="card-container">
+            <div className="tab-scroll">
                 {tabUI}
             </div >
         );

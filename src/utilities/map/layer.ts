@@ -27,6 +27,7 @@ export class ILayer {
    * @member 地图url
    */
   url?: string;
+  style?: IStyle;
   /**
    * @member 地图样式
    */
@@ -37,4 +38,6 @@ export class ILayer {
   icon?: string;
 }
 
-
+export class IStyle {
+  visible?: boolean;
+}

@@ -1,4 +1,4 @@
-import { ILayer } from "./layer";
+import { ILayer, IStyle } from "./layer";
 import { NameSpaceDocument } from "../../models/workspace";
 
 export class BackGroundLayer extends ILayer {
@@ -11,12 +11,13 @@ export class BackGroundLayer extends ILayer {
 //-------------------------------------BackGroundStyle----------------------------------
 //---------------------------------------背景样式-开始-----------------------------------
 //-------------------------------------BackGroundStyle----------------------------------
-export class BackGroundStyle {
+export class BackGroundStyle extends IStyle{
   visible: boolean;
   opacity: number;
   hue: number;
 
   constructor(visible: boolean, opacity: number, hue: number) {
+    super();
     this.visible = visible ? true : false;
     this.opacity = opacity ? opacity : 1;
     this.hue = hue ? hue : 0;

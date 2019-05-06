@@ -47,15 +47,15 @@ class WorkSpaceAntd extends React.Component<IAppProps, IAppState> {
         let { left, right, bottom } = this.props.layout.state;
 
         let width_left = 4;
-        let width_center = 16;
-        let width_right = 4;
+        let width_center = 15;
+        let width_right = 5;
 
         if (left && right) {
 
         } else if (left) {
             width_left = 4;
-            width_center = 16;
-            width_right = 4;
+            width_center = 15;
+            width_right = 5;
         } else if (!left) {
             width_left = 1;
             width_center = 22;
@@ -66,7 +66,7 @@ class WorkSpaceAntd extends React.Component<IAppProps, IAppState> {
         let visibleRight = width_right > 1 ? true : false;
 
         return (
-            <div className="editor">
+            <div className="editor">                                 
                 <Row type="flex" className="editorHd">
                     <Col span={7}>
                         <DocToolbar />
@@ -94,7 +94,7 @@ class WorkSpaceAntd extends React.Component<IAppProps, IAppState> {
                         {visibleRight && <RightPaneLayer ></RightPaneLayer>}
                     </Col>
                 </Row>
-                <Row type="flex" align="bottom" className="editorBd">
+                <Row type="flex" className="editorBd">
                     <Col span={24} className="editorStateBar">
                         <Statebar></Statebar>
                     </Col>

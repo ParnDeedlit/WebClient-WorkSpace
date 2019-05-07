@@ -4,7 +4,7 @@ import { Divider } from 'antd';
 import IDocument from '../../utilities/map/document';
 import BodyStyle from './BodyStyle';
 
-import ScrollContainer from '../Pane/ScollPane/ScrollContainer';
+import ZoomLevelScale from '../Common/Scale/ZoomLevelScale';
 import StringInput from '../Common/Input/StringInput';
 import BlockCheckbox from '../Common/Select/BlockChecbox';
 import BlockSlider from '../Common/Select/BlockSlider';
@@ -99,9 +99,7 @@ class RasterStyleView extends React.Component<IProps, IStates> implements IRaste
 
                 <Divider />
 
-                <BodyStyle title="地址">
-                    <StringInput />
-                </BodyStyle>
+                <ZoomLevelScale></ZoomLevelScale>
 
                 <Divider />
 

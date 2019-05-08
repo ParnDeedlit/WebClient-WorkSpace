@@ -1,7 +1,8 @@
-import * as  React from 'react';
+import * as React from 'react';
 import {
-  Slider, InputNumber, Row, Col, Tag
+  Slider, InputNumber, Row, Col, Switch
 } from 'antd';
+
 import './BlockSlider.less';
 
 interface IProps {
@@ -10,16 +11,19 @@ interface IProps {
   marks?: any;
   step: number;
   title?: string;
+  children?: JSX.Element | JSX.Element[] | Array<JSX.Element | undefined>;
   onChange?: Function;
 }
 
 interface IStates {
   inputValue: number;
+  basicView: boolean;
 }
 
 class IntegerStep extends React.Component<IProps, IStates> {
   public state: IStates = {
     inputValue: 1,
+    basicView: true
   }
 
   onSlideChange = (value) => {
@@ -32,14 +36,18 @@ class IntegerStep extends React.Component<IProps, IStates> {
     }
   }
 
+  onViewChange(checked) {
+    this.setState({ basicView: checked })
+  }
+
 
   renderTitle(title) {
     return <Row><h3 className="style-body-title">{title}</h3></Row>;
   }
 
   render() {
-    const { title, step, min, max, marks } = this.props;
-    const { inputValue } = this.state;
+    const { title, step, min, max, marks, children } = this.props;
+    const { inputValue, basicView } = this.state;
 
     let visible = typeof title === 'string';
     const titleUI = this.renderTitle(title);
@@ -48,7 +56,13 @@ class IntegerStep extends React.Component<IProps, IStates> {
     return (<div>
       {visible && titleUI}
       <Row>
-        <Col span={12}>
+        <Col span={24}>
+          <Switch checkedChildren="统一设置界面" unCheckedChildren="缩放级别界面"
+            defaultChecked size="default" onChange={this.onViewChange.bind(this)} />
+        </Col>
+      </Row>
+      {basicView && <Row>
+        <Col span={16}>
           <Slider
             min={min}
             max={max}
@@ -68,7 +82,12 @@ class IntegerStep extends React.Component<IProps, IStates> {
             onChange={this.onSlideChange}
           />
         </Col>
-      </Row>
+      </Row>}
+      {!basicView && <Row>
+        <Col span={24}>
+          {children}
+        </Col>
+      </Row>}
     </div>
     );
   }

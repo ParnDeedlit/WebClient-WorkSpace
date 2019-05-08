@@ -16,6 +16,7 @@ import { changeRasterTileStyle, RasterTileLayer, RasterTileStyle, IRasterTileSyt
 
 import './index.less';
 import { ILayer } from '../../utilities/map/layer';
+import TableSlider from '../Common/Table/TableSlider';
 
 interface IProps {
     document: IDocument;
@@ -99,34 +100,6 @@ class RasterStyleView extends React.Component<IProps, IStates> implements IRaste
 
                 <Divider />
 
-                <ZoomLevelScale></ZoomLevelScale>
-
-                <Divider />
-
-                <BodyStyle title="透明度">
-                    <BlockSlider
-                        min={0}
-                        max={1}
-                        step={0.05}
-                        marks={opacityMarks}
-                        onChange={this.onOpacityChange}
-                    />
-                </BodyStyle>
-
-                <Divider />
-
-                <BodyStyle title="色调值">
-                    <BlockSlider
-                        min={0}
-                        max={1000}
-                        step={10}
-                        marks={hueMarks}
-                        onChange={this.onHueChange}
-                    />
-                </BodyStyle>
-
-                <Divider />
-
                 <BodyStyle title="栅格样式设置">
                     <BlockCheckbox
                         list={[
@@ -155,7 +128,10 @@ class RasterStyleView extends React.Component<IProps, IStates> implements IRaste
                         step={0.05}
                         marks={opacityMarks}
                         onChange={this.onOpacityChange}
-                    />
+                    >
+                        <ZoomLevelScale />
+                        <TableSlider min={0} max={1} step={0.05} title="透明度"/>
+                    </BlockSlider>
                 </BodyStyle>
 
                 <Divider />

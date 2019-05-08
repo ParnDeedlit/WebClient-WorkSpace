@@ -1,11 +1,11 @@
 import * as React from "react";
 
-import D3ZoomLevel from "../../Charts/D3/zoom/D3ZoomLevel";
+import D3ZoomOpacity from "../../Charts/D3/zoom/D3ZoomOpacity";
 
 export class ZoomLevelScale extends React.Component<{}, {}> {
   private _svgNode: any;
   private _chart: any;
-  private _d3ZoomLevel: D3ZoomLevel;
+  private _d3ZoomLevel: D3ZoomOpacity;
 
   public state = {
     height: 150,
@@ -14,7 +14,7 @@ export class ZoomLevelScale extends React.Component<{}, {}> {
 
   constructor(props: {}) {
     super(props);
-    this._d3ZoomLevel = new D3ZoomLevel();
+    this._d3ZoomLevel = new D3ZoomOpacity();
   }
 
   setRef(node) {
@@ -63,8 +63,8 @@ export class ZoomLevelScale extends React.Component<{}, {}> {
     let { height, width } = this.state;
     const style = { marginLeft: 5 }
     return (
-      <div className="canvasContainer" ref={this.setRef.bind(this)} style={style}>
-        <svg height={height} width={width} />
+      <div ref={this.setRef.bind(this)} style={style}>
+        <svg height={height} width={width}  />
       </div>
     );
   }

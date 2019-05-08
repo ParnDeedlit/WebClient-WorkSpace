@@ -1,8 +1,8 @@
 import * as d3 from "d3";
 
-var self = null;
+let self = null;
 
-export class D3ZoomLevel {
+export class D3ZoomOpacity {
   constructor() {
     this.context = null;
     self = this;
@@ -25,13 +25,14 @@ export class D3ZoomLevel {
   }
 
   drag(d) {
+    //self.svg.selectAll("path").remove();
     var circle = d3.select(this).classed("dragging", true);
     d[1] = self.y_reveser(d3.event.y);
     circle
       .raise()
       .attr("cy", d3.event.y)
       .attr("r", 10);
-    self.drawLine();
+    self.drawDashLine();
   }
 
   end(d) {
@@ -44,13 +45,13 @@ export class D3ZoomLevel {
     self.draw();
   }
 
-  drawLine() {
+  drawDashLine() {
     //self.lastline.remove();
     var lastline = self.svg.append("path").datum(self.stops);
     lastline
       .attr("fill", "none")
       .attr("stroke", "#6fc8e8")
-      .attr("stroke-width", 0.5)
+      .attr("stroke-width", 0.3)
       .attr("stroke-dasharray", "5,5")
       .attr("d", self.line);
     self.lastline = lastline;
@@ -58,6 +59,7 @@ export class D3ZoomLevel {
 
   draw() {
     console.log("draw", self.stops);
+    if (!self.svg) return;
     self.svg.selectAll("*").remove();
     self.svg.append("g").call(self.xAxis);
     self.svg.append("g").call(self.yAxis);
@@ -184,4 +186,4 @@ export class D3ZoomLevel {
   destory() {}
 }
 
-export default D3ZoomLevel;
+export default D3ZoomOpacity;

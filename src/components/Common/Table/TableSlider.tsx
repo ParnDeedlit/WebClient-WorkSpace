@@ -3,6 +3,7 @@ import {
   Button, Table, Row, Col, Popconfirm
 } from 'antd';
 import { EditableFormRow, EditableCell } from './TableNumberEdit.jsx';
+import { PropertyValueSpecification } from "@mapbox/mapbox-gl-style-spec/types";
 
 import './TableSlider.less';
 
@@ -10,7 +11,7 @@ interface IProps {
   min: number;
   max: number;
   step: number;
-  origin: number;
+  current: PropertyValueSpecification<number>;
   marks?: any;
   title: string;
   onChange?: Function;
@@ -49,12 +50,28 @@ class TableSlider extends React.Component<IProps, IStates> {
 
   public state: IStates = {
     inputValue: 1,
-    dataSource: [{
-      key: '0',
-      level: "0",
-      value: this.props.max,
-    }],
+    dataSource: this.parseDefault(this.props.current),
     count: 1,
+  }
+
+  private defaultData = [{
+    key: 0,
+    level: 0,
+    value: 1,
+  }];
+
+  parseDefault(current: PropertyValueSpecification<number>) {
+    if (typeof current === "number") {
+      this.defaultData[0].value = current;
+      return this.defaultData;
+    } else {
+      if (!current.stops) return this.defaultData;
+      return [].concat(current.stops.map((item, index) => {
+        let level = Math.round(item[0] * 100) / 100;
+        let value = Math.round(item[1] * 100) / 100;
+        return { key: index, level: level, value: value }
+      }));
+    }
   }
 
   parseStops(dataSource) {
@@ -70,7 +87,6 @@ class TableSlider extends React.Component<IProps, IStates> {
   slideChange = (dataSource) => {
     let { onChange } = this.props;
     let value = this.parseStops(dataSource);
-    console.log("slideChange", value);
     if (onChange) {
       onChange(value);
     }
@@ -78,9 +94,10 @@ class TableSlider extends React.Component<IProps, IStates> {
 
   handleAdd = () => {
     const { count, dataSource } = this.state;
-    const { origin, step, max } = this.props;
-    let value = origin + count * step;
+    const { step, min, max } = this.props;
+    let value = min + count * step;
     value = value > max ? max : value;
+    value = Math.round(value * 100) / 100;
     const newData = {
       key: count,
       level: count,
@@ -117,8 +134,10 @@ class TableSlider extends React.Component<IProps, IStates> {
   }
 
   render() {
-    const { title, step, min, max, marks, children } = this.props;
-    const { inputValue, dataSource } = this.state;
+    const { title, step, min, max, marks, current } = this.props;
+    let { inputValue, dataSource } = this.state;
+
+    dataSource = this.parseDefault(current);
 
     const components = {
       body: {

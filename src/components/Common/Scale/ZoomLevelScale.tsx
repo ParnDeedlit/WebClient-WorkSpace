@@ -1,18 +1,31 @@
 import * as React from "react";
 
 import D3ZoomOpacity from "../../Charts/D3/zoom/D3ZoomOpacity";
+import { PropertyValueSpecification } from "@mapbox/mapbox-gl-style-spec/types";
+import { defaultOpacity } from '../../../utilities/map/rastertile';
 
-export class ZoomLevelScale extends React.Component<{}, {}> {
+interface IProps {
+  min: number;
+  max: number;
+  step: number;
+  current: PropertyValueSpecification<number>;
+  marks?: any;
+  title: string;
+  onChange?: Function;
+}
+
+export class ZoomLevelScale extends React.Component<IProps, {}> {
   private _svgNode: any;
   private _chart: any;
   private _d3ZoomLevel: D3ZoomOpacity;
 
   public state = {
     height: 150,
-    width: 280
+    width: 280,
+    stops: this.parseDefault(this.props.current)
   }
 
-  constructor(props: {}) {
+  constructor(props: IProps) {
     super(props);
     this._d3ZoomLevel = new D3ZoomOpacity();
   }
@@ -21,14 +34,26 @@ export class ZoomLevelScale extends React.Component<{}, {}> {
     this._svgNode = node;
   }
 
-  onScaleChange(value) {
-    this.setState({ scale: value });
+  parseDefault(current: PropertyValueSpecification<number>) {
+    if (typeof current === "number") {
+      return defaultOpacity;
+    } else {
+      if (!current.stops) return defaultOpacity;
+      return current.stops;
+    }
   }
 
   componentDidMount() {
+    const { height, width } = this.state;
+    const { title, min, max, onChange } = this.props;
+
     let option = {
-      height: this.state.height,
-      width: this.state.width,
+      height: height,
+      width: width,
+      box: {
+        miny: min,
+        maxy: max,
+      },
       margin: {
         top: 10,
         right: 10,
@@ -37,34 +62,41 @@ export class ZoomLevelScale extends React.Component<{}, {}> {
       },
       text: {
         x: "级别",
-        y: "透明度"
+        y: title
+      },
+      callback: {
+        dragEnd: onChange
       }
     };
-    let stops = [[0, 0.4], [5, 0.4], [10, 0.6], [15, 0.8], [20, 0.8]];
+    let stops = this.state.stops;
     this._chart = this._d3ZoomLevel.create(this._svgNode, stops, option);
   }
 
   componentDidUpdate() {
-    /*         this._d3.update(
-          this._svgNode,
-          this.state.geometryJson,
-          this.state.geometryBboxScale,
-          this.state.geometryCenter,
-          this.state.scale
-        ); */
+
   }
 
   componentWillUnmount() {
     //this._d3.destroy(this._svgNode);
   }
 
-  componentWillReceiveProps(next) { }
+  componentWillReceiveProps(next) {
+    if (next.current.stops != this.state.stops) {
+      this._d3ZoomLevel.update(
+        this._svgNode,
+        next.current.stops
+      );
+      return true;
+    }
+    return false;
+  }
+
   public render() {
     let { height, width } = this.state;
     const style = { marginLeft: 5 }
     return (
       <div ref={this.setRef.bind(this)} style={style}>
-        <svg height={height} width={width}  />
+        <svg height={height} width={width} />
       </div>
     );
   }

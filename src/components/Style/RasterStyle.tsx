@@ -24,18 +24,31 @@ interface IProps {
 }
 
 interface IStates {
-    value: string;
+    visible: string;
+    opacity: PropertyValueSpecification<number>;
+    hue: PropertyValueSpecification<number>;
 }
 
 let self = null;
 class RasterStyleView extends React.Component<IProps, IStates> implements IRasterTileSytle {
     public state: IStates = {
-        value: "visible"
+        visible: "visible",
+        opacity: this.getCurrentOpacity(),
+        hue: this.getCurrentHue()
     };
 
     constructor(props: IProps) {
         super(props);
         self = this;
+    }
+
+    getCurrentStyle() {
+        let { document } = this.props;
+        let { name, current, backgrounds, layers, maprender } = document;
+        let idoc = new IDocument(name, current, backgrounds, layers, maprender);
+        let style = idoc.getCurrentStyle();
+        if (!style) style = defaultRasterTileStyle;
+        return style;
     }
 
     dispatchStyleChange(layer: ILayer, style: RasterTileStyle, doc: IDocument) {
@@ -56,6 +69,11 @@ class RasterStyleView extends React.Component<IProps, IStates> implements IRaste
         let newStyle = new RasterTileStyle(visible, opacity, hue);
 
         self.dispatchStyleChange(layer, newStyle, idoc);
+        self.setState({ opacity: opacity });
+    }
+
+    getCurrentOpacity() {
+        return this.getCurrentStyle().opacity;
     }
 
     onHueChange(hue: PropertyValueSpecification<number>) {
@@ -73,6 +91,10 @@ class RasterStyleView extends React.Component<IProps, IStates> implements IRaste
         self.dispatchStyleChange(layer, newStyle, idoc);
     }
 
+    getCurrentHue() {
+        return this.getCurrentStyle().hue;
+    }
+
     onVisibleChange(value) {
         let visible = value == "visible" ? true : false;
         let { document } = self.props;
@@ -87,11 +109,12 @@ class RasterStyleView extends React.Component<IProps, IStates> implements IRaste
         let newStyle = new RasterTileStyle(visible, opacity, hue);
 
         self.dispatchStyleChange(layer, newStyle, idoc);
-        this.setState({ value: value });
+        this.setState({ visible: value });
     }
 
     render() {
         const { document } = this.props;
+        const { visible, opacity, hue } = this.state;
         return (
             <div className="style-content">
                 <BodyStyle title="名称">
@@ -114,7 +137,7 @@ class RasterStyleView extends React.Component<IProps, IStates> implements IRaste
                                 title: '不可见状态',
                             },
                         ]}
-                        value={this.state.value}
+                        value={visible}
                         onChange={value => this.onVisibleChange(value)}
                     />
                 </BodyStyle>
@@ -129,10 +152,16 @@ class RasterStyleView extends React.Component<IProps, IStates> implements IRaste
                         marks={opacityMarks}
                         onChange={this.onOpacityChange}
                     >
-                        <ZoomLevelScale />
+                        <ZoomLevelScale title="透明度"
+                            min={0} max={1} step={0.1}
+                            current={opacity}
+                            onChange={this.onOpacityChange}
+                        />
                         <TableSlider title="透明度"
-                            min={0} max={1} origin={1} step={0.1}
-                            onChange={this.onOpacityChange} />
+                            min={0} max={1} step={0.1}
+                            current={opacity}
+                            onChange={this.onOpacityChange}
+                        />
                     </BlockSlider>
                 </BodyStyle>
 

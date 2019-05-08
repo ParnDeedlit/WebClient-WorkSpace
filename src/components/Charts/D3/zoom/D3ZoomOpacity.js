@@ -43,6 +43,11 @@ export class D3ZoomOpacity {
       .attr("cy", d3.event.y)
       .attr("r", 6);
     self.draw();
+    if(self.options.callback && self.options.callback.dragEnd){
+      let result = { stops: [] };
+      result.stops = self.stops;
+      self.options.callback.dragEnd(result);
+    }
   }
 
   drawDashLine() {
@@ -58,7 +63,7 @@ export class D3ZoomOpacity {
   }
 
   draw() {
-    console.log("draw", self.stops);
+    console.log("d3-draw", self.stops);
     if (!self.svg) return;
     self.svg.selectAll("*").remove();
     self.svg.append("g").call(self.xAxis);
@@ -114,7 +119,8 @@ export class D3ZoomOpacity {
 
     this.y = d3
       .scaleLinear()
-      .domain([d3.min(stops, d => d[1]), d3.max(stops, d => d[1])])
+      //.domain([d3.min(stops, d => d[1]), d3.max(stops, d => d[1])])
+      .domain([options.box.miny, options.box.maxy])
       .nice()
       .range([options.height - options.margin.bottom, options.margin.top]);
 
@@ -122,7 +128,8 @@ export class D3ZoomOpacity {
       .scaleLinear()
       .domain([options.height - options.margin.bottom, options.margin.top])
       .nice()
-      .range([d3.min(stops, d => d[1]), d3.max(stops, d => d[1])]);
+      //.range([d3.min(stops, d => d[1]), d3.max(stops, d => d[1])]);
+      .range([options.box.miny, options.box.maxy]);
 
     this.line = d3
       .line()
@@ -179,8 +186,10 @@ export class D3ZoomOpacity {
       );
   }
 
-  update(el, data, options) {
-    if (!el || !data) return;
+  update(el, stops, options) {
+    if (!el || !stops) return;
+    self.stops = stops;
+    self.draw();
   }
 
   destory() {}

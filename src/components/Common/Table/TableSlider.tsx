@@ -9,8 +9,9 @@ import './TableSlider.less';
 interface IProps {
   min: number;
   max: number;
-  marks?: any;
   step: number;
+  origin: number;
+  marks?: any;
   title: string;
   onChange?: Function;
 }
@@ -50,21 +51,26 @@ class TableSlider extends React.Component<IProps, IStates> {
     inputValue: 1,
     dataSource: [{
       key: '0',
-      level: 4,
-      value: 0.4,
-    }, {
-      key: '1',
-      level: 8,
-      value: 0.8,
+      level: "0",
+      value: this.props.max,
     }],
-    count: 2,
+    count: 1,
   }
 
-  onSlideChange = (value) => {
-    let { onChange } = this.props;
-    this.setState({
-      inputValue: value,
+  parseStops(dataSource) {
+    let result = { stops: [] };
+    dataSource.map(item => {
+      let level = typeof item.level === "string" ? parseFloat(item.level) : item.level;
+      let value = typeof item.value === "string" ? parseFloat(item.value) : item.value;
+      result.stops.push([level, value]);
     });
+    return result;
+  }
+
+  slideChange = (dataSource) => {
+    let { onChange } = this.props;
+    let value = this.parseStops(dataSource);
+    console.log("slideChange", value);
     if (onChange) {
       onChange(value);
     }
@@ -72,21 +78,29 @@ class TableSlider extends React.Component<IProps, IStates> {
 
   handleAdd = () => {
     const { count, dataSource } = this.state;
+    const { origin, step, max } = this.props;
+    let value = origin + count * step;
+    value = value > max ? max : value;
     const newData = {
       key: count,
-      name: `Edward King ${count}`,
-      age: 32,
-      address: `London, Park Lane no. ${count}`,
+      level: count,
+      value: value
     };
+
+    let newDatasource = [...dataSource, newData];
+    this.slideChange(newDatasource);
+
     this.setState({
-      dataSource: [...dataSource, newData],
+      dataSource: newDatasource,
       count: count + 1,
     });
   }
 
   handleDelete = (key) => {
-    const dataSource = [...this.state.dataSource];
-    this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
+    const { count, dataSource } = this.state;
+    let newDatasource = dataSource.filter(item => item.key !== key);
+    this.slideChange(newDatasource);
+    this.setState({ dataSource: newDatasource, count: count - 1 });
   }
 
   handleSave = (row) => {
@@ -97,7 +111,9 @@ class TableSlider extends React.Component<IProps, IStates> {
       ...item,
       ...row,
     });
-    this.setState({ dataSource: newData });
+    let newDatasource = newData;
+    this.slideChange(newDatasource);
+    this.setState({ dataSource: newDatasource });
   }
 
   render() {

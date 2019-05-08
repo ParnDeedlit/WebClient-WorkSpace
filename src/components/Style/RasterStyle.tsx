@@ -11,8 +11,8 @@ import BlockSlider from '../Common/Select/BlockSlider';
 import { opacityMarks, hueMarks } from '../Common/Select/BlockSliderMarker';
 
 import { NameSpaceDocument } from '../../models/workspace';
-import { changeRasterTileStyle, RasterTileLayer, RasterTileStyle, IRasterTileSytle, defaultRasterTileStyle } from '../../utilities/map/rastertile';
-
+import { changeRasterTileStyle, RasterTileStyle, IRasterTileSytle, defaultRasterTileStyle } from '../../utilities/map/rastertile';
+import { PropertyValueSpecification } from "@mapbox/mapbox-gl-style-spec/types";
 
 import './index.less';
 import { ILayer } from '../../utilities/map/layer';
@@ -43,7 +43,7 @@ class RasterStyleView extends React.Component<IProps, IStates> implements IRaste
         dispatch(changeRasterTileStyle(layer, style, doc));
     }
 
-    onOpacityChange(opacity: number) {
+    onOpacityChange(opacity: PropertyValueSpecification<number>) {
         let { document } = self.props;
         let { name, current, backgrounds, layers, maprender } = document;
         let idoc = new IDocument(name, current, backgrounds, layers, maprender);
@@ -58,7 +58,7 @@ class RasterStyleView extends React.Component<IProps, IStates> implements IRaste
         self.dispatchStyleChange(layer, newStyle, idoc);
     }
 
-    onHueChange(hue: number) {
+    onHueChange(hue: PropertyValueSpecification<number>) {
         let { document } = self.props;
         let { name, current, backgrounds, layers, maprender } = document;
         let idoc = new IDocument(name, current, backgrounds, layers, maprender);
@@ -130,7 +130,9 @@ class RasterStyleView extends React.Component<IProps, IStates> implements IRaste
                         onChange={this.onOpacityChange}
                     >
                         <ZoomLevelScale />
-                        <TableSlider min={0} max={1} step={0.05} title="透明度"/>
+                        <TableSlider title="透明度"
+                            min={0} max={1} origin={1} step={0.1}
+                            onChange={this.onOpacityChange} />
                     </BlockSlider>
                 </BodyStyle>
 

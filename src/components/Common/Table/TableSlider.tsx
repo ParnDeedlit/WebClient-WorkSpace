@@ -51,21 +51,20 @@ class TableSlider extends React.Component<IProps, IStates> {
   public state: IStates = {
     inputValue: 1,
     dataSource: this.parseDefault(this.props.current),
-    count: 1,
+    count: this.parseCount(this.parseDefault(this.props.current)),
   }
 
-  private defaultData = [{
-    key: 0,
-    level: 0,
-    value: 1,
-  }];
-
   parseDefault(current: PropertyValueSpecification<number>) {
+    let defaultData = [{
+      key: 0,
+      level: 0,
+      value: 1,
+    }];
     if (typeof current === "number") {
-      this.defaultData[0].value = current;
-      return this.defaultData;
+      defaultData[0].value = current;
+      return defaultData;
     } else {
-      if (!current.stops) return this.defaultData;
+      if (!current.stops) return defaultData;
       return [].concat(current.stops.map((item, index) => {
         let level = Math.round(item[0] * 100) / 100;
         let value = Math.round(item[1] * 100) / 100;
@@ -73,6 +72,23 @@ class TableSlider extends React.Component<IProps, IStates> {
       }));
     }
   }
+
+  parseCount(dataSource) {
+    let max = -1, temp = 0;
+    dataSource.map((item, index) => {
+      item.key = index;
+      if (typeof item.level === 'string') {
+        temp = parseInt(item.level);
+      } else {
+        temp = item.level;
+      }
+      if (max < temp) {
+        max = temp;
+      }
+    });
+    return max;
+  }
+
 
   parseStops(dataSource) {
     let result = { stops: [] };
@@ -82,6 +98,10 @@ class TableSlider extends React.Component<IProps, IStates> {
       result.stops.push([level, value]);
     });
     return result;
+  }
+
+  _sort(a, b) {
+    return a.level - b.level;
   }
 
   slideChange = (dataSource) => {
@@ -95,29 +115,45 @@ class TableSlider extends React.Component<IProps, IStates> {
   handleAdd = () => {
     const { count, dataSource } = this.state;
     const { step, min, max } = this.props;
+
     let value = min + count * step;
     value = value > max ? max : value;
     value = Math.round(value * 100) / 100;
     const newData = {
-      key: count,
-      level: count,
+      key: count + 1,
+      level: count + 1,
       value: value
     };
 
     let newDatasource = [...dataSource, newData];
+    newDatasource = newDatasource.sort(this._sort);
     this.slideChange(newDatasource);
+
+    let newCount = this.parseCount(newDatasource);
 
     this.setState({
       dataSource: newDatasource,
-      count: count + 1,
+      count: newCount,
     });
   }
 
   handleDelete = (key) => {
     const { count, dataSource } = this.state;
     let newDatasource = dataSource.filter(item => item.key !== key);
+    if (newDatasource.length <= 0) newDatasource = [{ key: 0, level: 0, value: 1, }];
+    newDatasource = newDatasource.sort(this._sort);
     this.slideChange(newDatasource);
-    this.setState({ dataSource: newDatasource, count: count - 1 });
+
+    let maxCount = this.parseCount(newDatasource);
+    let newCount = -1;
+
+    let delDatasource = dataSource.filter(item => item.key == key);
+    delDatasource.map(item => {
+      newCount = typeof item.level === 'string' ? parseInt(item.level) : item.level
+    });
+    if (newCount >= maxCount) newCount = maxCount;
+
+    this.setState({ dataSource: newDatasource, count: newCount });
   }
 
   handleSave = (row) => {
@@ -129,8 +165,17 @@ class TableSlider extends React.Component<IProps, IStates> {
       ...row,
     });
     let newDatasource = newData;
+    newDatasource = newDatasource.sort(this._sort);
+    let newCount = this.parseCount(newDatasource);
+
     this.slideChange(newDatasource);
-    this.setState({ dataSource: newDatasource });
+    this.setState({ dataSource: newDatasource, count: newCount });
+  }
+
+  componentWillReceiveProps(next) {
+    const { current } = next;
+    let dataSource = this.parseDefault(current);
+    this.setState({ dataSource: dataSource });
   }
 
   render() {

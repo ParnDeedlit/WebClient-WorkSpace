@@ -36,9 +36,22 @@ export class ZoomLevelScale extends React.Component<IProps, {}> {
 
   parseDefault(current: PropertyValueSpecification<number>) {
     if (typeof current === "number") {
-      return defaultOpacity;
+      return {
+        stops: [[0, current], [20, current]]
+      };
     } else {
       if (!current.stops) return defaultOpacity;
+      /* if (current.stops.length == 1) {
+        let level = current.stops[0][0];
+        let value = current.stops[0][1];
+        if (level <= 0) {
+          current.stops = [[0, value], [20, value]]
+        } else if (level >= 20) {
+          current.stops = [[0, value], [20, value]]
+        } else {
+          current.stops = [[0, value], [level, value], [20, value]]
+        }
+      } */
       return current.stops;
     }
   }

@@ -4,6 +4,8 @@ import D3ZoomOpacity from "../../Charts/D3/zoom/D3ZoomOpacity";
 import { PropertyValueSpecification } from "@mapbox/mapbox-gl-style-spec/types";
 import { defaultOpacity } from '../../../utilities/map/rastertile';
 
+const cloneDeep = require("clone-deep");
+
 interface IProps {
   min: number;
   max: number;
@@ -41,24 +43,13 @@ export class ZoomOpacityScale extends React.Component<IProps, {}> {
         stops: [[0, current], [20, current]]
       };
     } else {
-      if (!current.stops) return defaultOpacity;
-      /* if (current.stops.length == 1) {
-        let level = current.stops[0][0];
-        let value = current.stops[0][1];
-        if (level <= 0) {
-          current.stops = [[0, value], [20, value]]
-        } else if (level >= 20) {
-          current.stops = [[0, value], [20, value]]
-        } else {
-          current.stops = [[0, value], [level, value], [20, value]]
-        }
-      } */
+      if (!current.stops) return cloneDeep(defaultOpacity);
       return current.stops;
     }
   }
 
   componentDidMount() {
-    const { height, width } = this.state;
+    const { height, width, stops } = this.state;
     const { title, min, max, onChange, zoom } = this.props;
 
     let option = {
@@ -83,7 +74,6 @@ export class ZoomOpacityScale extends React.Component<IProps, {}> {
         dragEnd: onChange
       }
     };
-    let stops = this.state.stops;
     this._chart = this._d3ZoomLevel.create(this._svgNode, stops, option);
   }
 
@@ -103,6 +93,9 @@ export class ZoomOpacityScale extends React.Component<IProps, {}> {
         next.current.stops,
         next.zoom
       );
+      let stops = this.parseDefault(next.current)
+      console.log("TableSlider-will", stops);
+      this.setState({ stops: stops });
       return true;
     }
     return false;

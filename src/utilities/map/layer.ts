@@ -1,4 +1,5 @@
 import { NameSpaceDocument } from "../../models/workspace";
+import IDocument from "./document";
 
 export const defaultId: string = "unknow";
 
@@ -40,4 +41,24 @@ export class ILayer {
 
 export class IStyle {
   visible?: boolean;
+}
+
+export function changeLayerName(
+  layer: ILayer,
+  name: string,
+  document: IDocument
+) {
+  let layers = document.layers;
+  if (!layers) return undefined;
+
+  layers.map(item => {
+    if (item.name == layer.name) {
+      item.title = item.name = name;
+    }
+  });
+
+  return {
+    type: NameSpaceDocument + "/changeLayerName",
+    payload: layers
+  };
 }

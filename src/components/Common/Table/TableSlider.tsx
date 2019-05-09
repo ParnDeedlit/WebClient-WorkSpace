@@ -189,7 +189,7 @@ class TableSlider extends React.Component<IProps, IStates> {
     let { inputValue, dataSource } = this.state;
 
     //dataSource = this.parseDefault(current);
-    console.log("render", dataSource)
+    //console.log("render", dataSource)
 
     const components = {
       body: {

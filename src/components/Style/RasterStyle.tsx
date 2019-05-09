@@ -10,6 +10,7 @@ import BlockSlider from '../Common/Select/BlockSlider';
 import { opacityMarks, hueMarks } from '../Common/Select/BlockSliderMarker';
 
 import { NameSpaceDocument, NameSpaceMapState } from '../../models/workspace';
+import { changeLayerName } from '../../utilities/map/layer';
 import { changeRasterTileStyle, RasterTileStyle, IRasterTileSytle, defaultRasterTileStyle } from '../../utilities/map/rastertile';
 import { PropertyValueSpecification } from "@mapbox/mapbox-gl-style-spec/types";
 
@@ -18,6 +19,8 @@ import { ILayer } from '../../utilities/map/layer';
 import TableSlider from '../Common/Table/TableSlider';
 import ZoomHueScale from '../Common/Scale/ZoomHueScale';
 import ZoomOpacityScale from '../Common/Scale/ZoomOpacityScale';
+
+const cloneDeep = require('clone-deep');
 
 interface IProps {
     document: IDocument;
@@ -29,6 +32,7 @@ interface IStates {
     visible: string;
     opacity: PropertyValueSpecification<number>;
     hue: PropertyValueSpecification<number>;
+    name: string;
 }
 
 let self = null;
@@ -36,7 +40,8 @@ class RasterStyleView extends React.Component<IProps, IStates> implements IRaste
     public state: IStates = {
         visible: "visible",
         opacity: this.getCurrentOpacity(),
-        hue: this.getCurrentHue()
+        hue: this.getCurrentHue(),
+        name: this.getCurrentStyle().name
     };
 
     constructor(props: IProps) {
@@ -44,19 +49,35 @@ class RasterStyleView extends React.Component<IProps, IStates> implements IRaste
         self = this;
     }
 
-    getCurrentStyle() {
+    getCurrentStyle(doc?: IDocument) {
         let { document } = this.props;
+        document = doc ? doc : document;
         let { name, current, backgrounds, layers, maprender } = document;
         let idoc = new IDocument(name, current, backgrounds, layers, maprender);
         //console.log("getCurrentStyle-0", name, current, layers);
         let style = idoc.getCurrentStyle();
-        if (!style) style = defaultRasterTileStyle;
+        console.log("rasterstyle-getCurrentStyle-0", style);
+        if (!style) style = {
+            opacity: {
+                stops: [[0, 1], [5, 1], [10, 1], [15, 1], [20, 1]]
+            },
+            hue: {
+                stops: [[0, 0]]
+            },
+            visible: true
+        };
+        console.log("rasterstyle-getCurrentStyle-1", style);
         return style;
     }
 
     dispatchStyleChange(layer: ILayer, style: RasterTileStyle, doc: IDocument) {
         const { dispatch } = this.props;
         dispatch(changeRasterTileStyle(layer, style, doc));
+    }
+
+    dispatchNameChange(layer: ILayer, name: string, doc: IDocument) {
+        const { dispatch } = this.props;
+        dispatch(changeLayerName(layer, name, doc));
     }
 
     onOpacityChange(opacity: PropertyValueSpecification<number>) {
@@ -66,7 +87,7 @@ class RasterStyleView extends React.Component<IProps, IStates> implements IRaste
 
         let layer = idoc.getCurrentLayer();
         let style = idoc.getCurrentStyle();
-        if (!style) style = defaultRasterTileStyle;
+        if (!style) style = cloneDeep(defaultRasterTileStyle);
         let { visible, hue } = style;
 
         let newStyle = new RasterTileStyle(visible, opacity, hue);
@@ -116,30 +137,47 @@ class RasterStyleView extends React.Component<IProps, IStates> implements IRaste
         this.setState({ visible: value });
     }
 
+    onNameChange(newName) {
+        let { document } = self.props;
+        let { name, current, backgrounds, layers, maprender } = document;
+        let idoc = new IDocument(name, current, backgrounds, layers, maprender);
+
+        let layer = idoc.getCurrentLayer();
+        self.dispatchNameChange(layer, newName, idoc);
+    }
+
     componentWillReceiveProps(next) {
         const { document } = next;
         if (document == this.props.document) return;
 
-        let style = this.getCurrentStyle();
+        let style = this.getCurrentStyle(document);
         let opacity = style.opacity;
         let hue = style.hue;
+        let name = document.current.name;
 
-        this.setState({ opacity: opacity, hue: hue });
+        console.log("rasterstyle-will", document, name, opacity, hue);
+
+        this.setState({ opacity: opacity, hue: hue, name: name });
     }
 
     render() {
         const { document, zoom } = this.props;
-        const { visible, opacity, hue } = this.state;
-        
+        const { visible, opacity, hue, name } = this.state;
+
+        console.log("rasterstyle-render", name, opacity, hue);
+
         return (
             <div className="style-content">
                 <BodyStyle title="名称">
-                    <StringInput />
+                    <StringInput title={name}
+                        placeholder="请输入名称"
+                        tooltip="实时修改图层名称"
+                        onChange={this.onNameChange} />
                 </BodyStyle>
 
                 <Divider />
 
-                <BodyStyle title="栅格样式设置">
+                <BodyStyle title="可见状态">
                     <BlockCheckbox
                         list={[
                             {

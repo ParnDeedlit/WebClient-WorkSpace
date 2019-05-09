@@ -30,6 +30,10 @@ export default {
       var newState = { ...state, maprender };
       return newState;
     },
+    changeLayerName(state, { payload: layers }) {
+      var newState = { ...state, layers };
+      return newState;
+    },
     changeBackgroud(state, { payload: backgrounds }) {
       var newState = { ...state, backgrounds };
       return newState;

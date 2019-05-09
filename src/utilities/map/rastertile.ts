@@ -45,7 +45,7 @@ export interface IRasterTileSytle {
 }
 
 export const defaultOpacity: PropertyValueSpecification<number> = {
-  stops: [[0, 1],[5, 1],[10, 1],[15, 1],[20, 1]]
+  stops: [[0, 1], [5, 1], [10, 1], [15, 1], [20, 1]]
 };
 
 export const defaultHue: PropertyValueSpecification<number> = {

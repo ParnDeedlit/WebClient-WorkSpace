@@ -9,6 +9,7 @@ interface IProps {
   max: number;
   step: number;
   current: PropertyValueSpecification<number>;
+  zoom: number;
   marks?: any;
   title: string;
   onChange?: Function;
@@ -58,11 +59,12 @@ export class ZoomLevelScale extends React.Component<IProps, {}> {
 
   componentDidMount() {
     const { height, width } = this.state;
-    const { title, min, max, onChange } = this.props;
+    const { title, min, max, onChange, zoom } = this.props;
 
     let option = {
       height: height,
       width: width,
+      zoom: zoom,
       box: {
         miny: min,
         maxy: max,
@@ -94,10 +96,12 @@ export class ZoomLevelScale extends React.Component<IProps, {}> {
   }
 
   componentWillReceiveProps(next) {
-    if (next.current.stops != this.state.stops) {
+    if (next.current.stops != this.state.stops
+      || next.zoom != this.props.zoom) {
       this._d3ZoomLevel.update(
         this._svgNode,
-        next.current.stops
+        next.current.stops,
+        next.zoom
       );
       return true;
     }
@@ -106,7 +110,7 @@ export class ZoomLevelScale extends React.Component<IProps, {}> {
 
   public render() {
     let { height, width } = this.state;
-    const style = { marginLeft: 5 }
+    const style = { marginLeft: 5, marginTop: 5 }
     return (
       <div ref={this.setRef.bind(this)} style={style}>
         <svg height={height} width={width} />

@@ -33,6 +33,7 @@ export class D3ZoomOpacity {
       .attr("cy", d3.event.y)
       .attr("r", 10);
     self.drawDashLine();
+    self.drawZoomLine();
   }
 
   end(d) {
@@ -42,11 +43,14 @@ export class D3ZoomOpacity {
       .raise()
       .attr("cy", d3.event.y)
       .attr("r", 6);
+
     self.draw();
-    if(self.options.callback && self.options.callback.dragEnd){
+    self.drawZoomLine();
+
+    if (self.option.callback && self.option.callback.dragEnd) {
       let result = { stops: [] };
       result.stops = self.stops;
-      self.options.callback.dragEnd(result);
+      self.option.callback.dragEnd(result);
     }
   }
 
@@ -62,8 +66,37 @@ export class D3ZoomOpacity {
     self.lastline = lastline;
   }
 
+  drawZoomLine() {
+    let zoom = self.option.zoom;
+
+    //d[1] = self.y_reveser(d3.event.y);
+    var midline = [[0, 0.5], [10, 0.5], [20, 0.5]];
+    var zoomline = [[zoom, 0.0], [zoom, 1.0]];
+
+    self.svg
+      .append("path")
+      .datum(midline)
+      .attr("fill", "none")
+      .attr("stroke", "#6fc8e8")
+      .attr("stroke-width", 1.5)
+      .attr("stroke-dasharray", "5, 5")
+      .attr("stroke-linejoin", "round")
+      .attr("stroke-linecap", "round")
+      .attr("d", self.line);
+
+    self.svg
+      .append("path")
+      .datum(zoomline)
+      .attr("fill", "none")
+      .attr("stroke", "#e4e4e4")
+      .attr("stroke-width", 1.5)
+      .attr("stroke-dasharray", "5, 5")
+      .attr("stroke-linejoin", "round")
+      .attr("stroke-linecap", "round")
+      .attr("d", self.line);
+  }
+
   draw() {
-    console.log("d3-draw", self.stops);
     if (!self.svg) return;
     self.svg.selectAll("*").remove();
     self.svg.append("g").call(self.xAxis);
@@ -76,7 +109,7 @@ export class D3ZoomOpacity {
       .attr("stroke-width", 3.5)
       .attr("stroke-linejoin", "round")
       .attr("stroke-linecap", "round")
-      .attr("d", self.line);
+      .attr("d", self.lineStep);
 
     var g = self.svg
       .append("g")
@@ -105,31 +138,30 @@ export class D3ZoomOpacity {
     circle.exit().remove();
   }
 
-  create(el, stops, options) {
-    console.log("d3-create", el, stops);
+  create(el, stops, option) {
     if (!el) return;
     else this.el = el;
-    if (options) this.options = options;
+    if (option) this.option = option;
     if (stops) this.stops = stops;
 
     this.x = d3
       .scaleLinear()
       .domain([0, 20])
-      .range([options.margin.left, options.width - options.margin.right]);
+      .range([option.margin.left, option.width - option.margin.right]);
 
     this.y = d3
       .scaleLinear()
       //.domain([d3.min(stops, d => d[1]), d3.max(stops, d => d[1])])
-      .domain([options.box.miny, options.box.maxy])
+      .domain([option.box.miny, option.box.maxy])
       .nice()
-      .range([options.height - options.margin.bottom, options.margin.top]);
+      .range([option.height - option.margin.bottom, option.margin.top]);
 
     this.y_reveser = d3
       .scaleLinear()
-      .domain([options.height - options.margin.bottom, options.margin.top])
+      .domain([option.height - option.margin.bottom, option.margin.top])
       .nice()
       //.range([d3.min(stops, d => d[1]), d3.max(stops, d => d[1])]);
-      .range([options.box.miny, options.box.maxy]);
+      .range([option.box.miny, option.box.maxy]);
 
     this.line = d3
       .line()
@@ -137,11 +169,19 @@ export class D3ZoomOpacity {
       .x(d => this.x(d[0]))
       .y(d => this.y(d[1]));
 
+    this.lineStep = d3
+      .line()
+      .defined(d => !isNaN(d[1]))
+      .x(d => this.x(d[0]))
+      .y(d => this.y(d[1]))
+      .curve(d3.curveNatural);
+
     var svg = d3.select(el).select("svg");
 
     this.svg = svg;
 
     this.draw();
+    this.drawZoomLine();
 
     //this.touch = "ontouchstart" in window;
     //svg.on(this.touch ? "touchmove" : "mousemove", this.move);
@@ -150,13 +190,13 @@ export class D3ZoomOpacity {
   xAxis(g) {
     g.attr(
       "transform",
-      `translate(0,${self.options.height - self.options.margin.bottom})`
+      `translate(0,${self.option.height - self.option.margin.bottom})`
     )
       .call(
         d3
           .axisBottom(self.x)
           //.tickPadding([5]).tickSizeInner([5]).tickSizeOuter([-5])
-          .ticks(self.options.width / 80)
+          .ticks(self.option.width / 80)
           .tickSizeOuter(0)
       )
       .call(g =>
@@ -167,12 +207,12 @@ export class D3ZoomOpacity {
           .attr("y", -10)
           .attr("text-anchor", "start")
           .attr("font-weight", "bold")
-          .text(self.options.text.x)
+          .text(self.option.text.x)
       );
   }
 
   yAxis(g) {
-    g.attr("transform", `translate(${self.options.margin.left},0)`)
+    g.attr("transform", `translate(${self.option.margin.left},0)`)
       .call(d3.axisLeft(self.y))
       .call(g => g.select(".domain").remove())
       .call(g =>
@@ -182,14 +222,17 @@ export class D3ZoomOpacity {
           .attr("x", 3)
           .attr("text-anchor", "start")
           .attr("font-weight", "bold")
-          .text(self.options.text.y)
+          .text(self.option.text.y)
       );
   }
 
-  update(el, stops, options) {
+  update(el, stops, zoom) {
     if (!el || !stops) return;
     self.stops = stops;
+    self.option.zoom = zoom;
     self.draw();
+    //self.drawDashLine();
+    self.drawZoomLine();
   }
 
   destory() {}

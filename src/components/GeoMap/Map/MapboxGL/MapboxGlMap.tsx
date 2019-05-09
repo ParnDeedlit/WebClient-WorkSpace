@@ -164,7 +164,7 @@ export class MapboxGlMap extends React.Component<
       this.currentPosition([e.lngLat.lng, e.lngLat.lat]);
     });
 
-    map.on("zoomend", (e) => {
+    map.on("zoom", (e) => {
       let level = e.target.style.z;
       this.zoom(level);
     });

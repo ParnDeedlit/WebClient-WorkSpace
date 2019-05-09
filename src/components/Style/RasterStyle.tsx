@@ -10,7 +10,7 @@ import BlockCheckbox from '../Common/Select/BlockChecbox';
 import BlockSlider from '../Common/Select/BlockSlider';
 import { opacityMarks, hueMarks } from '../Common/Select/BlockSliderMarker';
 
-import { NameSpaceDocument } from '../../models/workspace';
+import { NameSpaceDocument, NameSpaceMapState } from '../../models/workspace';
 import { changeRasterTileStyle, RasterTileStyle, IRasterTileSytle, defaultRasterTileStyle } from '../../utilities/map/rastertile';
 import { PropertyValueSpecification } from "@mapbox/mapbox-gl-style-spec/types";
 
@@ -20,6 +20,7 @@ import TableSlider from '../Common/Table/TableSlider';
 
 interface IProps {
     document: IDocument;
+    zoom?: number;
     dispatch: any;
 }
 
@@ -112,8 +113,10 @@ class RasterStyleView extends React.Component<IProps, IStates> implements IRaste
         this.setState({ visible: value });
     }
 
+
+
     render() {
-        const { document } = this.props;
+        const { document, zoom } = this.props;
         const { visible, opacity, hue } = this.state;
         return (
             <div className="style-content">
@@ -155,6 +158,7 @@ class RasterStyleView extends React.Component<IProps, IStates> implements IRaste
                         <ZoomLevelScale title="透明度"
                             min={0} max={1} step={0.1}
                             current={opacity}
+                            zoom={zoom}
                             onChange={this.onOpacityChange}
                         />
                         <TableSlider title="透明度"
@@ -184,6 +188,7 @@ class RasterStyleView extends React.Component<IProps, IStates> implements IRaste
 function mapStateToProps(state: any, ownProps: any) {
     return {
         document: state[NameSpaceDocument],
+        zoom: state[NameSpaceMapState].zoom
     };
 }
 

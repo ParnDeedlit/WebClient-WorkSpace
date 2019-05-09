@@ -42,27 +42,26 @@ class IntegerStep extends React.Component<IProps, IStates> {
 
 
   renderTitle(title) {
-    return <Row><h3 className="style-body-title">{title}</h3></Row>;
+    return <Row></Row>;
   }
 
   render() {
     const { title, step, min, max, marks, children } = this.props;
     const { inputValue, basicView } = this.state;
 
-    let visible = typeof title === 'string';
-    const titleUI = this.renderTitle(title);
-
-
     return (<div>
-      {visible && titleUI}
       <Row>
-        <Col span={24}>
-          <Switch checkedChildren="统一设置界面" unCheckedChildren="缩放级别界面"
+        <Col span={12}>
+          <h3 className="style-body-title"><strong>{title}</strong></h3>
+        </Col>
+        <Col span={10} offset={2}>
+          <Switch style={{ marginLeft: 15 }}
+            checkedChildren="统一设置界面" unCheckedChildren="缩放级别界面"
             defaultChecked size="default" onChange={this.onViewChange.bind(this)} />
         </Col>
       </Row>
       {basicView && <Row>
-        <Col span={16}>
+        <Col span={14}>
           <Slider
             min={min}
             max={max}
@@ -72,12 +71,12 @@ class IntegerStep extends React.Component<IProps, IStates> {
             value={typeof inputValue === 'number' ? inputValue : 0}
           />
         </Col>
-        <Col span={6}>
+        <Col span={6} offset={1}>
           <InputNumber
             min={min}
             max={max}
             step={step}
-            style={{ marginLeft: 16, marginTop: 12.5 }}
+            style={{ marginTop: 12.5 }}
             value={inputValue}
             onChange={this.onSlideChange}
           />

@@ -3,7 +3,7 @@ import './index.less';
 
 interface IProps {
     children?: JSX.Element | JSX.Element[] | Array<JSX.Element | undefined>;
-    title: string;
+    title?: string;
     style?: any;
 }
 
@@ -17,7 +17,7 @@ class BodyStyle extends React.Component<IProps, {}> {
                 ...style
             }}
         >
-            <h3 className="style-body-title"><strong>{title}</strong></h3>
+            {title && <h3 className="style-body-title"><strong>{title}</strong></h3>}
             {children}
         </div>)
     }

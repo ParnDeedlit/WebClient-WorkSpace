@@ -147,8 +147,9 @@ class RasterStyleView extends React.Component<IProps, IStates> implements IRaste
 
                 <Divider />
 
-                <BodyStyle title="透明度">
+                <BodyStyle>
                     <BlockSlider
+                        title="透明度"
                         min={0}
                         max={1}
                         step={0.05}
@@ -171,8 +172,9 @@ class RasterStyleView extends React.Component<IProps, IStates> implements IRaste
 
                 <Divider />
 
-                <BodyStyle title="色调值">
+                <BodyStyle >
                     <BlockSlider
+                        title="色调值"
                         min={0}
                         max={1000}
                         step={10}

@@ -8,6 +8,7 @@ import { LayerType, ILayer, defaultId } from "./layer";
 import { defaultRasterLayer } from "../../config/layers";
 import { BackGroundLayer } from "./background";
 import { RasterTileLayer } from "./rastertile";
+import style from "../style";
 
 export enum MapRender {
   MapBoxGL = "mapboxgl",
@@ -110,23 +111,26 @@ export class IDocument {
 
   getCurrentStyle() {
     let layers = this.getCurrentLayers();
+    let style = undefined;
     if (layers && layers.length >= 1) {
       let layer = layers[0];
       switch (layer.type) {
         case LayerType.BackGround:
+          style = layer.style;
           if (layer instanceof BackGroundLayer) {
-            return (<BackGroundLayer>layer).style;
           }
           break;
         case LayerType.RasterTile:
+          style = layer.style;
           if (layer instanceof RasterTileLayer) {
-            return (<RasterTileLayer>layer).style;
+            //<RasterTileLayer>layer).style do not work
           }
           break;
         case LayerType.VectorTile:
           break;
       }
     }
+    return style;
   }
 
   changeCurrent(id: string) {

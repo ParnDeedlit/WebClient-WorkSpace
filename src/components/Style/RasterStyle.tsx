@@ -4,7 +4,6 @@ import { Divider } from 'antd';
 import IDocument from '../../utilities/map/document';
 import BodyStyle from './BodyStyle';
 
-import ZoomLevelScale from '../Common/Scale/ZoomLevelScale';
 import StringInput from '../Common/Input/StringInput';
 import BlockCheckbox from '../Common/Select/BlockChecbox';
 import BlockSlider from '../Common/Select/BlockSlider';
@@ -17,6 +16,8 @@ import { PropertyValueSpecification } from "@mapbox/mapbox-gl-style-spec/types";
 import './index.less';
 import { ILayer } from '../../utilities/map/layer';
 import TableSlider from '../Common/Table/TableSlider';
+import ZoomHueScale from '../Common/Scale/ZoomHueScale';
+import ZoomOpacityScale from '../Common/Scale/ZoomOpacityScale';
 
 interface IProps {
     document: IDocument;
@@ -47,6 +48,7 @@ class RasterStyleView extends React.Component<IProps, IStates> implements IRaste
         let { document } = this.props;
         let { name, current, backgrounds, layers, maprender } = document;
         let idoc = new IDocument(name, current, backgrounds, layers, maprender);
+        //console.log("getCurrentStyle-0", name, current, layers);
         let style = idoc.getCurrentStyle();
         if (!style) style = defaultRasterTileStyle;
         return style;
@@ -90,6 +92,7 @@ class RasterStyleView extends React.Component<IProps, IStates> implements IRaste
         let newStyle = new RasterTileStyle(visible, opacity, hue);
 
         self.dispatchStyleChange(layer, newStyle, idoc);
+        self.setState({ hue: hue });
     }
 
     getCurrentHue() {
@@ -113,11 +116,21 @@ class RasterStyleView extends React.Component<IProps, IStates> implements IRaste
         this.setState({ visible: value });
     }
 
+    componentWillReceiveProps(next) {
+        const { document } = next;
+        if (document == this.props.document) return;
 
+        let style = this.getCurrentStyle();
+        let opacity = style.opacity;
+        let hue = style.hue;
+
+        this.setState({ opacity: opacity, hue: hue });
+    }
 
     render() {
         const { document, zoom } = this.props;
         const { visible, opacity, hue } = this.state;
+        
         return (
             <div className="style-content">
                 <BodyStyle title="名称">
@@ -156,7 +169,7 @@ class RasterStyleView extends React.Component<IProps, IStates> implements IRaste
                         marks={opacityMarks}
                         onChange={this.onOpacityChange}
                     >
-                        <ZoomLevelScale title="透明度"
+                        <ZoomOpacityScale title="透明度"
                             min={0} max={1} step={0.1}
                             current={opacity}
                             zoom={zoom}
@@ -177,10 +190,22 @@ class RasterStyleView extends React.Component<IProps, IStates> implements IRaste
                         title="色调值"
                         min={0}
                         max={1000}
-                        step={10}
+                        step={100}
                         marks={hueMarks}
                         onChange={this.onHueChange}
-                    />
+                    >
+                        <ZoomHueScale title="色调值"
+                            min={0} max={1000} step={100}
+                            current={hue}
+                            zoom={zoom}
+                            onChange={this.onHueChange}
+                        />
+                        <TableSlider title="色调值"
+                            min={0} max={1000} step={100}
+                            current={hue}
+                            onChange={this.onHueChange}
+                        />
+                    </BlockSlider>
                 </BodyStyle>
             </div>
         )

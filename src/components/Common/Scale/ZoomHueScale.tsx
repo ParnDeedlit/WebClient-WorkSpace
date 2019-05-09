@@ -1,8 +1,8 @@
 import * as React from "react";
 
-import D3ZoomOpacity from "../../Charts/D3/zoom/D3ZoomOpacity";
+import D3ZoomHue from "../../Charts/D3/zoom/D3ZoomHue";
 import { PropertyValueSpecification } from "@mapbox/mapbox-gl-style-spec/types";
-import { defaultOpacity } from '../../../utilities/map/rastertile';
+import { defaultHue } from '../../../utilities/map/rastertile';
 
 interface IProps {
   min: number;
@@ -15,10 +15,10 @@ interface IProps {
   onChange?: Function;
 }
 
-export class ZoomLevelScale extends React.Component<IProps, {}> {
+export class ZoomHueScale extends React.Component<IProps, {}> {
   private _svgNode: any;
   private _chart: any;
-  private _d3ZoomLevel: D3ZoomOpacity;
+  private _d3ZoomLevel: D3ZoomHue;
 
   public state = {
     height: 150,
@@ -28,7 +28,7 @@ export class ZoomLevelScale extends React.Component<IProps, {}> {
 
   constructor(props: IProps) {
     super(props);
-    this._d3ZoomLevel = new D3ZoomOpacity();
+    this._d3ZoomLevel = new D3ZoomHue();
   }
 
   setRef(node) {
@@ -41,18 +41,7 @@ export class ZoomLevelScale extends React.Component<IProps, {}> {
         stops: [[0, current], [20, current]]
       };
     } else {
-      if (!current.stops) return defaultOpacity;
-      /* if (current.stops.length == 1) {
-        let level = current.stops[0][0];
-        let value = current.stops[0][1];
-        if (level <= 0) {
-          current.stops = [[0, value], [20, value]]
-        } else if (level >= 20) {
-          current.stops = [[0, value], [20, value]]
-        } else {
-          current.stops = [[0, value], [level, value], [20, value]]
-        }
-      } */
+      if (!current.stops) return defaultHue;
       return current.stops;
     }
   }
@@ -119,4 +108,4 @@ export class ZoomLevelScale extends React.Component<IProps, {}> {
   }
 }
 
-export default ZoomLevelScale;
+export default ZoomHueScale;

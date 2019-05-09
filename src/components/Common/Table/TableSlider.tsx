@@ -131,6 +131,8 @@ class TableSlider extends React.Component<IProps, IStates> {
 
     let newCount = this.parseCount(newDatasource);
 
+    console.log("handleAdd", newDatasource, dataSource, newCount);
+
     this.setState({
       dataSource: newDatasource,
       count: newCount,
@@ -153,6 +155,8 @@ class TableSlider extends React.Component<IProps, IStates> {
     });
     if (newCount >= maxCount) newCount = maxCount;
 
+    console.log("handleDelete", newDatasource, dataSource, newCount);
+
     this.setState({ dataSource: newDatasource, count: newCount });
   }
 
@@ -174,15 +178,18 @@ class TableSlider extends React.Component<IProps, IStates> {
 
   componentWillReceiveProps(next) {
     const { current } = next;
+    if (current == this.props.current) return;
+    console.log("componentWillReceiveProps", current);
     let dataSource = this.parseDefault(current);
     this.setState({ dataSource: dataSource });
   }
 
   render() {
-    const { title, step, min, max, marks, current } = this.props;
+    //const { title, step, min, max, marks, current } = this.props;
     let { inputValue, dataSource } = this.state;
 
-    dataSource = this.parseDefault(current);
+    //dataSource = this.parseDefault(current);
+    console.log("render", dataSource)
 
     const components = {
       body: {

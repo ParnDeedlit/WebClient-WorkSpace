@@ -94,7 +94,6 @@ export class ZoomOpacityScale extends React.Component<IProps, {}> {
         next.zoom
       );
       let stops = this.parseDefault(next.current)
-      console.log("TableSlider-will", stops);
       this.setState({ stops: stops });
       return true;
     }

@@ -2,6 +2,8 @@ import * as React from 'react';
 import * as MapboxGL from 'mapbox-gl';
 import { withMap } from '../Global/context';
 import { RasterTileLayer, RasterTileStyle, defaultRasterTileStyle, RasterTileLayout, defaultRasterTileLayout } from '../../../../../utilities/map/rastertile';
+import { deepEqual } from '../../../../../utilities/deepequal';
+
 
 interface IProps {
     map: MapboxGL.Map;
@@ -122,12 +124,19 @@ export class RasterTile extends React.Component<IProps, IStates> {
     }
 
     public componentWillReceiveProps(nextProps: IProps) {
-        console.log("123", this.props.layout, nextProps.layout);
-        if (this.props.style != nextProps.style) {
+        if (nextProps.style) {
             this.changeLayerStyle(nextProps.style);
+            /* if (!deepEqual(this.props.style, nextProps.style)) {
+                console.log("!deepqual-style", this.props.style, nextProps.style);
+            } */
         }
-        if (this.props.layout != nextProps.layout) {
+
+        if (nextProps.layout) {
             this.changeLayerLayout(nextProps.layout);
+            /* if (!deepEqual(this.props.layout, nextProps.layout)) {
+                console.log("!deepqual-layout", this.props.style, nextProps.style);
+                this.changeLayerLayout(nextProps.layout);
+            } */
         }
     }
 

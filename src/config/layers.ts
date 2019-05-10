@@ -1,12 +1,10 @@
-import { LayerType } from "../utilities/map/layer";
+import { LayerType, ILayer } from "../utilities/map/layer";
 
-export const defaultRasterLayer = [
+export const defaultRasterLayer: Array<ILayer> = [
   {
     type: LayerType.RasterTile,
     url: "http://localhost:6163/igs/rest/mrms/tile/世界地图/{z}/{y}/{x}",
-    mapstyle: "",
     description: "世界地图",
-    visible: true,
     name: "世界地图",
     title: "世界地图",
     id: "world",
@@ -16,9 +14,7 @@ export const defaultRasterLayer = [
   {
     type: LayerType.RasterTile,
     url: "http://localhost:6163/igs/rest/mrms/tile/省级行政区/{z}/{y}/{x}",
-    mapstyle: "",
     description: "省级行政区",
-    visible: true,
     name: "省级行政区",
     title: "省级行政区",
     id: "province",
@@ -28,9 +24,7 @@ export const defaultRasterLayer = [
   {
     type: LayerType.RasterTile,
     url: "http://localhost:6163/igs/rest/mrms/tile/中国地级市/{z}/{y}/{x}",
-    mapstyle: "",
     description: "中国地级市",
-    visible: true,
     name: "中国地级市",
     title: "中国地级市",
     id: "shi",
@@ -40,13 +34,24 @@ export const defaultRasterLayer = [
   {
     type: LayerType.RasterTile,
     url: "http://localhost:6163/igs/rest/mrms/tile/中国地级县/{z}/{y}/{x}",
-    mapstyle: "",
     description: "中国地级县",
-    visible: true,
     name: "中国地级县",
     title: "中国地级县",
     id: "xian",
     key: "xian",
     icon: "icon-raster_tile"
+  }
+];
+export const defaultVectorTileLayer: Array<ILayer> = [
+  {
+    type: LayerType.VectorTile,
+    url: "http://localhost:6163/igs/rest/mrms/vtiles/styles/军测最终.json",
+    mapstyle: "http://localhost:6163/igs/rest/mrms/vtiles/styles/军测最终.json",
+    description: "军测矢量瓦片, WMTS服务",
+    name: "军测最终",
+    title: "军测最终",
+    id: "military",
+    key: "military",
+    icon: "icon-vector"
   }
 ];

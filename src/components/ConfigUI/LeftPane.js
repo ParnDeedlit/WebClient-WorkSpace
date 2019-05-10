@@ -1,5 +1,5 @@
 import * as React from "react";
-import Document from "../GeoMap/Document/Document";
+import Document from "../Document/Document";
 //import { IDocument } from "../../utilities/document";
 
 export function getDocument(document, map, layout) {

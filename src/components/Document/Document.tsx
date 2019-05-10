@@ -1,18 +1,18 @@
 import * as React from 'react';
 import { Tree } from 'antd';
 import { connect } from "dva";
-import IconFont from '../../IconFont/mapgis';
-import BackMenu from '../../Menu/BackMenu';
-import BackPopver from '../../Popover/BackPopver';
-import VectorTilePopver from '../../Popover/VectorTilePopver';
-import RasterTilePopver from '../../Popover/RasterTilePopver';
+import IconFont from '../IconFont/mapgis';
+import BackMenu from '../Menu/BackMenu';
+import BackPopver from '../Popover/BackPopver';
+import VectorTilePopver from '../Popover/VectorTilePopver';
+import RasterTilePopver from '../Popover/RasterTilePopver';
 
-import { NameSpaceDocument } from '../../../models/workspace';
-import { IDocument, toggleCurrent, cloneDocument } from '../../../utilities/map/document';
-import { LayerType, ILayer } from '../../../utilities/map/layer';
-import { BackGroundLayer } from '../../../utilities/map/background';
-import { VectorTileLayer } from '../../../utilities/map/vectortile';
-import { RasterTileLayer } from '../../../utilities/map/rastertile';
+import { NameSpaceDocument } from '../../models/workspace';
+import { IDocument, toggleCurrent, cloneDocument } from '../../utilities/map/document';
+import { LayerType, ILayer, changeLayersVisible } from '../../utilities/map/layer';
+import { BackGroundLayer } from '../../utilities/map/background';
+import { VectorTileLayer } from '../../utilities/map/vectortile';
+import { RasterTileLayer } from '../../utilities/map/rastertile';
 
 
 import './index.less';
@@ -47,14 +47,14 @@ class Document extends React.Component<IDocumentProps, IDocumentState> {
     public state: IDocumentState = {
         expandedKeys: [],
         autoExpandParent: true,
-        checkedKeys: ['background'],
+        checkedKeys: this.getCheckedLayers(),
         selectedKeys: [],
     };
 
     changeCurrent = (id) => {
         const { document } = this.props;
         let idoc = cloneDocument(document);
-        this.props.dispatch(toggleCurrent(id, idoc))
+        this.props.dispatch(toggleCurrent(id, idoc));
     }
 
     onExpand = (expandedKeys) => {
@@ -68,8 +68,10 @@ class Document extends React.Component<IDocumentProps, IDocumentState> {
     }
 
     onCheck = (checkedKeys, change) => {
-        console.log('onCheck', checkedKeys, change);
+        const { document } = this.props;
         this.setState({ checkedKeys });
+        console.log("oncheck", checkedKeys, change);
+        this.props.dispatch(changeLayersVisible(checkedKeys, document));
     }
 
     onSelect = (selectedKeys, info) => {
@@ -113,11 +115,29 @@ class Document extends React.Component<IDocumentProps, IDocumentState> {
         return <TreeNode {...item} />;
     })
 
+    getCheckedLayers(doc?: IDocument) {
+        let { document } = this.props;
+        let checkedKeys = [];
+        if (doc) document = doc;
+        let { backgrounds, layers } = document;
+        backgrounds.forEach(back => {
+            if (!back.layout || (back.layout && back.layout.visible)) {
+                checkedKeys.push(back.id);
+            }
+        });
+        layers.forEach(layer => {
+            if (!layer.layout || (layer.layout && layer.layout.visible)) {
+                checkedKeys.push(layer.id);
+            }
+        });
+        return checkedKeys;
+    }
+
     getBackgrounds(backgrounds: Array<BackGroundLayer>) {
         let backgournd = {
             title: '背景底图',
             icon: 'icon-background',
-            key: 'background',
+            key: '@background',
             type: LayerType.BackGround,
             children: []
         };
@@ -131,7 +151,7 @@ class Document extends React.Component<IDocumentProps, IDocumentState> {
         let rastertile = {
             title: '栅格瓦片',
             icon: 'icon-raster_tile',
-            key: 'rastertile',
+            key: '@rastertile',
             type: LayerType.RasterTile,
             children: []
         };
@@ -148,7 +168,7 @@ class Document extends React.Component<IDocumentProps, IDocumentState> {
         let vectortile = {
             title: '矢量瓦片',
             icon: 'icon-vector',
-            key: 'vectortile',
+            key: '@vectortile',
             type: LayerType.VectorTile,
             children: []
         };
@@ -176,6 +196,12 @@ class Document extends React.Component<IDocumentProps, IDocumentState> {
         return vectortile;
     }
 
+    componentWillReceiveProps(next) {
+        let checkedKeys = this.getCheckedLayers(next.document);
+        console.log("componentWillReceiveProps", checkedKeys);
+        this.setState({ checkedKeys: checkedKeys });
+    }
+
     render() {
         if (!this.props.document) return (<div />);
 
@@ -200,7 +226,7 @@ class Document extends React.Component<IDocumentProps, IDocumentState> {
                     onExpand={this.onExpand}
                     /* expandedKeys={this.state.expandedKeys} */
                     /* autoExpandParent={this.state.autoExpandParent} */
-                    onCheck={this.onCheck}
+                    onCheck={this.onCheck.bind(this)}
                     checkedKeys={this.state.checkedKeys}
                     onSelect={this.onSelect}
                     selectedKeys={this.state.selectedKeys}

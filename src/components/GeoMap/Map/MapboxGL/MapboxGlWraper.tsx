@@ -78,6 +78,7 @@ export class MapboxGlWraper extends React.Component<
             return <Backgrounds
                 background={background}
                 style={background.style}
+                layout={background.layout}
                 key={background.key}
                 before={this.state.before}
             />;
@@ -90,6 +91,7 @@ export class MapboxGlWraper extends React.Component<
             return <RasterTile
                 rastertile={rastertile}
                 style={rastertile.style}
+                layout={rastertile.layout}
                 key={rastertile.key}
                 before={this.state.before}
             />;

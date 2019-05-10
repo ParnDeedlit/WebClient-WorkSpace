@@ -1,12 +1,13 @@
 import * as React from 'react';
 import * as MapboxGL from 'mapbox-gl';
 import { withMap } from '../Global/context';
-import { RasterTileLayer, RasterTileStyle, defaultRasterTileStyle } from '../../../../../utilities/map/rastertile';
+import { RasterTileLayer, RasterTileStyle, defaultRasterTileStyle, RasterTileLayout, defaultRasterTileLayout } from '../../../../../utilities/map/rastertile';
 
 interface IProps {
     map: MapboxGL.Map;
     rastertile: RasterTileLayer;
     style?: RasterTileStyle;
+    layout?: RasterTileLayout;
     before?: string;
 }
 
@@ -34,18 +35,20 @@ export class RasterTile extends React.Component<IProps, IStates> {
         }
     }
 
-    parseLayout(style: RasterTileStyle) {
+    parseLayout(layout: RasterTileLayout) {
         return {
-            "visibility": style.visible ? "visible" : "none",
+            "visibility": layout.visible ? "visible" : "none",
         }
     }
 
     private createLayer = () => {
-        let { map, rastertile, before, style } = this.props
+        let { map, rastertile, before, style, layout } = this.props
 
         if (!style) style = defaultRasterTileStyle;
-        let paint = this.parsePaint(style);
-        let layout = this.parseLayout(style);
+        if (!layout) layout = defaultRasterTileLayout;
+
+        let paintValue = this.parsePaint(style);
+        let layoutValue = this.parseLayout(layout);
 
         const { id, tileUrl, url } = rastertile;
         if (!id || !(url || tileUrl)) return;
@@ -61,8 +64,8 @@ export class RasterTile extends React.Component<IProps, IStates> {
             "id": id,
             "type": "raster",
             "source": id,
-            "layout": layout,
-            "paint": paint,
+            "layout": layoutValue,
+            "paint": paintValue,
             "minzoom": 0,
             "maxzoom": 20
         }, before);
@@ -72,8 +75,11 @@ export class RasterTile extends React.Component<IProps, IStates> {
         const { map, rastertile } = this.props;
         map.setPaintProperty(rastertile.id, "raster-opacity", style.opacity);
         map.setPaintProperty(rastertile.id, "raster-hue-rotate", style.hue);
+    }
 
-        let visible = style.visible ? 'visible' : 'none';
+    private changeLayerLayout(layout: RasterTileLayout) {
+        const { map, rastertile } = this.props;
+        let visible = layout.visible ? 'visible' : 'none';
         map.setLayoutProperty(rastertile.id, "visibility", visible);
     }
 
@@ -116,8 +122,12 @@ export class RasterTile extends React.Component<IProps, IStates> {
     }
 
     public componentWillReceiveProps(nextProps: IProps) {
+        console.log("123", this.props.layout, nextProps.layout);
         if (this.props.style != nextProps.style) {
             this.changeLayerStyle(nextProps.style);
+        }
+        if (this.props.layout != nextProps.layout) {
+            this.changeLayerLayout(nextProps.layout);
         }
     }
 

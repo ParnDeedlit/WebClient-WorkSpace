@@ -17,7 +17,6 @@ export class ILayer {
   key: string;
 
   description?: string;
-  visible?: boolean;
 
   /**
    * @member UI框架用来进行文字绑定的关键字与name一致即可
@@ -28,6 +27,7 @@ export class ILayer {
    * @member 地图url
    */
   url?: string;
+  layout?: ILayout;
   style?: IStyle;
   /**
    * @member 地图样式
@@ -39,7 +39,9 @@ export class ILayer {
   icon?: string;
 }
 
-export class IStyle {
+export class IStyle {}
+
+export class ILayout {
   visible?: boolean;
 }
 
@@ -59,6 +61,29 @@ export function changeLayerName(
 
   return {
     type: NameSpaceDocument + "/changeLayerName",
+    payload: layers
+  };
+}
+
+export function changeLayersVisible(
+  visibleIds: Array<string>,
+  document: IDocument
+) {
+  let layers = document.layers;
+  if (!layers) return undefined;
+
+  layers.forEach(layer => {
+    if (!layer.layout) layer.layout = new ILayout();
+    layer.layout.visible = false;
+    visibleIds.forEach(id => {
+      if (id == layer.id) {
+        layer.layout.visible = true;
+      }
+    });
+  });
+
+  return {
+    type: NameSpaceDocument + "/changeLayersVisible",
     payload: layers
   };
 }

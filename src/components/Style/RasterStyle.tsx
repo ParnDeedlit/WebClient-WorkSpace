@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from "dva";
-import { Divider } from 'antd';
+import { Divider, Collapse } from 'antd';
 import IDocument from '../../utilities/map/document';
 import BodyStyle from './BodyStyle';
 
@@ -11,7 +11,7 @@ import { opacityMarks, hueMarks } from '../Common/Select/BlockSliderMarker';
 
 import { NameSpaceDocument, NameSpaceMapState } from '../../models/workspace';
 import { changeLayerName } from '../../utilities/map/layer';
-import { changeRasterTileStyle, RasterTileStyle, IRasterTileSytle, defaultRasterTileStyle } from '../../utilities/map/rastertile';
+import { changeRasterTileStyle, RasterTileStyle, IRasterTileSytle, defaultRasterTileStyle, RasterTileLayout, changeRasterTileLayout, defaultRasterTileLayout } from '../../utilities/map/rastertile';
 import { PropertyValueSpecification } from "@mapbox/mapbox-gl-style-spec/types";
 
 import './index.less';
@@ -20,7 +20,8 @@ import TableSlider from '../Common/Table/TableSlider';
 import ZoomHueScale from '../Common/Scale/ZoomHueScale';
 import ZoomOpacityScale from '../Common/Scale/ZoomOpacityScale';
 
-const cloneDeep = require('clone-deep');
+const clone = require('clone');
+const Panel = Collapse.Panel;
 
 interface IProps {
     document: IDocument;
@@ -38,7 +39,7 @@ interface IStates {
 let self = null;
 class RasterStyleView extends React.Component<IProps, IStates> implements IRasterTileSytle {
     public state: IStates = {
-        visible: "visible",
+        visible: this.getCurrentVisible(),
         opacity: this.getCurrentOpacity(),
         hue: this.getCurrentHue(),
         name: this.getCurrentStyle().name
@@ -54,25 +55,39 @@ class RasterStyleView extends React.Component<IProps, IStates> implements IRaste
         document = doc ? doc : document;
         let { name, current, backgrounds, layers, maprender } = document;
         let idoc = new IDocument(name, current, backgrounds, layers, maprender);
-        //console.log("getCurrentStyle-0", name, current, layers);
+
         let style = idoc.getCurrentStyle();
-        console.log("rasterstyle-getCurrentStyle-0", style);
-        if (!style) style = {
-            opacity: {
-                stops: [[0, 1], [5, 1], [10, 1], [15, 1], [20, 1]]
-            },
-            hue: {
-                stops: [[0, 0]]
-            },
-            visible: true
-        };
-        console.log("rasterstyle-getCurrentStyle-1", style);
+
+        if (!style) {
+            style = clone(defaultRasterTileStyle);
+        }
+
         return style;
+    }
+
+    getCurrentLayout(doc?: IDocument) {
+        let { document } = this.props;
+        document = doc ? doc : document;
+        let { name, current, backgrounds, layers, maprender } = document;
+        let idoc = new IDocument(name, current, backgrounds, layers, maprender);
+
+        let layout = idoc.getCurrentLayout();
+
+        if (!layout) {
+            layout = clone(defaultRasterTileLayout);
+        }
+
+        return layout;
     }
 
     dispatchStyleChange(layer: ILayer, style: RasterTileStyle, doc: IDocument) {
         const { dispatch } = this.props;
         dispatch(changeRasterTileStyle(layer, style, doc));
+    }
+
+    dispatchLayoutChange(layer: ILayer, layout: RasterTileLayout, doc: IDocument) {
+        const { dispatch } = this.props;
+        dispatch(changeRasterTileLayout(layer, layout, doc));
     }
 
     dispatchNameChange(layer: ILayer, name: string, doc: IDocument) {
@@ -87,10 +102,10 @@ class RasterStyleView extends React.Component<IProps, IStates> implements IRaste
 
         let layer = idoc.getCurrentLayer();
         let style = idoc.getCurrentStyle();
-        if (!style) style = cloneDeep(defaultRasterTileStyle);
-        let { visible, hue } = style;
+        if (!style) style = clone(defaultRasterTileStyle);
+        let { hue } = style;
 
-        let newStyle = new RasterTileStyle(visible, opacity, hue);
+        let newStyle = new RasterTileStyle(opacity, hue);
 
         self.dispatchStyleChange(layer, newStyle, idoc);
         self.setState({ opacity: opacity });
@@ -108,9 +123,9 @@ class RasterStyleView extends React.Component<IProps, IStates> implements IRaste
         let layer = idoc.getCurrentLayer();
         let style = idoc.getCurrentStyle();
         if (!style) style = defaultRasterTileStyle;
-        let { visible, opacity } = style;
+        let { opacity } = style;
 
-        let newStyle = new RasterTileStyle(visible, opacity, hue);
+        let newStyle = new RasterTileStyle(opacity, hue);
 
         self.dispatchStyleChange(layer, newStyle, idoc);
         self.setState({ hue: hue });
@@ -127,14 +142,18 @@ class RasterStyleView extends React.Component<IProps, IStates> implements IRaste
         let idoc = new IDocument(name, current, backgrounds, layers, maprender);
 
         let layer = idoc.getCurrentLayer();
-        let style = idoc.getCurrentStyle();
-        if (!style) style = defaultRasterTileStyle;
-        let { opacity, hue } = style;
+        let layout = idoc.getCurrentLayout();
 
-        let newStyle = new RasterTileStyle(visible, opacity, hue);
+        let newLayout = new RasterTileLayout(visible);
 
-        self.dispatchStyleChange(layer, newStyle, idoc);
+        self.dispatchLayoutChange(layer, newLayout, idoc);
         this.setState({ visible: value });
+    }
+
+    getCurrentVisible() {
+        let visible = this.getCurrentLayout().visible;
+        visible = visible ? "visible" : "unvisible";
+        return visible;
     }
 
     onNameChange(newName) {
@@ -154,98 +173,105 @@ class RasterStyleView extends React.Component<IProps, IStates> implements IRaste
         let opacity = style.opacity;
         let hue = style.hue;
         let name = document.current.name;
+        let visible = this.getCurrentVisible();
 
-        console.log("rasterstyle-will", document, name, opacity, hue);
+        this.setState({ opacity: opacity, hue: hue, name: name, visible: visible });
+    }
 
-        this.setState({ opacity: opacity, hue: hue, name: name });
+    renderHeader(title) {
+        return <strong style={{ fontSize: 15 }}>{title}</strong>
     }
 
     render() {
         const { document, zoom } = this.props;
         const { visible, opacity, hue, name } = this.state;
-
-        console.log("rasterstyle-render", name, opacity, hue);
+        const customPanelStyle = {
+            /*             background: '#f7f7f7',
+                        borderRadius: 4,
+                        marginBottom: 24,
+                        border: 0,
+                        overflow: 'hidden',
+                        fontsize: '16px' */
+        };
 
         return (
-            <div className="style-content">
-                <BodyStyle title="名称">
-                    <StringInput title={name}
-                        placeholder="请输入名称"
-                        tooltip="实时修改图层名称"
-                        onChange={this.onNameChange} />
-                </BodyStyle>
-
-                <Divider />
-
-                <BodyStyle title="可见状态">
-                    <BlockCheckbox
-                        list={[
-                            {
-                                key: 'visible',
-                                url: 'https://gw.alipayobjects.com/zos/rmsportal/LCkqqYNmvBEbokSDscrm.svg',
-                                title: "可见状态",
-                            },
-                            {
-                                key: 'unvisible',
-                                url: 'https://gw.alipayobjects.com/zos/rmsportal/jpRkZQMyYRryryPNtyIC.svg',
-                                title: '不可见状态',
-                            },
-                        ]}
-                        value={visible}
-                        onChange={value => this.onVisibleChange(value)}
-                    />
-                </BodyStyle>
-
-                <Divider />
-
-                <BodyStyle>
-                    <BlockSlider
-                        title="透明度"
-                        min={0}
-                        max={1}
-                        step={0.05}
-                        marks={opacityMarks}
-                        onChange={this.onOpacityChange}
-                    >
-                        <ZoomOpacityScale title="透明度"
-                            min={0} max={1} step={0.1}
-                            current={opacity}
-                            zoom={zoom}
+            <Collapse bordered={false} defaultActiveKey={['1', '2', '3']} >
+                <Panel header={this.renderHeader("信息")} key="1" style={customPanelStyle}>
+                    <BodyStyle title="名称">
+                        <StringInput title={name}
+                            placeholder="请输入名称"
+                            tooltip="实时修改图层名称"
+                            onChange={this.onNameChange} />
+                    </BodyStyle>
+                </Panel>
+                <Panel header={this.renderHeader("布局")} key="2" style={customPanelStyle}>
+                    <BodyStyle title="可见状态">
+                        <BlockCheckbox
+                            list={[
+                                {
+                                    key: 'visible',
+                                    url: 'https://gw.alipayobjects.com/zos/rmsportal/LCkqqYNmvBEbokSDscrm.svg',
+                                    title: "可见状态",
+                                },
+                                {
+                                    key: 'unvisible',
+                                    url: 'https://gw.alipayobjects.com/zos/rmsportal/jpRkZQMyYRryryPNtyIC.svg',
+                                    title: '不可见状态',
+                                },
+                            ]}
+                            value={visible}
+                            onChange={value => this.onVisibleChange(value)}
+                        />
+                    </BodyStyle>
+                </Panel>
+                <Panel header={this.renderHeader("样式")} key="3" style={customPanelStyle}>
+                    <BodyStyle>
+                        <BlockSlider
+                            title="透明度"
+                            min={0}
+                            max={1}
+                            step={0.05}
+                            marks={opacityMarks}
                             onChange={this.onOpacityChange}
-                        />
-                        <TableSlider title="透明度"
-                            min={0} max={1} step={0.1}
-                            current={opacity}
-                            onChange={this.onOpacityChange}
-                        />
-                    </BlockSlider>
-                </BodyStyle>
-
-                <Divider />
-
-                <BodyStyle >
-                    <BlockSlider
-                        title="色调值"
-                        min={0}
-                        max={1000}
-                        step={100}
-                        marks={hueMarks}
-                        onChange={this.onHueChange}
-                    >
-                        <ZoomHueScale title="色调值"
-                            min={0} max={1000} step={100}
-                            current={hue}
-                            zoom={zoom}
+                        >
+                            <ZoomOpacityScale title="透明度"
+                                min={0} max={1} step={0.1}
+                                current={opacity}
+                                zoom={zoom}
+                                onChange={this.onOpacityChange}
+                            />
+                            <TableSlider title="透明度"
+                                min={0} max={1} step={0.1}
+                                current={opacity}
+                                onChange={this.onOpacityChange}
+                            />
+                        </BlockSlider>
+                    </BodyStyle>
+                    <Divider />
+                    <BodyStyle >
+                        <BlockSlider
+                            title="色调值"
+                            min={0}
+                            max={1000}
+                            step={100}
+                            marks={hueMarks}
                             onChange={this.onHueChange}
-                        />
-                        <TableSlider title="色调值"
-                            min={0} max={1000} step={100}
-                            current={hue}
-                            onChange={this.onHueChange}
-                        />
-                    </BlockSlider>
-                </BodyStyle>
-            </div>
+                        >
+                            <ZoomHueScale title="色调值"
+                                min={0} max={1000} step={100}
+                                current={hue}
+                                zoom={zoom}
+                                onChange={this.onHueChange}
+                            />
+                            <TableSlider title="色调值"
+                                min={0} max={1000} step={100}
+                                current={hue}
+                                onChange={this.onHueChange}
+                            />
+                        </BlockSlider>
+                    </BodyStyle>
+                </Panel>
+            </Collapse>
         )
     }
 }

@@ -1,4 +1,4 @@
-import { ILayer, LayerType, IStyle } from "./layer";
+import { ILayer, LayerType, IStyle, ILayout } from "./layer";
 import { NameSpaceDocument } from "../../models/workspace";
 import IDocument from "./document";
 import { PropertyValueSpecification } from "@mapbox/mapbox-gl-style-spec/types";
@@ -7,6 +7,7 @@ export class RasterTileLayer extends ILayer {
   title?: string;
   tileUrl?: string;
   imgUrl?: string;
+  layout?: ILayout;
   style?: RasterTileStyle;
 }
 
@@ -14,17 +15,14 @@ export class RasterTileLayer extends ILayer {
 //---------------------------------------栅格样式-开始-----------------------------------
 //-------------------------------------RasterTileStyle----------------------------------
 export class RasterTileStyle extends IStyle {
-  visible?: boolean;
   opacity?: PropertyValueSpecification<number>;
   hue?: PropertyValueSpecification<number>;
 
   constructor(
-    visible: boolean,
     opacity: PropertyValueSpecification<number>,
     hue: PropertyValueSpecification<number>
   ) {
     super();
-    this.visible = visible ? true : false;
     this.opacity = opacity ? opacity : 1;
     this.hue = hue ? hue : 0;
   }
@@ -53,7 +51,6 @@ export const defaultHue: PropertyValueSpecification<number> = {
 };
 
 export const defaultRasterTileStyle: RasterTileStyle = new RasterTileStyle(
-  true,
   defaultOpacity,
   defaultHue
 );
@@ -79,7 +76,53 @@ export function changeRasterTileStyle(
     payload: layers
   };
 }
-
 //-------------------------------------RasterTileStyle----------------------------------
 //---------------------------------------栅格样式-结束-----------------------------------
 //-------------------------------------RasterTileStyle----------------------------------
+
+//-------------------------------------RasterTileLayout----------------------------------
+//---------------------------------------栅格布局-开始-----------------------------------
+//-------------------------------------RasterTileLayout----------------------------------
+export class RasterTileLayout extends ILayout {
+  visible?: boolean;
+
+  constructor(visible: boolean) {
+    super();
+    this.visible = visible;
+  }
+
+  setOpacity(visible: boolean) {
+    this.visible = visible;
+  }
+}
+
+export const defaultVisible: boolean = true;
+
+export const defaultRasterTileLayout: RasterTileLayout = new RasterTileLayout(
+  defaultVisible
+);
+
+export function changeRasterTileLayout(
+  raster: ILayer,
+  layout: RasterTileLayout,
+  document: IDocument
+) {
+  let layers = document.layers;
+  if (!layers) return undefined;
+
+  layers.map(layer => {
+    if (layer.id == raster.id) {
+      if (layer.type == LayerType.RasterTile) {
+        layer.layout = layout;
+      }
+    }
+  });
+
+  return {
+    type: NameSpaceDocument + "/changeRasterTileLayout",
+    payload: layers
+  };
+}
+//-------------------------------------RasterTileLayout----------------------------------
+//---------------------------------------栅格布局-结束-----------------------------------
+//-------------------------------------RasterTileLayout----------------------------------

@@ -174,7 +174,7 @@ export class D3ZoomOpacity {
       .defined(d => !isNaN(d[1]))
       .x(d => this.x(d[0]))
       .y(d => this.y(d[1]))
-      .curve(d3.curveNatural);
+      .curve(d3.curveNatural);//curveStep  curveNatural
 
     var svg = d3.select(el).select("svg");
 

@@ -34,6 +34,10 @@ export default {
       var newState = { ...state, layers };
       return newState;
     },
+    changeLayersVisible(state, { payload: layers }) {
+      var newState = { ...state, layers };
+      return newState;
+    },
     changeBackgroud(state, { payload: backgrounds }) {
       var newState = { ...state, backgrounds };
       return newState;
@@ -42,7 +46,15 @@ export default {
       var newState = { ...state, backgrounds };
       return newState;
     },
+    changeBackgroundLayout(state, { payload: backgrounds }) {
+      var newState = { ...state, backgrounds };
+      return newState;
+    },
     changeRasterTileStyle(state, { payload: layers }) {
+      var newState = { ...state, layers };
+      return newState;
+    },
+    changeRasterTileLayout(state, { payload: layers }) {
       var newState = { ...state, layers };
       return newState;
     }

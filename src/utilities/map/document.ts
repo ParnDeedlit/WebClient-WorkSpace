@@ -5,10 +5,9 @@ import backgrouds, {
 import { NameSpaceDocument } from "../../models/workspace";
 
 import { LayerType, ILayer, defaultId } from "./layer";
-import { defaultRasterLayer } from "../../config/layers";
+import { defaultRasterLayer, defaultVectorTileLayer } from "../../config/layers";
 import { BackGroundLayer } from "./background";
 import { RasterTileLayer } from "./rastertile";
-import style from "../style";
 
 export enum MapRender {
   MapBoxGL = "mapboxgl",
@@ -133,6 +132,30 @@ export class IDocument {
     return style;
   }
 
+  getCurrentLayout() {
+    let layers = this.getCurrentLayers();
+    let layout = undefined;
+    if (layers && layers.length >= 1) {
+      let layer = layers[0];
+      switch (layer.type) {
+        case LayerType.BackGround:
+          layout = layer.layout;
+          if (layer instanceof BackGroundLayer) {
+          }
+          break;
+        case LayerType.RasterTile:
+          layout = layer.layout;
+          if (layer instanceof RasterTileLayer) {
+            //<RasterTileLayer>layer).layout do not work
+          }
+          break;
+        case LayerType.VectorTile:
+          break;
+      }
+    }
+    return layout;
+  }
+
   changeCurrent(id: string) {
     let current = defaultCurrent;
 
@@ -201,7 +224,6 @@ export const defaultBacks: Array<BackGroundLayer> = [
     description: "MapboxGL提供的浅色背景图，版本是v4, WMTS服务",
     icon: "icon-background",
     type: LayerType.BackGround,
-    visible: true,
     url: "",
     tileUrl:
       "https://api.tiles.mapbox.com/v4/mapbox.light/{z}/{x}/{y}.png?access_token=sk.eyJ1IjoiY2hlbmdkYWRhIiwiYSI6ImNqZDFjaGo0ZjFzcnoyeG54enoxdnNuZHUifQ.hTWXXBUQ0wdGeuDF3GWeUw",
@@ -210,20 +232,9 @@ export const defaultBacks: Array<BackGroundLayer> = [
   }
 ];
 
-export const defaultLayers: Array<ILayer> = [
-  {
-    type: LayerType.VectorTile,
-    url: "http://localhost:6163/igs/rest/mrms/vtiles/styles/军测最终.json",
-    mapstyle: "http://localhost:6163/igs/rest/mrms/vtiles/styles/军测最终.json",
-    description: "军测矢量瓦片, WMTS服务",
-    visible: true,
-    name: "军测最终",
-    title: "军测最终",
-    id: "military",
-    key: "military",
-    icon: "icon-vector"
-  }
-].concat(defaultRasterLayer);
+export const defaultLayers: Array<ILayer> = defaultRasterLayer.concat(
+  defaultVectorTileLayer
+);
 
 export const defaultDocument: IDocument = new IDocument(
   defaultName,

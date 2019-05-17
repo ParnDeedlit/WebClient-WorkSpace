@@ -6,8 +6,8 @@ import { PropertyValueSpecification } from "@mapbox/mapbox-gl-style-spec/types";
 
 export class DemWMSLayer extends ILayer {
   title?: string;
-  tileUrl?: string;
   imgUrl?: string;
+  heightImgUrl?: string;
   layout?: DemWMSLayout;
   style?: DemWMSStyle;
 }
@@ -123,7 +123,7 @@ export function changeDemWMSLayout(
 //-------------------------------------DemWMSLayout----------------------------------
 //---------------------------------------地形画布布局-结束-----------------------------------
 //-------------------------------------DemWMSLayout----------------------------------
-
+let globalLoader = null;
 export class DemWMSLoader {
   loader: THREE.TextureLoader;
 
@@ -144,8 +144,6 @@ export class DemWMSLoader {
   canvas: any;
   image: any;
 
-  self: any;
-
   constructor(option) {
     this.loader = new THREE.TextureLoader();
 
@@ -154,24 +152,23 @@ export class DemWMSLoader {
     this.imgWidth = 100;
     this.imgHeight = 100;
     // var imgURL = './map_natural2.jpg';
-    this.imgURL = "./assets/Westeros2_natural.jpg";
-    this.heightImgURL = "./assets/height3.png";
+    this.imgURL = option.imgUrl;
+    this.heightImgURL = option.heightImgUrl;
 
     this.scene = option.scene;
     this.camera = option.camera;
     this.renderer = option.renderer;
     this.canvas = option.canvas;
 
-    this.self = this;
+    globalLoader = this;
   }
 
-  initTerrainLayer() {
-    this.ambientlight = new THREE.AmbientLight(0xffffff);
-    this.scene.add(this.ambientlight);
+  initTerrainLayer(self) {
+    self.ambientlight = new THREE.AmbientLight(0xffffff);
+    self.scene.add(self.ambientlight);
   }
 
-  loadTerrainLayer() {
-    let self = this;
+  loadTerrainLayer(self) {
     self.image = new Image();
     self.image.onload = evt => {
       self.imgWidth = evt.target.width;
@@ -183,13 +180,13 @@ export class DemWMSLoader {
         self.imgWidth - 1,
         self.imgHeight - 1
       );
-      self.loadHeight();
+      self.loadHeight(self);
     };
     self.image.src = self.imgURL;
   }
 
   addTexture(texture) {
-    let self = this;
+    let self = globalLoader;
     texture.mapping = THREE.CubeReflectionMapping;
     console.log("texture loaded. mapping type is : " + texture.mapping);
     var imgMaterial = new THREE.MeshLambertMaterial({
@@ -218,8 +215,7 @@ export class DemWMSLoader {
     return geometry;
   }
 
-  private loadHeight() {
-    var self = this;
+  private loadHeight(self) {
     // Malloc memory for Array length with 1024*1024, storing uint8(0~255)
     var data = new Uint8Array(self.imgWidth * self.imgHeight);
     self.canvas.width = self.imgWidth;
@@ -230,6 +226,7 @@ export class DemWMSLoader {
     context.fillRect(0, 0, self.imgWidth, self.imgHeight);
 
     var img = new Image();
+    img.crossOrigin = "";
     img.onload = function() {
       context.drawImage(img, 0, 0);
 
@@ -251,16 +248,15 @@ export class DemWMSLoader {
       context.clearRect(0, 0, self.imgWidth, self.imgHeight);
       context.putImageData(self.image, 0, 0);
       // attach height to bufferPlane geometry.
-      self.attachHeight(self.bufferPlane, data);
-      self.loadTexture();
+      self.attachHeight(self.bufferPlane, data, self);
+      self.loadTexture(self);
     };
     // img.src = imgURL;
     img.src = self.heightImgURL;
     return data;
   }
 
-  private attachHeight(geometry, data) {
-    var self = this;
+  private attachHeight(geometry, data, self) {
     // return position flatArray [x,y,z,x1,y1,z1...] in geometry
     var flatArray = geometry.attributes.position.array;
     var verticesCount = flatArray.length / 3.0;
@@ -279,13 +275,12 @@ export class DemWMSLoader {
     return geometry;
   }
 
-  private loadTexture() {
-    let self = this;
+  private loadTexture(self) {
     self.loader.load(
       // resource URL
       self.imgURL,
       // Function when resource is loaded
-      this.addTexture,
+      self.addTexture,
       // Function called when download progresses
       function(xhr) {
         console.log((xhr.loaded / xhr.total) * 100 + "% loaded");

@@ -25,6 +25,12 @@ class DemWMS extends React.Component<IProps, IStates> {
     };
 
     public canvas: any = null;
+    public scene: THREE.Scene;
+    public camera: THREE.Camera;
+    public renderer: THREE.WebGLRenderer;
+    public terrainLoader: DemWMSLoader;
+
+    public modelTransform: any;
 
     constructor(props) {
         super(props);
@@ -63,6 +69,7 @@ class DemWMS extends React.Component<IProps, IStates> {
 
     private createLayer = () => {
         let { map, demwms, before, style, layout } = this.props
+        let dem = this;
 
         if (!style) style = defaultDemWMSStyle;
         if (!layout) layout = defaultDemWMSLayout;
@@ -70,17 +77,17 @@ class DemWMS extends React.Component<IProps, IStates> {
         let paintValue = this.parsePaint(style);
         let layoutValue = this.parseLayout(layout);
 
-        const { id, tileUrl, url } = demwms;
-        if (!id || !(url || tileUrl)) return;
+        const { id, imgUrl, heightImgUrl, url } = demwms;
+        if (!id || !(url || imgUrl)) return;
 
         // parameters to ensure the THREE plane is georeferenced correctly on the map
-        var modelOrigin = [19.638807, 0.762392];
+        var modelOrigin = [114.638807, 30.762392];
         var modelAltitude = 0;
         var modelRotate = [Math.PI / 2, 0, 0];
         var modelScale = 5.31843220338983e-5;
 
         // transformation parameters to position, rotate and scale the 3D model onto the map
-        var modelTransform = {
+        dem.modelTransform = {
             translateX: MapboxGL.MercatorCoordinate.fromLngLat(modelOrigin, modelAltitude).x,
             translateY: MapboxGL.MercatorCoordinate.fromLngLat(modelOrigin, modelAltitude).y,
             translateZ: MapboxGL.MercatorCoordinate.fromLngLat(modelOrigin, modelAltitude).z,
@@ -91,49 +98,61 @@ class DemWMS extends React.Component<IProps, IStates> {
         };
 
         var demcanvs = {
-            id: '3d-terrain',
+            id: id,
             type: 'custom',
             renderingMode: '3d',
             onAdd: function (map, gl) {
-                this.camera = new THREE.Camera();
-                this.scene = new THREE.Scene();
-                this.map = map;
+                dem.camera = new THREE.Camera();
+                dem.scene = new THREE.Scene();
 
                 // use the Mapbox GL JS map canvas for three.js
-                this.renderer = new THREE.WebGLRenderer({
+                dem.renderer = new THREE.WebGLRenderer({
                     canvas: map.getCanvas(),
                     context: gl
                 });
 
-                this.terrainLoader = new DemWMSLoader({
-                    scene: this.scene,
-                    camera: this.camera,
-                    renderer: this.renderer
+                dem.terrainLoader = new DemWMSLoader({
+                    scene: dem.scene,
+                    camera: dem.camera,
+                    renderer: dem.renderer,
+                    imgUrl: imgUrl,
+                    heightImgUrl: heightImgUrl,
+                    canvas: dem.canvas
                 });
+                var item = dem.terrainLoader;
 
-                this.renderer.autoClear = false;
-                this.terrainLoader.initTerrainLayer();
-                this.terrainLoader.loadTerrainLayer();
+                dem.renderer.autoClear = false;
+                dem.terrainLoader.initTerrainLayer(item);
+                dem.terrainLoader.loadTerrainLayer(item);
             },
             render: function (gl, matrix) {
-                var rotationX = new THREE.Matrix4().makeRotationAxis(new THREE.Vector3(1, 0, 0), modelTransform.rotateX);
-                var rotationY = new THREE.Matrix4().makeRotationAxis(new THREE.Vector3(0, 1, 0), modelTransform.rotateY);
-                var rotationZ = new THREE.Matrix4().makeRotationAxis(new THREE.Vector3(0, 0, 1), modelTransform.rotateZ);
+                var rotationX = new THREE.Matrix4()
+                    .makeRotationAxis(new THREE.Vector3(1, 0, 0), dem.modelTransform.rotateX);
+                var rotationY = new THREE.Matrix4()
+                    .makeRotationAxis(new THREE.Vector3(0, 1, 0), dem.modelTransform.rotateY);
+                var rotationZ = new THREE.Matrix4()
+                    .makeRotationAxis(new THREE.Vector3(0, 0, 1), dem.modelTransform.rotateZ);
 
                 var m = new THREE.Matrix4().fromArray(matrix);
                 var l = new THREE.Matrix4()
-                    .makeTranslation(modelTransform.translateX, modelTransform.translateY, modelTransform.translateZ)
-                    .scale(new THREE.Vector3(modelTransform.scale, -modelTransform.scale, modelTransform.scale))
+                    .makeTranslation(
+                        dem.modelTransform.translateX,
+                        dem.modelTransform.translateY,
+                        dem.modelTransform.translateZ)
+                    .scale(new THREE.Vector3(
+                        dem.modelTransform.scale,
+                        -dem.modelTransform.scale,
+                        dem.modelTransform.scale))
                     .multiply(rotationX)
                     .multiply(rotationY)
                     .multiply(rotationZ);
 
                 // sync mapbox matrix with THREE camera.
-                this.camera.projectionMatrix.elements = matrix;
-                this.camera.projectionMatrix = m.multiply(l);
-                this.renderer.state.reset();
-                this.renderer.render(this.scene, this.camera);
-                this.map.triggerRepaint();
+                dem.camera.projectionMatrix.elements = matrix;
+                dem.camera.projectionMatrix = m.multiply(l);
+                dem.renderer.state.reset();
+                dem.renderer.render(dem.scene, dem.camera);
+                map.triggerRepaint();
             }
         };
 
@@ -153,6 +172,7 @@ class DemWMS extends React.Component<IProps, IStates> {
     }
 
     private bind() {
+        this.createCanvas();
         this.createLayer();
     }
 

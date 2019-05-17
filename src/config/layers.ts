@@ -1,4 +1,5 @@
 import { LayerType, ILayer } from "../utilities/map/layer";
+import { DemWMSLayer } from "../utilities/map/demwms";
 
 export const defaultRasterLayer: Array<ILayer> = [
   {
@@ -55,10 +56,14 @@ export const defaultVectorTileLayer: Array<ILayer> = [
     icon: "icon-vector"
   }
 ];
-export const defaultDemWmsLayer: Array<ILayer> = [
+export const defaultDemWmsLayer: Array<DemWMSLayer> = [
   {
     type: LayerType.DemWMS,
     description: "军测矢量瓦片, WMTS服务",
+    url: "http://localhost:8899/data/terrain/Westeros2_natural.jpg",
+    imgUrl: "http://localhost:8899/data/terrain/Westeros2_natural.jpg",
+    heightImgUrl:
+      "http://localhost:8899/data/terrain/Westeros2_natural_height3.png",
     name: "DEM-WMS",
     title: "DEM-WMS",
     id: "demwms-test",

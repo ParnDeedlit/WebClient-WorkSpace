@@ -16,6 +16,7 @@ import { RasterTileLayer } from '../../utilities/map/rastertile';
 
 
 import './index.less';
+import DemWmsPopver from '../Popover/DemWmsPopver';
 
 const { TreeNode } = Tree;
 
@@ -111,6 +112,8 @@ class Document extends React.Component<IDocumentProps, IDocumentState> {
             return <TreeNode {...item} icon={<RasterTilePopver {...item} />} />
         } else if (item.icon && item.type == LayerType.VectorTile) {
             return <TreeNode {...item} icon={<VectorTilePopver {...item} />} />
+        }else if (item.icon && item.type == LayerType.DemWMS) {
+            return <TreeNode {...item} icon={<DemWmsPopver {...item} />} />
         }
         return <TreeNode {...item} />;
     })
@@ -173,27 +176,43 @@ class Document extends React.Component<IDocumentProps, IDocumentState> {
             children: []
         };
 
-        /*         let customChldren = {
-                    title: '湖南',
-                    icon: 'icon-vector',
-                    key: 'vectortile',
-                    type: LayerType.VectorTile,
-                    children: []
-                };
-                vectortiles.map(layer => {
-                    if (layer.type == LayerType.VectorTile) {
-                        customChldren.children.push(layer);
-                    }
-                });
-                vectortile.children.push(customChldren);
-                return vectortile; */
-
+        /*                 let customChldren = {
+                            title: '湖南',
+                            icon: 'icon-vector',
+                            key: 'vectortile',
+                            type: LayerType.VectorTile,
+                            children: []
+                        };
+                        vectortiles.map(layer => {
+                            if (layer.type == LayerType.VectorTile) {
+                                customChldren.children.push(layer);
+                            }
+                        });
+                        vectortile.children.push(customChldren);
+                        return vectortile;  */
         vectortiles.map(layer => {
             if (layer.type == LayerType.VectorTile) {
                 vectortile.children.push(layer);
             }
         });
         return vectortile;
+    }
+
+    getDemWms(demwmss: Array<ILayer>) {
+        let demwms = {
+            title: '地形图片服务',
+            icon: 'icon-terrain',
+            key: '@demwms',
+            type: LayerType.DemWMS,
+            children: []
+        };
+
+        demwmss.map(layer => {
+            if (layer.type == LayerType.DemWMS) {
+                demwms.children.push(layer);
+            }
+        });
+        return demwms;
     }
 
     componentWillReceiveProps(next) {
@@ -211,10 +230,12 @@ class Document extends React.Component<IDocumentProps, IDocumentState> {
         let groupBack = this.getBackgrounds(backgrounds);
         let groupVectorTile = this.getVectorTiles(layers);
         let groupRasterTile = this.getRasterTiles(layers);
+        let groupDemWms = this.getDemWms(layers);
 
         trees.push(groupBack);
         trees.push(groupRasterTile);
         trees.push(groupVectorTile);
+        trees.push(groupDemWms);
 
         return (
             <div>

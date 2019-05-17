@@ -55,3 +55,14 @@ export const defaultVectorTileLayer: Array<ILayer> = [
     icon: "icon-vector"
   }
 ];
+export const defaultDemWmsLayer: Array<ILayer> = [
+  {
+    type: LayerType.DemWMS,
+    description: "军测矢量瓦片, WMTS服务",
+    name: "DEM-WMS",
+    title: "DEM-WMS",
+    id: "demwms-test",
+    key: "demwms-test",
+    icon: "icon-terrain"
+  }
+];

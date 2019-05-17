@@ -4,7 +4,6 @@ const baseWebpackConfig = require('./webpack.config.base');
 
 const port = 8881;
 
-
 module.exports = merge(baseWebpackConfig, {
     mode: 'development',
     devtool: "source-map",

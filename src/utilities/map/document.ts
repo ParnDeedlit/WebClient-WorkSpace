@@ -88,6 +88,12 @@ export class IDocument {
           return true;
         }
       });
+    } else {
+      return this.layers.filter(layer => {
+        if (this.current.id == layer.id) {
+          return true;
+        }
+      });
     }
     return [defaultLayer];
   }
@@ -110,7 +116,15 @@ export class IDocument {
         }
       });
       if (results && results.length >= 1) return results[0];
+    } else {
+      const results = this.layers.filter(layer => {
+        if (this.current.id == layer.id) {
+          return true;
+        }
+      });
+      if (results && results.length >= 1) return results[0];
     }
+
     return defaultLayer;
   }
 
@@ -156,6 +170,13 @@ export class IDocument {
           }
           break;
         case LayerType.VectorTile:
+          layout = layer.layout;
+          break;
+        case LayerType.DemWMS:
+          layout = layer.layout;
+          break;
+        default:
+          layout = layer.layout;
           break;
       }
     }

@@ -27,3 +27,18 @@ export const hueMarks = {
     label: "1000"
   }
 };
+
+export const opacityScale = {
+  "-10": {
+    style: {
+      color: "#e4e4e4"
+    },
+    label: "-10"
+  },
+  "10": {
+    style: {
+      color: "#0079c1"
+    },
+    label: "10"
+  }
+};

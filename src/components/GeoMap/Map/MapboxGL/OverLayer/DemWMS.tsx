@@ -6,6 +6,7 @@ import {
     DemWMSLayer, DemWMSStyle, defaultDemWMSStyle,
     DemWMSLayout, defaultDemWMSLayout, DemWMSLoader
 } from '../../../../../utilities/map/demwms';
+import { number } from 'prop-types';
 
 interface IProps {
     map: MapboxGL.Map;
@@ -16,12 +17,18 @@ interface IProps {
 }
 
 interface IStates {
-
+    modelOrigin: Array<number>;
+    modelAltitude: number;
+    modelRotate: Array<number>;
+    modelScale: number;
 }
 
 class DemWMS extends React.Component<IProps, IStates> {
     public state: IStates = {
-
+        modelOrigin: defaultDemWMSLayout.center,
+        modelAltitude: 0,
+        modelRotate: [Math.PI / 2, 0, 0],
+        modelScale: defaultDemWMSLayout.scale,
     };
 
     public canvas: any = null;
@@ -55,20 +62,36 @@ class DemWMS extends React.Component<IProps, IStates> {
     }
 
     parsePaint(style: DemWMSStyle) {
-        return {
-            "raster-opacity": style.opacity,
-            "raster-hue-rotate": style.hue,
-        }
+
     }
 
     parseLayout(layout: DemWMSLayout) {
-        return {
-            "visibility": layout.visible ? "visible" : "none",
-        }
+
     }
+
+    parseTransform(origin?, altitude?, rotate?, scale?) {
+        // parameters to ensure the THREE plane is georeferenced correctly on the map
+        let { modelOrigin, modelAltitude, modelRotate, modelScale } = this.state;
+        modelOrigin = origin ? origin : modelOrigin;
+        modelAltitude = altitude ? altitude : modelAltitude;
+        modelRotate = rotate ? rotate : modelRotate;
+        modelScale = scale ? scale : modelScale;
+        // transformation parameters to position, rotate and scale the 3D model onto the map
+        this.modelTransform = {
+            translateX: MapboxGL.MercatorCoordinate.fromLngLat(modelOrigin, modelAltitude).x,
+            translateY: MapboxGL.MercatorCoordinate.fromLngLat(modelOrigin, modelAltitude).y,
+            translateZ: MapboxGL.MercatorCoordinate.fromLngLat(modelOrigin, modelAltitude).z,
+            rotateX: modelRotate[0],
+            rotateY: modelRotate[1],
+            rotateZ: modelRotate[2],
+            scale: modelScale
+        };
+    }
+
 
     private createLayer = () => {
         let { map, demwms, before, style, layout } = this.props
+
         let dem = this;
 
         if (!style) style = defaultDemWMSStyle;
@@ -80,22 +103,7 @@ class DemWMS extends React.Component<IProps, IStates> {
         const { id, imgUrl, heightImgUrl, url } = demwms;
         if (!id || !(url || imgUrl)) return;
 
-        // parameters to ensure the THREE plane is georeferenced correctly on the map
-        var modelOrigin = [114.638807, 30.762392];
-        var modelAltitude = 0;
-        var modelRotate = [Math.PI / 2, 0, 0];
-        var modelScale = 5.31843220338983e-5;
-
-        // transformation parameters to position, rotate and scale the 3D model onto the map
-        dem.modelTransform = {
-            translateX: MapboxGL.MercatorCoordinate.fromLngLat(modelOrigin, modelAltitude).x,
-            translateY: MapboxGL.MercatorCoordinate.fromLngLat(modelOrigin, modelAltitude).y,
-            translateZ: MapboxGL.MercatorCoordinate.fromLngLat(modelOrigin, modelAltitude).z,
-            rotateX: modelRotate[0],
-            rotateY: modelRotate[1],
-            rotateZ: modelRotate[2],
-            scale: modelScale
-        };
+        this.parseTransform();
 
         var demcanvs = {
             id: id,
@@ -161,14 +169,18 @@ class DemWMS extends React.Component<IProps, IStates> {
 
     private changeLayerStyle(style: DemWMSStyle) {
         const { map, demwms } = this.props;
-        map.setPaintProperty(demwms.id, "raster-opacity", style.opacity);
-        map.setPaintProperty(demwms.id, "raster-hue-rotate", style.hue);
+        //map.setPaintProperty(demwms.id, "raster-opacity", style.opacity);
     }
 
     private changeLayerLayout(layout: DemWMSLayout) {
         const { map, demwms } = this.props;
         let visible = layout.visible ? 'visible' : 'none';
         map.setLayoutProperty(demwms.id, "visibility", visible);
+
+        var modelOrigin = layout.center;
+        var modelScale = layout.scale;
+
+        this.parseTransform(modelOrigin, null, null, modelScale);
     }
 
     private bind() {

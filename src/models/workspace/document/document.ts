@@ -57,6 +57,10 @@ export default {
     changeRasterTileLayout(state, { payload: layers }) {
       var newState = { ...state, layers };
       return newState;
+    },
+    changeDemWMSLayout(state, { payload: layers }) {
+      var newState = { ...state, layers };
+      return newState;
     }
   }
 };

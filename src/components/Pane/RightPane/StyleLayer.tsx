@@ -4,6 +4,7 @@ import './index.less'
 import { ILayer, LayerType } from '../../../utilities/map/layer';
 import BackgroudStyleView from '../../Style/BackgroundStyle';
 import RasterStyleView from '../../Style/RasterStyle';
+import DemWMSStyleView from '../../Style/DemWMSStyle';
 
 interface IProps {
     document: IDocument;
@@ -28,6 +29,8 @@ class StyleLayer extends React.Component<IProps, IState> {
                 return <BackgroudStyleView document={document} />
             case LayerType.RasterTile:
                 return <RasterStyleView document={document} />
+            case LayerType.DemWMS:
+                return <DemWMSStyleView document={document} />
         }
 
         return;

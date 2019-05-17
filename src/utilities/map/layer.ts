@@ -40,6 +40,11 @@ export class ILayer {
   icon?: string;
 }
 
+export interface ICommonAction {
+  dispatchNameChange(layer: ILayer, name: string, doc: IDocument);
+  handleNameChange(name: string);
+}
+
 export class IStyle {}
 
 export class ILayout {

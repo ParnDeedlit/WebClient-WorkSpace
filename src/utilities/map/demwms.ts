@@ -16,45 +16,15 @@ export class DemWMSLayer extends ILayer {
 //------------------------------------地形画布样式-开始-----------------------------------
 //-------------------------------------DemWMSStyle----------------------------------
 export class DemWMSStyle extends IStyle {
-  opacity?: PropertyValueSpecification<number>;
-  hue?: PropertyValueSpecification<number>;
-
-  constructor(
-    opacity: PropertyValueSpecification<number>,
-    hue: PropertyValueSpecification<number>
-  ) {
+  constructor() {
     super();
-    this.opacity = opacity ? opacity : 1;
-    this.hue = hue ? hue : 0;
-  }
-
-  setOpacity(opacity: PropertyValueSpecification<number>) {
-    this.opacity = opacity;
-  }
-
-  setHue(hue: PropertyValueSpecification<number>) {
-    this.hue = hue;
   }
 }
-
 export interface IDemWMSSytle {
   dispatchStyleChange(layer: ILayer, style: DemWMSStyle, doc: IDocument);
-  onOpacityChange(opacity: PropertyValueSpecification<number>);
-  onHueChange(hue: PropertyValueSpecification<number>);
 }
 
-export const defaultOpacity: PropertyValueSpecification<number> = {
-  stops: [[0, 1], [5, 1], [10, 1], [15, 1], [20, 1]]
-};
-
-export const defaultHue: PropertyValueSpecification<number> = {
-  stops: [[0, 0]]
-};
-
-export const defaultDemWMSStyle: DemWMSStyle = new DemWMSStyle(
-  defaultOpacity,
-  defaultHue
-);
+export const defaultDemWMSStyle: DemWMSStyle = new DemWMSStyle();
 
 export function changeDemWMSStyle(
   raster: ILayer,
@@ -84,19 +54,51 @@ export function changeDemWMSStyle(
 //-------------------------------------DemWMSLayout----------------------------------
 //------------------------------------地形画布布局-开始-----------------------------------
 //-------------------------------------DemWMSLayout----------------------------------
+export interface IDemWMSLayout {
+  dispatchLayoutChange(layer: ILayer, style: DemWMSStyle, doc: IDocument);
+  handleScaleChange(scale: PropertyValueSpecification<number>);
+  handleVisibleChange(visible: boolean);
+}
+
 export class DemWMSLayout extends ILayout {
   visible?: boolean;
+  scale?: PropertyValueSpecification<number>;
+  center?: Array<number>;
 
-  constructor(visible: boolean) {
+  constructor(
+    visible: boolean,
+    scale: PropertyValueSpecification<number>,
+    center: Array<number>
+  ) {
     super();
     this.visible = visible;
+    this.scale = scale ? scale : 1;
+    this.center = center ? center : [0, 0];
+  }
+
+  setVisible(visible: boolean) {
+    this.visible = visible;
+  }
+
+  setScale(scale: PropertyValueSpecification<number>) {
+    this.scale = scale;
+  }
+
+  setCenter(center: Array<number>) {
+    this.center = center;
   }
 }
 
 export const defaultVisible: boolean = true;
+export const defaultScale: PropertyValueSpecification<
+  number
+> = 5.31843220338983e-5;
+export const defaultCenter: Array<number> = [0, 0];
 
 export const defaultDemWMSLayout: DemWMSLayout = new DemWMSLayout(
-  defaultVisible
+  defaultVisible,
+  defaultScale,
+  defaultCenter
 );
 
 export function changeDemWMSLayout(

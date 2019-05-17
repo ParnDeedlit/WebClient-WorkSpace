@@ -87,6 +87,10 @@ class Document extends React.Component<IDocumentProps, IDocumentState> {
                 self.changeCurrent(key);
             } else if (type == LayerType.VectorTile) {
                 self.changeCurrent(key);
+            } else if (type == LayerType.DemWMS) {
+                self.changeCurrent(key);
+            } else {
+                //self.changeCurrent(key);
             }
         }
         this.setState({ selectedKeys });
@@ -112,7 +116,7 @@ class Document extends React.Component<IDocumentProps, IDocumentState> {
             return <TreeNode {...item} icon={<RasterTilePopver {...item} />} />
         } else if (item.icon && item.type == LayerType.VectorTile) {
             return <TreeNode {...item} icon={<VectorTilePopver {...item} />} />
-        }else if (item.icon && item.type == LayerType.DemWMS) {
+        } else if (item.icon && item.type == LayerType.DemWMS) {
             return <TreeNode {...item} icon={<DemWmsPopver {...item} />} />
         }
         return <TreeNode {...item} />;

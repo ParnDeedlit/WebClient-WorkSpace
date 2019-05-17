@@ -142,7 +142,6 @@ class RasterStyleView extends React.Component<IProps, IStates> implements IRaste
         let idoc = new IDocument(name, current, backgrounds, layers, maprender);
 
         let layer = idoc.getCurrentLayer();
-        let layout = idoc.getCurrentLayout();
 
         let newLayout = new RasterTileLayout(visible);
 

@@ -1,17 +1,15 @@
 import * as React from "react";
 
 import { IDocument } from '../../../../utilities/map/document';
+
 import MapboxGlMap from './MapboxGlMap'
 import Backgrounds from './OverLayer/Backgrounds';
 import RasterTile from './OverLayer/RasterTile';
+import DemWMS from './OverLayer/DemWMS';
+
 import { BackGroundLayer } from '../../../../utilities/map/background';
-import { RasterTileLayer } from '../../../../utilities/map/rastertile';
 import { MapEvent } from '../../../../utilities/map/mapevent';
 import { LayerType, ILayer } from '../../../../utilities/map/layer';
-import { array } from 'prop-types';
-import { VectorTileLayer } from '../../../../utilities/map/vectortile';
-
-
 
 interface IMapboxGlMapProps {
     document: IDocument;
@@ -98,6 +96,19 @@ export class MapboxGlWraper extends React.Component<
         }).reverse();
     }
 
+    renderDemWms(demwmss: Array<ILayer>) {
+        if (!this.state.before) return;
+        return demwmss.map(dem => {
+            return <DemWMS
+                demwms={dem}
+                style={dem.style}
+                layout={dem.layout}
+                key={dem.key}
+                before={this.state.before}
+            />;
+        });
+    }
+
     render() {
         const { document, options, layout, dispatch } = this.props;
         const { name, current, backgrounds, layers, maprender } = document;
@@ -105,9 +116,11 @@ export class MapboxGlWraper extends React.Component<
 
         const backsLayer = this.renderBackground(idoc.getBackgrouds());
         const rastersLayer = this.renderRasterTile(idoc.getLayersByType(LayerType.RasterTile));
+        const demwmssLayer = this.renderDemWms(idoc.getLayersByType(LayerType.DemWMS));
+
         let children = undefined;
         if (backsLayer) {
-            children = backsLayer.concat(rastersLayer);
+            children = backsLayer.concat(rastersLayer).concat(demwmssLayer);
         }
 
         return <MapboxGlMap

@@ -14,7 +14,7 @@ interface IBackgroundsStates {
 
 }
 
-export class Backgrounds extends React.Component<IBackgroundsProps, IBackgroundsStates> {
+class Backgrounds extends React.Component<IBackgroundsProps, IBackgroundsStates> {
     public state: IBackgroundsStates = {
 
     };

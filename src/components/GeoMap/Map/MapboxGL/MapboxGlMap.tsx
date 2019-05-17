@@ -19,6 +19,7 @@ import { IDocument } from '../../../../utilities/map/document';
 import { MapMouseEvent, Positon, toggleMousePosition, toggleZoomLevel } from '../../../../utilities/map';
 import { LayerType } from '../../../../utilities/map/layer';
 import { BackGroundLayer } from '../../../../utilities/map/background';
+import { DefaultStyle } from './Style/DefaultStyle';
 
 const IS_SUPPORTED = MapboxGL.supported();
 
@@ -134,9 +135,9 @@ export class MapboxGlMap extends React.Component<
     const mapOpts = {
       ...this.props.options,
       container: this.container,
-      style: style,//this.props.mapStyle,
+      style: DefaultStyle,//style,
       //hash: true,
-      //preserveDrawingBuffer: true //特别注意，打印的时候必须启动该配置项
+      preserveDrawingBuffer: true //特别注意，打印的时候必须启动该配置项
     };
 
     const map = new MapboxGL.Map(mapOpts);

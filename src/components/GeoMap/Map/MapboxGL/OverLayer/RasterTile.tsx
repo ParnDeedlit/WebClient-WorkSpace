@@ -1,9 +1,10 @@
 import * as React from 'react';
 import * as MapboxGL from 'mapbox-gl';
 import { withMap } from '../Global/context';
-import { RasterTileLayer, RasterTileStyle, defaultRasterTileStyle, RasterTileLayout, defaultRasterTileLayout } from '../../../../../utilities/map/rastertile';
-import { deepEqual } from '../../../../../utilities/deepequal';
-
+import {
+    RasterTileLayer, RasterTileStyle, defaultRasterTileStyle,
+    RasterTileLayout, defaultRasterTileLayout
+} from '../../../../../utilities/map/rastertile';
 
 interface IProps {
     map: MapboxGL.Map;
@@ -17,7 +18,7 @@ interface IStates {
 
 }
 
-export class RasterTile extends React.Component<IProps, IStates> {
+class RasterTile extends React.Component<IProps, IStates> {
     public state: IStates = {
 
     };

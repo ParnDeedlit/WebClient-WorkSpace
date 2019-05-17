@@ -7,6 +7,7 @@ export enum LayerType {
   BackGround = "background",
   RasterTile = "rastertile",
   VectorTile = "vectortile",
+  DemWMS = "demwms",
   UnKnow = "unknow"
 }
 

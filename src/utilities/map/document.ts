@@ -5,9 +5,15 @@ import backgrouds, {
 import { NameSpaceDocument } from "../../models/workspace";
 
 import { LayerType, ILayer, defaultId } from "./layer";
-import { defaultRasterLayer, defaultVectorTileLayer } from "../../config/layers";
+import {
+  defaultRasterLayer,
+  defaultVectorTileLayer,
+  defaultDemWmsLayer
+} from "../../config/layers";
 import { BackGroundLayer } from "./background";
 import { RasterTileLayer } from "./rastertile";
+import { DemWMSLayer } from "./demwms";
+import { VectorTileLayer } from "./vectortile";
 
 export enum MapRender {
   MapBoxGL = "mapboxgl",
@@ -186,7 +192,11 @@ export class IDocument {
     return this.layers;
   }
 
-  getLayersByType(type: LayerType) {
+  /**
+   * @param type LayerType
+   * @returns Array<ILayer> | Array<DemWMSLayer> | Array<RasterTileLayer> | Array<VectorTileLayer>
+   */
+  getLayersByType(type: LayerType): ILayer[] {
     return this.layers.filter(layer => {
       return layer.type == type;
     });
@@ -232,9 +242,9 @@ export const defaultBacks: Array<BackGroundLayer> = [
   }
 ];
 
-export const defaultLayers: Array<ILayer> = defaultRasterLayer.concat(
-  defaultVectorTileLayer
-);
+export const defaultLayers: Array<ILayer> = defaultVectorTileLayer
+  //.concat(defaultRasterLayer)
+  .concat(defaultDemWmsLayer);
 
 export const defaultDocument: IDocument = new IDocument(
   defaultName,

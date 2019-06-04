@@ -30,6 +30,7 @@ export default class MapRenderer extends React.Component<IModelsProps, {}> {
     const mapProps = {
       document: document,
       layout: this.props.layout,
+      state: this.props.state,
       options: this.props.options,
       dispatch: this.props.dispatch,
     };

@@ -61,9 +61,11 @@ export const defaultDemWmsLayer: Array<DemWMSLayer> = [
     type: LayerType.DemWMS,
     description: "军测矢量瓦片, WMTS服务",
     url: "http://localhost:8899/data/terrain/Westeros2_natural.jpg",
-    imgUrl: "http://localhost:8899/data/terrain/Westeros2_natural.jpg",
-    heightImgUrl:
-      "http://localhost:8899/data/terrain/Westeros2_natural_height3.png",
+    info:{
+      imgUrl: "https://alex2wong.github.io/Game-of-Throne-Map/assets/Westeros2_natural.jpg",
+      heightImgUrl:
+        "https://alex2wong.github.io/Game-of-Throne-Map/assets/height3.png",
+    },
     name: "DEM-WMS",
     title: "DEM-WMS",
     id: "demwms-test",

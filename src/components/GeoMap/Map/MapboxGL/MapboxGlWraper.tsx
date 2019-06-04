@@ -6,6 +6,7 @@ import MapboxGlMap from './MapboxGlMap'
 import Backgrounds from './OverLayer/Backgrounds';
 import RasterTile from './OverLayer/RasterTile';
 import DemWMS from './OverLayer/DemWMS';
+import ScaleLegend from '../Common/Legend/ScaleLegend';
 
 import { BackGroundLayer } from '../../../../utilities/map/background';
 import { MapEvent } from '../../../../utilities/map/mapevent';
@@ -15,6 +16,7 @@ interface IMapboxGlMapProps {
     document: IDocument;
     options: any;
     layout: any;
+    state: any;
     dispatch?: any;
 }
 
@@ -109,6 +111,12 @@ export class MapboxGlWraper extends React.Component<
         });
     }
 
+    renderScaleLegend() {
+        const { state } = this.props;
+        const { scale } = state;
+        return <ScaleLegend scale={scale} left={25} bottom={15.5} />;
+    }
+
     render() {
         const { document, options, layout, dispatch } = this.props;
         const { name, current, backgrounds, layers, maprender } = document;
@@ -117,10 +125,11 @@ export class MapboxGlWraper extends React.Component<
         const backsLayer = this.renderBackground(idoc.getBackgrouds());
         const rastersLayer = this.renderRasterTile(idoc.getLayersByType(LayerType.RasterTile));
         const demwmssLayer = this.renderDemWms(idoc.getLayersByType(LayerType.DemWMS));
+        const scaleLegend = this.renderScaleLegend();
 
         let children = undefined;
         if (backsLayer) {
-            children = backsLayer.concat(rastersLayer).concat(demwmssLayer);
+            children = backsLayer.concat(rastersLayer).concat(demwmssLayer).concat(scaleLegend);
         }
 
         return <MapboxGlMap

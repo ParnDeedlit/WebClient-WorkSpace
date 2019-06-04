@@ -13,6 +13,10 @@ export default {
       var newState = { ...state, zoom };
       return newState;
     },
+    scale(state, { payload: scale }) {
+      var newState = { ...state, scale };
+      return newState;
+    },
     mousePosition(state, { payload: mousePosition }) {
       var newState = { ...state, mousePosition };
       return newState;

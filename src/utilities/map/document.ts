@@ -128,6 +128,37 @@ export class IDocument {
     return defaultLayer;
   }
 
+  getCurrentInfo() {
+    let layers = this.getCurrentLayers();
+    let info = undefined;
+    if (layers && layers.length >= 1) {
+      let layer = layers[0];
+      switch (layer.type) {
+        case LayerType.BackGround:
+          info = layer.info;
+          if (layer instanceof BackGroundLayer) {
+          }
+          break;
+        case LayerType.RasterTile:
+          info = layer.info;
+          if (layer instanceof RasterTileLayer) {
+            //<RasterTileLayer>layer).info do not work
+          }
+          break;
+        case LayerType.VectorTile:
+          info = layer.info;
+          break;
+        case LayerType.DemWMS:
+          info = layer.info;
+          break;
+        default:
+          info = layer.info;
+          break;
+      }
+    }
+    return info;
+  }
+
   getCurrentStyle() {
     let layers = this.getCurrentLayers();
     let style = undefined;

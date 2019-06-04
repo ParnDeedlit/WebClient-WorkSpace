@@ -15,14 +15,17 @@
 .editorHd {
   padding: 8px;
   border: 1px solid #e6e9ed;
+  height: @toolbar-height
 }
 
 .editorCd {
   flex: 1;
+  height: calc(100vh - @header-height - @toolbar-height - @bottom-height);
 }
 
 .editorBd {
-  /* flex: 1; */
+  flex: 1; 
+  height: @bottom-height
 }
 
 .editorSidebar,

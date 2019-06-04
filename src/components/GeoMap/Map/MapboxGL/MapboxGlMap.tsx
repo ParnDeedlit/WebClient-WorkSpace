@@ -16,10 +16,13 @@ import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 import { IDocument } from '../../../../utilities/map/document';
-import { MapMouseEvent, Positon, toggleMousePosition, toggleZoomLevel } from '../../../../utilities/map';
+import { MapMouseEvent, Positon, 
+  toggleMousePosition, toggleZoomLevel, toggleScale } from '../../../../utilities/map';
 import { LayerType } from '../../../../utilities/map/layer';
 import { BackGroundLayer } from '../../../../utilities/map/background';
 import { DefaultStyle } from './Style/DefaultStyle';
+import { getScaleByLonlat } from '../Common/scale/mapScale';
+import Lonlat from '../../../../utilities/geom/lonlat';
 
 const IS_SUPPORTED = MapboxGL.supported();
 
@@ -47,6 +50,27 @@ export class MapboxGlMap extends React.Component<
   zoom(zoom: number): number {
     this.props.dispatch(toggleZoomLevel(zoom));
     return zoom;
+  }
+
+  scale(scale: number): number {
+    this.props.dispatch(toggleScale(scale));
+    return scale;
+  }
+
+  calcScale(map) : number{
+    var y = map.getContainer().clientHeight / 2;
+    var x = 200 || map.getContainer().clientWidth / 2;
+
+    if(typeof x != 'number' || typeof y != 'number') return;
+    
+    let point1 = map.unproject([0, y]);
+    let point2 = map.unproject([x, y]);
+
+    let lonlat1 = new Lonlat(point1.lng, point1.lat);
+    let lonlat2 = new Lonlat(point2.lng, point2.lat);
+
+    let scale = getScaleByLonlat(lonlat1, lonlat2);
+    return scale;
   }
 
   currentPosition(point: Positon): Positon {
@@ -165,9 +189,14 @@ export class MapboxGlMap extends React.Component<
       this.currentPosition([e.lngLat.lng, e.lngLat.lat]);
     });
 
+    map.on("move", (e) => {
+      this.scale(this.calcScale(map));
+    });
+
     map.on("zoom", (e) => {
       let level = e.target.style.z;
       this.zoom(level);
+      this.scale(this.calcScale(map));
     });
 
   }

@@ -100,7 +100,8 @@ class DemWMS extends React.Component<IProps, IStates> {
         let paintValue = this.parsePaint(style);
         let layoutValue = this.parseLayout(layout);
 
-        const { id, imgUrl, heightImgUrl, url } = demwms;
+        const { id, info, url } = demwms;
+        const {imgUrl, heightImgUrl} = info;
         if (!id || !(url || imgUrl)) return;
 
         this.parseTransform();

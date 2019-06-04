@@ -64,6 +64,7 @@ export class State {
   center: Array<number>;
   bbox: BBox;
   extent: Extent;
+  scale: number;
   bounds: Bounds;
   mousePosition: Positon;
   viewState: ViewState;
@@ -73,6 +74,7 @@ export let defaultZoom = 0;
 export let defaultCenter = [0, 0];
 export let defaultBbox: BBox = [-180, 90, 180, -90];
 export let defaultExtent: Extent = [-180, 90, 180, -90];
+export let defaultScale = 0;
 export let defaultBounds = new Bounds();
 export let defaultPosition: [number, number, number] = [0, 0, 0];
 export let defaultViewState = ViewState.Map;
@@ -82,6 +84,7 @@ export let defaultMapState: State = {
   center: defaultCenter,
   bbox: defaultBbox,
   extent: defaultExtent,
+  scale: defaultScale,
   bounds: defaultBounds,
   mousePosition: defaultPosition,
   viewState: defaultViewState
@@ -89,6 +92,7 @@ export let defaultMapState: State = {
 
 export interface MapMouseEvent {
   zoom(zoom: number): number;
+  scale(scale : number) : number;
   /**
    * @description 返回当前地图鼠标移动的点位置
    */
@@ -122,5 +126,17 @@ export function toggleZoomLevel(zoom: number) {
   return {
     type: NameSpaceMapState + "/zoom",
     payload: zoom
+  };
+}
+
+/**
+ * @function 发送当前比例尺
+ * @param scalse
+ * @return 触发对应的action行为，让model里面的mapstate的reduer函数响应
+ */
+export function toggleScale(scale: number) {
+  return {
+    type: NameSpaceMapState + "/scale",
+    payload: scale
   };
 }

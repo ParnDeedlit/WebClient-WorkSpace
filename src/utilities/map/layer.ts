@@ -28,6 +28,7 @@ export class ILayer {
    * @member 地图url
    */
   url?: string;
+  info?: IInfo;
   layout?: ILayout;
   style?: IStyle;
   /**
@@ -45,7 +46,9 @@ export interface ICommonAction {
   handleNameChange(name: string);
 }
 
-export class IStyle {}
+export class IInfo { }
+
+export class IStyle { }
 
 export class ILayout {
   visible?: boolean;

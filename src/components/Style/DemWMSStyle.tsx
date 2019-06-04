@@ -7,14 +7,15 @@ import BodyStyle from './BodyStyle';
 import StringInput from '../Common/Input/StringInput';
 import BlockCheckbox from '../Common/Select/BlockChecbox';
 import BlockSlider from '../Common/Select/BlockSlider';
-import { opacityMarks, hueMarks, opacityScale } from '../Common/Select/BlockSliderMarker';
+import { opacityScale } from '../Common/Select/BlockSliderMarker';
 
 import { NameSpaceDocument, NameSpaceMapState } from '../../models/workspace';
 import { changeLayerName, ICommonAction } from '../../utilities/map/layer';
 import { ILayer } from '../../utilities/map/layer';
 import {
-    changeDemWMSStyle, DemWMSStyle, defaultDemWMSStyle, IDemWMSSytle,
-    DemWMSLayout, changeDemWMSLayout, defaultDemWMSLayout, IDemWMSLayout
+    DemWMSStyle, changeDemWMSStyle, IDemWMSSytle, defaultDemWMSStyle,
+    DemWMSLayout, changeDemWMSLayout, IDemWMSLayout, defaultDemWMSLayout,
+    DemWMSInfo, changeDemWMSInfo, IDemWMSInfo, defaultDemWMSInfo
 } from '../../utilities/map/demwms';
 import { PropertyValueSpecification } from "@mapbox/mapbox-gl-style-spec/types";
 
@@ -42,13 +43,13 @@ interface IStates {
 
 let self = null;
 class DemWMSStyleView extends React.Component<IProps, IStates>
-    implements ICommonAction, IDemWMSSytle, IDemWMSLayout {
+    implements ICommonAction, IDemWMSInfo, IDemWMSSytle, IDemWMSLayout {
 
     public state: IStates = {
         visible: this.getCurrentVisible(),
-        name: this.getCurrentStyle().name,
-        imageUrl: "",
-        imageHeightUrl: "",
+        name: this.getCurrentLayer().name,
+        imageUrl: this.getCurrentInfo().imgUrl,
+        imageHeightUrl: this.getCurrentInfo().heightImgUrl,
         scale: this.getCurrentLayout().scale,
         center: this.getCurrentLayout().center
     };
@@ -59,6 +60,27 @@ class DemWMSStyleView extends React.Component<IProps, IStates>
         super(props);
         self = this;
         this.defaultScale = this.state.scale;
+    }
+
+    getCurrentLayer(doc?: IDocument) {
+        let { document } = this.props;
+        document = doc ? doc : document;
+        let idoc = cloneDocument(document);
+        let layer = idoc.getCurrentLayer();
+        return layer;
+    }
+
+    getCurrentInfo(doc?: IDocument) {
+        let { document } = this.props;
+        document = doc ? doc : document;
+        let idoc = cloneDocument(document);
+        let info = idoc.getCurrentInfo();
+
+        if (!info) {
+            info = clone(defaultDemWMSInfo);
+        }
+
+        return info;
     }
 
     getCurrentStyle(doc?: IDocument) {
@@ -98,6 +120,11 @@ class DemWMSStyleView extends React.Component<IProps, IStates>
         dispatch(changeLayerName(layer, name, doc));
     }
 
+    dispatchInfoChange(layer: ILayer, info: DemWMSInfo, doc: IDocument) {
+        const { dispatch } = this.props;
+        dispatch(changeDemWMSInfo(layer, info, doc));
+    }
+
     dispatchStyleChange(layer: ILayer, style: DemWMSStyle, doc: IDocument) {
         const { dispatch } = this.props;
         dispatch(changeDemWMSStyle(layer, style, doc));
@@ -107,7 +134,6 @@ class DemWMSStyleView extends React.Component<IProps, IStates>
         const { dispatch } = this.props;
         dispatch(changeDemWMSLayout(layer, layout, doc));
     }
-
 
     handleVisibleChange(visible: boolean) {
         //onVisibleChange
@@ -152,7 +178,7 @@ class DemWMSStyleView extends React.Component<IProps, IStates>
         self.dispatchLayoutChange(layer, newLayout, document);
     }
 
-    handleCenterChange(newCenter){
+    handleCenterChange(newCenter) {
         let { document } = self.props;
         let { name, current, backgrounds, layers, maprender } = document;
         let idoc = new IDocument(name, current, backgrounds, layers, maprender);
@@ -162,7 +188,7 @@ class DemWMSStyleView extends React.Component<IProps, IStates>
         if (!layout) layout = defaultDemWMSLayout;
 
         let { visible, scale, center } = layout;
-        
+
         center[0] = newCenter[0];
         center[1] = newCenter[1];
 
@@ -177,6 +203,31 @@ class DemWMSStyleView extends React.Component<IProps, IStates>
 
         let layer = idoc.getCurrentLayer();
         self.dispatchNameChange(layer, newName, idoc);
+    }
+
+    handleImgUrlChange(newImgUrl: string) {
+        let { document } = self.props;
+        let { name, current, backgrounds, layers, maprender } = document;
+        let idoc = new IDocument(name, current, backgrounds, layers, maprender);
+
+        let layer = idoc.getCurrentLayer();
+        let info = idoc.getCurrentInfo();
+        let { heightImgUrl } = info;
+        let newInfo = new DemWMSInfo(newImgUrl, heightImgUrl);
+        console.log("urlchage",newInfo );
+        self.dispatchInfoChange(layer, newInfo, idoc);
+    }
+
+    handleHeightUrlChange(newHeightImgUrl: string) {
+        let { document } = self.props;
+        let { name, current, backgrounds, layers, maprender } = document;
+        let idoc = new IDocument(name, current, backgrounds, layers, maprender);
+
+        let layer = idoc.getCurrentLayer();
+        let info = idoc.getCurrentInfo();
+        let { imgUrl } = info;
+        let newInfo = new DemWMSInfo(imgUrl, newHeightImgUrl);
+        self.dispatchInfoChange(layer, newInfo, idoc);
     }
 
     componentWillReceiveProps(next) {
@@ -198,7 +249,7 @@ class DemWMSStyleView extends React.Component<IProps, IStates>
 
     render() {
         const { document, zoom } = this.props;
-        const { visible, name } = this.state;
+        const { visible, name, imageUrl, imageHeightUrl } = this.state;
 
         return (
             <Collapse bordered={false} defaultActiveKey={['1', '2', '3']} >
@@ -210,18 +261,18 @@ class DemWMSStyleView extends React.Component<IProps, IStates>
                             onChange={this.handleNameChange} />
                     </BodyStyle>
 
-                    <BodyStyle title="遥感底图">
-                        <StringInput title={name}
+                    <BodyStyle title="遥感底图" style={{ marginTop: 10 }}>
+                        <StringInput title={imageUrl}
                             placeholder="请输入遥感底图资源Url"
                             tooltip="实时修改遥感底图Url"
-                            onChange={this.handleNameChange} />
+                            onChange={this.handleImgUrlChange} />
                     </BodyStyle>
 
-                    <BodyStyle title="遥感高程">
-                        <StringInput title={name}
+                    <BodyStyle title="遥感高程" style={{ marginTop: 10 }}>
+                        <StringInput title={imageHeightUrl}
                             placeholder="请输入高程图片资源Url"
                             tooltip="实时修改高程图片资源Url"
-                            onChange={this.handleNameChange} />
+                            onChange={this.handleHeightUrlChange} />
                     </BodyStyle>
                 </Panel>
                 <Panel header={this.renderHeader("布局")} key="2">

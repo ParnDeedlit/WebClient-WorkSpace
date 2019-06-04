@@ -1,15 +1,59 @@
 import * as THREE from "three";
-import { ILayer, LayerType, IStyle, ILayout } from "./layer";
+import { ILayer, LayerType, IStyle, ILayout, IInfo } from "./layer";
 import { NameSpaceDocument } from "../../models/workspace";
 import IDocument from "./document";
 import { PropertyValueSpecification } from "@mapbox/mapbox-gl-style-spec/types";
 
 export class DemWMSLayer extends ILayer {
   title?: string;
-  imgUrl?: string;
-  heightImgUrl?: string;
+  info?: DemWMSInfo;
   layout?: DemWMSLayout;
   style?: DemWMSStyle;
+}
+
+export class DemWMSInfo extends IInfo {
+  imgUrl?: string;
+  heightImgUrl?: string;
+
+  constructor(imgUrl, heightImgUrl) {
+    super();
+    this.imgUrl = imgUrl;
+    this.heightImgUrl = heightImgUrl;
+  }
+}
+
+export const defaultImgUrl : string = "";
+export const defaultHeightImgUrl : string = "";
+
+export const defaultDemWMSInfo: DemWMSInfo = new DemWMSInfo(
+  defaultImgUrl,
+  defaultHeightImgUrl,
+);
+
+export interface IDemWMSInfo {
+  dispatchInfoChange(layer: ILayer, info: DemWMSInfo, doc: IDocument);
+}
+
+export function changeDemWMSInfo(
+  demwms: ILayer,
+  info: DemWMSInfo,
+  document: IDocument
+) {
+  let layers = document.layers;
+  if (!layers) return undefined;
+
+  layers.map(layer => {
+    if (layer.id == demwms.id) {
+      if (layer.type == LayerType.DemWMS) {
+        layer.info = demwms.info;
+      }
+    }
+  });
+
+  return {
+    type: NameSpaceDocument + "/changeDemWMSInfo",
+    payload: layers
+  };
 }
 
 //-------------------------------------DemWMSStyle----------------------------------
@@ -102,7 +146,7 @@ export const defaultDemWMSLayout: DemWMSLayout = new DemWMSLayout(
 );
 
 export function changeDemWMSLayout(
-  raster: ILayer,
+  demwms: ILayer,
   layout: DemWMSLayout,
   document: IDocument
 ) {
@@ -110,7 +154,7 @@ export function changeDemWMSLayout(
   if (!layers) return undefined;
 
   layers.map(layer => {
-    if (layer.id == raster.id) {
+    if (layer.id == demwms.id) {
       if (layer.type == LayerType.DemWMS) {
         layer.layout = layout;
       }
@@ -229,7 +273,7 @@ export class DemWMSLoader {
 
     var img = new Image();
     img.crossOrigin = "";
-    img.onload = function() {
+    img.onload = function () {
       context.drawImage(img, 0, 0);
 
       // get FlatArray of band value [r,g,b,r1,g1,b1...] for JPG, [r,g,b,a,r1,g1,b1,a1...] for PNG.
@@ -237,7 +281,7 @@ export class DemWMSLoader {
       let imageData = self.image.data;
       console.warn(`image data length: ${imageData.length}, extract band g`);
       // get the Second band value from height source image.
-      for (var i = 0, j = 0, l = imageData.length; i < l; j++, i += 4) {
+      for (var i = 0, j = 0, l = imageData.length; i < l; j++ , i += 4) {
         // var hue = (imageData[i] + imageData[i + 1] + imageData[i + 2]) / 3;
         data[j] = imageData[i];
         // // //// green * 1.2 - blue * .6 - hue * .2
@@ -264,7 +308,7 @@ export class DemWMSLoader {
     var verticesCount = flatArray.length / 3.0;
     console.warn("bufferGeom Vertices Array length: " + verticesCount);
     // Actually you would find triangle verticeCount is more than imgWidth*imgHeight by (imgWidth + imgHeight + 1). Align required.
-    for (var i = 0, j = 0; i < verticesCount; i++, j += 3) {
+    for (var i = 0, j = 0; i < verticesCount; i++ , j += 3) {
       if (data[i] === undefined) {
         console.warn(`data[${i}] is  undefined..`);
         break;
@@ -284,11 +328,11 @@ export class DemWMSLoader {
       // Function when resource is loaded
       self.addTexture,
       // Function called when download progresses
-      function(xhr) {
+      function (xhr) {
         console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
       },
       // Function called when download errors
-      function(xhr) {
+      function (xhr) {
         console.log("An error happened");
       }
     );

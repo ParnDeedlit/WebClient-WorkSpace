@@ -61,6 +61,10 @@ export default {
     changeDemWMSLayout(state, { payload: layers }) {
       var newState = { ...state, layers };
       return newState;
+    },
+    changeDemWMSInfo(state, { payload: layers }) {
+      var newState = { ...state, layers };
+      return newState;
     }
   }
 };
